@@ -19,7 +19,7 @@ public class LearnWayApplication {
     @Bean
     public ApplicationRunner initializer(RoleRepository roleRepository) {
         return args -> roleRepository.saveAll(Arrays.asList(
-                Role.builder().roleName("USER").roleDescription("Default Role provided to each user").build(),
+                Role.builder().roleName("USER").roleDescription("Default Role provided to each user - STUDEN").build(),
                 Role.builder().roleName("ADMIN").roleDescription("Superuser, who has access for all functionality").build(),
                 Role.builder().roleName("INSTRUCTOR").roleDescription("User, who creates courses, adds lessons and tracks students progress").build()));
     }

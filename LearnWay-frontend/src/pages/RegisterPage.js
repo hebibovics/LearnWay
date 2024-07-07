@@ -53,8 +53,8 @@ const RegisterPage = () => {
       lastName: lastName,
       username: username,
       password: password,
-      phoneNumber: phoneNumber
-
+      phoneNumber: phoneNumber,
+      role: "USER"
     };
     register(dispatch, user).then((data) => {
       if (data.type === authConstants.USER_REGISTER_SUCCESS) {

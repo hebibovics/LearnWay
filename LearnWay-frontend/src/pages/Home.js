@@ -49,19 +49,19 @@ const Home = () => {
 
             <Row className="mt-5">
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/WebDev" className="image-link">
                         <Image src={webDevImage} fluid />
                         <h4>Web Development</h4>
                     </Link>
                 </Col>
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/WebDesign" className="image-link">
                         <Image src={webDesignImage} fluid />
                         <h4>Web Design</h4>
                     </Link>
                 </Col>
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/SoftSkills" className="image-link">
                         <Image src={softSkillsImage} fluid />
                         <h4>Soft Skills</h4>
                     </Link>
@@ -71,19 +71,19 @@ const Home = () => {
 
             <Row className="mt-5">
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/designTools" className="image-link">
                         <Image src={designToolsImage} fluid />
                         <h4>Design Tools</h4>
                     </Link>
                 </Col>
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/Programming" className="image-link">
                         <Image src={programmingLangImage} fluid />
                         <h4>Programming Languages</h4>
                     </Link>
                 </Col>
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/dataScience" className="image-link">
                         <Image src={dataSciImage} fluid />
                         <h4>Data Science</h4>
                     </Link>
@@ -92,19 +92,19 @@ const Home = () => {
 
             <Row className="mt-5">
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/ProjectManagement" className="image-link">
                         <Image src={projectManImage} fluid />
                         <h4>Project Management</h4>
                     </Link>
                 </Col>
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/DigitalMarketing" className="image-link">
                         <Image src={digitalMarkImage} fluid />
                         <h4>Digital Marketing</h4>
                     </Link>
                 </Col>
                 <Col md={4} className="text-center">
-                    <Link to="/login" className="image-link">
+                    <Link to="/OtherCourses" className="image-link">
                         <Image src={otherCoursesImage} fluid />
                         <h4>Other Courses</h4>
                     </Link>

@@ -21,6 +21,15 @@ import UserQuizResultPage from "./pages/users/UserQuizResultPage";
 import AdminQuizResultPage from "./pages/admin/AdminQuizResultPage";
 import Home from "./pages/Home";
 import AboutUs from "./pages/AboutUs";
+import DataScience from "./pages/course fields/DataScience";
+import Programming from "./pages/course fields/Programming";
+import DesignTools from "./pages/course fields/DesignTools";
+import DigitalMarketing from "./pages/course fields/DigitalMarketing";
+import OtherCourses from "./pages/course fields/OtherCourses";
+import ProjectManagement from "./pages/course fields/ProjectManagement";
+import SoftSkills from "./pages/course fields/SoftSkills";
+import WebDesign from "./pages/course fields/WebDesign";
+import WebDev from "./pages/course fields/WebDev";
 
 const App = () => {
   return (
@@ -56,6 +65,16 @@ const App = () => {
 
         <Route path="/aboutUs/" element={<AboutUs />} />
         <Route path="/home/" element={<Home />} />
+
+        <Route path="/dataScience/" element={<DataScience />} />
+        <Route path="/designTools/" element={<DesignTools />} />
+        <Route path="/DigitalMarketing/" element={<DigitalMarketing />} />
+        <Route path="/OtherCourses/" element={<OtherCourses />} />
+        <Route path="/Programming/" element={<Programming />} />
+        <Route path="/ProjectManagement/" element={<ProjectManagement />} />
+        <Route path="/SoftSkills/" element={<SoftSkills />} />
+        <Route path="/WebDesign/" element={<WebDesign />} />
+        <Route path="/WebDev/" element={<WebDev/>} />
       </Routes>
     </Router>
   );
