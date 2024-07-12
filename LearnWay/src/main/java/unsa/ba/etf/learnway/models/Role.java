@@ -3,6 +3,8 @@ package unsa.ba.etf.learnway.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -20,4 +22,6 @@ public class Role {
 
     @Column(name="role_description")
     private String roleDescription;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 }

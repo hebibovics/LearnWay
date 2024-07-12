@@ -40,8 +40,4 @@ public class QuizServiceImpl implements QuizService {
         quizRepository.deleteById(quizId);
     }
 
-    @Override
-    public List<Quiz> getQuizByCategory(Category category) {
-        return quizRepository.findByCategory(category);
-    }
 }

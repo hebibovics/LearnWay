@@ -35,11 +35,7 @@ public class QuizController {
         return ResponseEntity.ok(quizService.getQuiz(quizId));
     }
 
-    @GetMapping(value = "/", params = "catId")
-    public ResponseEntity<?> getQuizByCategory(@RequestParam Long catId) {
-        Category category = categoryService.getCategory(catId);
-        return ResponseEntity.ok(quizService.getQuizByCategory(category));
-    }
+
 
     @PutMapping("/{quizId}")
     public ResponseEntity<?> updateQuiz(@PathVariable Long quizId, @RequestBody Quiz quiz) {

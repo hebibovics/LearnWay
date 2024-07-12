@@ -34,8 +34,9 @@ public class Quiz {
     @Column(name = "num_of_questions")
     private int numOfQuestions;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    private Category category;
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 
     @OneToMany(mappedBy = "quiz", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonIgnore

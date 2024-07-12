@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Set;
 
 
 @Entity
@@ -24,8 +25,19 @@ public class Course {
     @Column(name = "description")
     private String description;
 
-   // @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-   // @JsonIgnore
-   // private List<Quiz> quizzes = new ArrayList<>();
-    //umjesto ovog da bude povezano sa lesson
+    @ManyToMany(mappedBy = "courses")
+    private Set<User> users;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Lesson> lessons;
+
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Quiz> quizzes;
 }

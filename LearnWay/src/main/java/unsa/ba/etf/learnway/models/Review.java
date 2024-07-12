@@ -23,8 +23,7 @@ public class Review {
     @Column(name = "rate")
     private int rate;
 
-    // @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    // @JsonIgnore
-    // private List<Quiz> quizzes = new ArrayList<>();
-    //umjesto ovog da bude povezano sa lesson
+    @ManyToOne
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 }

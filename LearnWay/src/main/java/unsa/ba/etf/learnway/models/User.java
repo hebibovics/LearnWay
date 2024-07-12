@@ -42,7 +42,7 @@ public class User implements UserDetails {
     @Column(name = "is_active")
     private boolean isActive = true;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = {
                     @JoinColumn(name = "user_id")
@@ -52,6 +52,13 @@ public class User implements UserDetails {
             }
     )
     private Set<Role> roles;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_courses",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "course_id"))
+    private Set<Course> courses = new HashSet<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

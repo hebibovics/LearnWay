@@ -18,6 +18,4 @@ public interface QuizService {
 
     void deleteQuiz(Long quizId);
 
-    // Extra methods
-    List<Quiz> getQuizByCategory(Category category);
 }

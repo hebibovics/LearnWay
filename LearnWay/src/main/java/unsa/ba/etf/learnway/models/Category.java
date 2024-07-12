@@ -27,7 +27,8 @@ public class Category {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<Quiz> quizzes = new ArrayList<>();
+    private List<Course> courses = new ArrayList<>();
+
 }
