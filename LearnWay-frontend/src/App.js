@@ -30,6 +30,7 @@ import ProjectManagement from "./pages/course fields/ProjectManagement";
 import SoftSkills from "./pages/course fields/SoftSkills";
 import WebDesign from "./pages/course fields/WebDesign";
 import WebDev from "./pages/course fields/WebDev";
+import CourseDetails from "./pages/course fields/CourseDetails";
 
 const App = () => {
   return (
@@ -67,14 +68,15 @@ const App = () => {
         <Route path="/home/" element={<Home />} />
 
         <Route path="/dataScience/" element={<DataScience />} />
+        <Route path="/course/:id" element={<CourseDetails />} />
         <Route path="/designTools/" element={<DesignTools />} />
         <Route path="/DigitalMarketing/" element={<DigitalMarketing />} />
         <Route path="/OtherCourses/" element={<OtherCourses />} />
-        <Route path="/Programming/" element={<Programming />} />
+        <Route path="/ProgrammingLanguages/" element={<Programming />} />
         <Route path="/ProjectManagement/" element={<ProjectManagement />} />
         <Route path="/SoftSkills/" element={<SoftSkills />} />
         <Route path="/WebDesign/" element={<WebDesign />} />
-        <Route path="/WebDev/" element={<WebDev/>} />
+        <Route path="/WebDevelopment" element={<WebDev/>} />
       </Routes>
     </Router>
   );

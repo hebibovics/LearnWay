@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Image } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import webDevImage from '../images/web-developments.webp';
 import webDesignImage from '../images/web-design.jpg';
 import softSkillsImage from '../images/soft_skills.jfif';
@@ -12,11 +13,43 @@ import digitalMarkImage from '../images/digital_marketing.jpg';
 import dataSciImage from '../images/datascience.png';
 import '../pages/Home.css';
 
+const categoryImages = {
+    "Web Development": webDevImage,
+    "Web Design": webDesignImage,
+    "Soft Skills": softSkillsImage,
+    "Design Tools": designToolsImage,
+    "Programming Languages": programmingLangImage,
+    "Data Science": dataSciImage,
+    "Project Management": projectManImage,
+    "Digital Marketing": digitalMarkImage,
+    "Other Courses": otherCoursesImage
+};
+
 const Home = () => {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        axios.get('/api/category/')
+            .then(response => {
+                setCategories(response.data);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the categories!', error);
+            });
+    }, []);
+
+    const chunkArray = (array, size) => {
+        const result = [];
+        for (let i = 0; i < array.length; i += size) {
+            result.push(array.slice(i, i + size));
+        }
+        return result;
+    };
+
+    const categoryChunks = chunkArray(categories, 3);
 
     return (
         <Container>
-            {/* Web Development section */}
             <Row className="mt-5">
                 <Col>
                     <h1>Welcome to LearnWay!</h1>
@@ -43,76 +76,22 @@ const Home = () => {
                 <Col>
                     <h2>Start your learning journey today!</h2>
                     <h5>Join us and embark on your path to acquiring new skills and knowledge.</h5>
-
                 </Col>
             </Row>
 
-            <Row className="mt-5">
-                <Col md={4} className="text-center">
-                    <Link to="/WebDev" className="image-link">
-                        <Image src={webDevImage} fluid />
-                        <h4>Web Development</h4>
-                    </Link>
-                </Col>
-                <Col md={4} className="text-center">
-                    <Link to="/WebDesign" className="image-link">
-                        <Image src={webDesignImage} fluid />
-                        <h4>Web Design</h4>
-                    </Link>
-                </Col>
-                <Col md={4} className="text-center">
-                    <Link to="/SoftSkills" className="image-link">
-                        <Image src={softSkillsImage} fluid />
-                        <h4>Soft Skills</h4>
-                    </Link>
-                </Col>
-            </Row>
+            {categoryChunks.map((chunk, chunkIndex) => (
+                <Row key={chunkIndex} className="mt-5">
+                    {chunk.map(category => (
+                        <Col key={category.catId} md={4} className="text-center">
+                            <Link to={`/${category.title.replace(/\s+/g, '')}`} className="image-link">
+                                <Image src={categoryImages[category.title]} fluid />
+                                <h4>{category.title}</h4>
+                            </Link>
+                        </Col>
+                    ))}
+                </Row>
+            ))}
 
-
-            <Row className="mt-5">
-                <Col md={4} className="text-center">
-                    <Link to="/designTools" className="image-link">
-                        <Image src={designToolsImage} fluid />
-                        <h4>Design Tools</h4>
-                    </Link>
-                </Col>
-                <Col md={4} className="text-center">
-                    <Link to="/Programming" className="image-link">
-                        <Image src={programmingLangImage} fluid />
-                        <h4>Programming Languages</h4>
-                    </Link>
-                </Col>
-                <Col md={4} className="text-center">
-                    <Link to="/dataScience" className="image-link">
-                        <Image src={dataSciImage} fluid />
-                        <h4>Data Science</h4>
-                    </Link>
-                </Col>
-            </Row>
-
-            <Row className="mt-5">
-                <Col md={4} className="text-center">
-                    <Link to="/ProjectManagement" className="image-link">
-                        <Image src={projectManImage} fluid />
-                        <h4>Project Management</h4>
-                    </Link>
-                </Col>
-                <Col md={4} className="text-center">
-                    <Link to="/DigitalMarketing" className="image-link">
-                        <Image src={digitalMarkImage} fluid />
-                        <h4>Digital Marketing</h4>
-                    </Link>
-                </Col>
-                <Col md={4} className="text-center">
-                    <Link to="/OtherCourses" className="image-link">
-                        <Image src={otherCoursesImage} fluid />
-                        <h4>Other Courses</h4>
-                    </Link>
-                </Col>
-            </Row>
-
-
-            {/* Footer Section */}
             <Row className="mt-5 bg-dark text-white p-4 footer">
                 <Col className="footer-content text-center">
                     <h3 className="mb-4">Contact Us</h3>
@@ -139,7 +118,6 @@ const Home = () => {
                     </blockquote>
                 </Col>
             </Row>
-
         </Container>
     );
 };

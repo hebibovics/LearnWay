@@ -1,44 +1,103 @@
-import React from "react";
-import { Container, Row, Col, Image } from "react-bootstrap";
+import React, { useState, useEffect } from 'react';
+import { Container, Row, Col, Card, Form, Dropdown, DropdownButton } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import '../../pages/Home.css'
+import axios from 'axios';
+import '../../pages/Home.css';
+
+// Osnovni podaci o kursevima
 
 const WebDesign = () => {
 
+    const [courses, setCourses] = useState([]);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortOption, setSortOption] = useState("");
+
+    useEffect(() => {
+        // Fetch courses from backend
+        axios.get('/api/course/')
+            .then(response => {
+                // Filter courses to include only those with category ID 2
+                console.log(response.data);
+                const webDesCourses = response.data.filter(course => course.category.catId === 2);
+                setCourses(webDesCourses);
+                console.log(webDesCourses);
+            })
+            .catch(error => {
+                console.error('There was an error fetching the courses!', error);
+            });
+    }, []);
+
+    const handleSearch = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+    const handleSort = (option) => {
+        setSortOption(option);
+    };
+
+    const filteredCourses = courses.filter(course =>
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const sortedCourses = [...filteredCourses].sort((a, b) => {
+        switch (sortOption) {
+            case 'rate-high-low':
+                return b.rate - a.rate;
+            case 'hours-min-max':
+                return a.hours - b.hours;
+            case 'hours-max-min':
+                return b.hours - a.hours;
+            case 'lessons-min-max':
+                return a.lessons - b.lessons;
+            case 'lessons-max-min':
+                return b.lessons - a.lessons;
+            case 'alphabet':
+                return a.title.localeCompare(b.title);
+            default:
+                return 0;
+        }
+    });
+
     return (
         <Container>
-            {/* Web Development section */}
-            <Row className="mt-5">
-                <Col>
-                    <h1>Welcome to LearnWay!</h1>
-                    <p>Learn, grow, and achieve your goals with our courses.</p>
-                </Col>
-            </Row>
-
-            <Row className="mt-5">
-                <Col md={4}>
-                    <h3>Interactive Learning</h3>
-                    <p>Experience interactive courses that make learning fun and engaging.</p>
+            <h1 className="my-4 text-center">Web Design Courses</h1>
+            <Row className="mb-4">
+                <Col md={8}>
+                    <Form.Control
+                        type="text"
+                        placeholder="Search for a course..."
+                        value={searchTerm}
+                        onChange={handleSearch}
+                    />
                 </Col>
                 <Col md={4}>
-                    <h3>Wide Range of Courses</h3>
-                    <p>From web development to soft skills, we offer courses for everyone.</p>
-                </Col>
-                <Col md={4}>
-                    <h3>Quality Education</h3>
-                    <p>Our courses are designed and led by industry experts.</p>
-                </Col>
-            </Row>
-
-            <Row className="mt-5">
-                <Col>
-                    <h2>Start your learning journey today!</h2>
-                    <h5>Join us and embark on your path to acquiring new skills and knowledge.</h5>
-
+                    <DropdownButton id="dropdown-basic-button" title="Sort">
+                        <Dropdown.Item onClick={() => handleSort('rate-high-low')}>Sort by rate (highest to lowest)</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSort('hours-min-max')}>Sort by total hours (min to max)</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSort('hours-max-min')}>Sort by total hours (max to min)</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSort('lessons-min-max')}>Sort by number of lessons (min to max)</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSort('lessons-max-min')}>Sort by number of lessons (max to min)</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleSort('alphabet')}>Sort by alphabet</Dropdown.Item>
+                    </DropdownButton>
                 </Col>
             </Row>
-
-
+            <Row>
+                {sortedCourses.map((course, index) => (
+                    <Col md={3} key={index} className="mb-4">
+                        <Card className="h-100">
+                            <Card.Body>
+                                <Card.Title className="text-uppercase">{course.title}</Card.Title>
+                                <Card.Text>
+                                    Lessons: {course.lessons}<br />
+                                    Total Hours: {course.hours}<br />
+                                    Rate: {course.rate}
+                                </Card.Text>
+                                <Link to={`/course/${course.id}`} className="btn btn-primary">View Course</Link>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
 
             {/* Footer Section */}
             <Row className="mt-5 bg-dark text-white p-4 footer">
@@ -67,7 +126,6 @@ const WebDesign = () => {
                     </blockquote>
                 </Col>
             </Row>
-
         </Container>
     );
 };

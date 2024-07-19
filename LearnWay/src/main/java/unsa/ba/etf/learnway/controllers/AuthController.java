@@ -20,6 +20,20 @@ public class AuthController {
     public User registerUser(@RequestBody User user) throws Exception {
         return authService.registerUserService(user);
     }
+//
+//    {
+//        "firstName":"sanis",
+//            "lastName": "saaa",
+//            "username": "sanidah1",
+//            "password": "sani1",
+//            "phoneNumber": "0001",
+//            "isActive": true,
+//            "user_role": "USER"
+//    }
+//
+//
+
+
 
     @PostMapping("/login")
     public LoginResponse loginUser(@RequestBody LoginRequest loginRequest) throws Exception {
