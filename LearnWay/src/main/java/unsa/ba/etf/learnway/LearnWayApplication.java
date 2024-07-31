@@ -4,14 +4,17 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import unsa.ba.etf.learnway.models.User;
 import unsa.ba.etf.learnway.repository.RoleRepository;
 import unsa.ba.etf.learnway.repository.CategoryRepository;
 import unsa.ba.etf.learnway.repository.CourseRepository;
+import unsa.ba.etf.learnway.repository.UserRepository;
 import unsa.ba.etf.learnway.models.Role;
 import unsa.ba.etf.learnway.models.Category;
 import unsa.ba.etf.learnway.models.Course;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @SpringBootApplication
 public class LearnWayApplication {
@@ -21,13 +24,20 @@ public class LearnWayApplication {
     }
 
     @Bean
-    public ApplicationRunner initializer(RoleRepository roleRepository, CategoryRepository categoryRepository, CourseRepository courseRepository) {
+    public ApplicationRunner initializer(RoleRepository roleRepository, CategoryRepository categoryRepository, CourseRepository courseRepository, UserRepository userRepository) {
         return args -> {
             roleRepository.saveAll(Arrays.asList(
-                    Role.builder().roleName("USER").roleDescription("Default Role provided to each user - STUDEN").build(),
+                    Role.builder().roleName("USER").roleDescription("Default Role provided to each user - STUDENT").build(),
                     Role.builder().roleName("ADMIN").roleDescription("Superuser, who has access for all functionality").build(),
                     Role.builder().roleName("INSTRUCTOR").roleDescription("User, who creates courses, adds lessons and tracks students progress").build()
             ));
+            Role instructorRole = roleRepository.findByRoleName("INSTRUCTOR");
+
+            userRepository.saveAll(Arrays.asList(
+                    User.builder().firstName("Instructor").lastName("is").username("username").password("pass")
+                            .build()
+            ));
+
 
             categoryRepository.saveAll(Arrays.asList(
                     Category.builder().title("Web Development").description("All about web development").build(),

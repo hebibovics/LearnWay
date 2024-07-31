@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Dropdown, DropdownButton } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../pages/Home.css';
 
@@ -11,16 +11,15 @@ const Programming = () => {
     const [courses, setCourses] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
     const [sortOption, setSortOption] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Fetch courses from backend
         axios.get('/api/course/')
             .then(response => {
-                // Filter courses to include only those with category ID 5
-                console.log(response.data);
-                const programmingCourses = response.data.filter(course => course.category.catId === 5);
-                setCourses(programmingCourses);
-                console.log(programmingCourses);
+                // Filter courses to include only those with category ID 1
+                const webDevCourses = response.data.filter(course => course.category.catId === 1);
+                setCourses(webDevCourses);
             })
             .catch(error => {
                 console.error('There was an error fetching the courses!', error);
@@ -58,6 +57,16 @@ const Programming = () => {
         }
     });
 
+    const handleViewCourse = (courseId) => {
+        const isAuthenticated = !!localStorage.getItem('jwtToken');
+        console.log("ovo", isAuthenticated);
+        if (isAuthenticated) {
+            navigate(`/course/${courseId}`);
+        } else {
+            navigate('/login');
+        }
+    };
+
     return (
         <Container>
             <h1 className="my-4 text-center">Programming Languages Courses</h1>
@@ -92,7 +101,7 @@ const Programming = () => {
                                     Total Hours: {course.hours}<br />
                                     Rate: {course.rate}
                                 </Card.Text>
-                                <Link to={`/course/${course.id}`} className="btn btn-primary">View Course</Link>
+                                <button onClick={() => handleViewCourse(course.courseId)} className="btn btn-primary">View Course</button>
                             </Card.Body>
                         </Card>
                     </Col>

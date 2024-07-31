@@ -55,7 +55,7 @@ const WebDev = () => {
     });
 
     const handleViewCourse = (courseId) => {
-        const isAuthenticated = !!localStorage.getItem('token');
+        const isAuthenticated = !!localStorage.getItem('jwtToken');
         console.log("ovo", isAuthenticated);
         if (isAuthenticated) {
             navigate(`/course/${courseId}`);
