@@ -9,6 +9,7 @@ const Header = () => {
   const loginReducer = useSelector((state) => state.loginReducer);
   const [isLoggedIn, setIsLoggedIn] = useState(loginReducer.loggedIn);
   const [profilePageUrl, setProfilePageUrl] = useState("");
+  const [userRole, setUserRole] = useState("");
 
   const logoutHandler = () => {
     setIsLoggedIn(false);
@@ -19,13 +20,20 @@ const Header = () => {
   useEffect(() => {
     if (localStorage.getItem("jwtToken")) {
       setIsLoggedIn(true);
+      let role = "";
       loginReducer.user.roles.map((r) => {
         if (r["roleName"] === "ADMIN") {
           setProfilePageUrl("/adminProfile");
+          role = "ADMIN";
+        } else if (r["roleName"] === "INSTRUCTOR") {
+          setProfilePageUrl("/instructorProfile");
+          role = "INSTRUCTOR";
         } else {
           setProfilePageUrl("/profile");
+          role = "USER";
         }
       });
+      setUserRole(role);
     }
   }, [navigate, loginReducer]);
 
@@ -38,9 +46,12 @@ const Header = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="justify-content-end flex-grow-1 pe-3">
-                <LinkContainer to="/home">
-                  <Nav.Link>Home</Nav.Link>
-                </LinkContainer>
+                {/* Conditionally render the Home link based on user role */}
+                {userRole !== "INSTRUCTOR" && (
+                    <LinkContainer to="/home">
+                      <Nav.Link>Home</Nav.Link>
+                    </LinkContainer>
+                )}
 
                 <LinkContainer to="/aboutUs">
                   <Nav.Link>About Us</Nav.Link>

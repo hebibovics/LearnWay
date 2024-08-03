@@ -14,6 +14,7 @@ import AdminQuestionsPage from "./pages/admin/questions/AdminQuestionsPage";
 import AdminAddQuestionsPage from "./pages/admin/questions/AdminAddQuestionsPage";
 import AdminUpdateQuestionPage from "./pages/admin/questions/AdminUpdateQuestionPage";
 import UserProfilePage from "./pages/users/UserProfilePage";
+import InstructorProfilePage from "./pages/instructor/InstructorProfilePage";
 import UserQuizzesPage from "./pages/users/UserQuizzesPage";
 import UserQuizManualPage from "./pages/users/UserQuizManualPage";
 import UserQuestionsPage from "./pages/users/UserQuestionsPage";
@@ -31,6 +32,8 @@ import SoftSkills from "./pages/course fields/SoftSkills";
 import WebDesign from "./pages/course fields/WebDesign";
 import WebDev from "./pages/course fields/WebDev";
 import CourseDetails from "./pages/course fields/CourseDetails";
+import InstructorAddCoursePage from "./pages/instructor/courses/InstructorAddCoursePage";
+import InstructorCoursesPage from "./pages/instructor/courses/InstructorCoursesPage";
 
 const App = () => {
   return (
@@ -63,6 +66,10 @@ const App = () => {
         <Route path="/quizManual/" element={<UserQuizManualPage />} />
         <Route path="/questions/" element={<UserQuestionsPage />} />
         <Route path="/quizResults/" element={<UserQuizResultPage />} />
+
+        <Route path="/instructorProfile" element={<InstructorProfilePage />} />
+        <Route path="/instructorAddCourse" element={<InstructorAddCoursePage />} />
+        <Route path="/instructorCourses" element={<InstructorCoursesPage />} />
 
         <Route path="/aboutUs/" element={<AboutUs />} />
         <Route path="/home/" element={<Home />} />

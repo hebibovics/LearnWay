@@ -59,10 +59,6 @@ const UserProfilePage = () => {
                 <td>Role</td>
                 <td>{user.roles[0].roleName}</td>
               </tr>
-              <tr>
-                <td>Account Status</td>
-                <td>{`${user.enabled}`}</td>
-              </tr>
             </tbody>
           </Table>
         </div>

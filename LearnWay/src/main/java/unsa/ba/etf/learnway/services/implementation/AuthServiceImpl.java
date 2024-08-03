@@ -43,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
         if (temp != null) {
             throw new Exception("User Already Exists");
         } else {
-            Role role = roleRepository.findById("USER").isPresent() ? roleRepository.findById("USER").get() : null;
+            Role role = roleRepository.findById("INSTRUCTOR").isPresent() ? roleRepository.findById("INSTRUCTOR").get() : null;
             Set<Role> userRoles = new HashSet<>();
             userRoles.add(role);
             user.setRoles(userRoles);

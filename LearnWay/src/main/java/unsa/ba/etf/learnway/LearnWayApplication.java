@@ -15,6 +15,9 @@ import unsa.ba.etf.learnway.models.Course;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.logging.Logger;
 
 @SpringBootApplication
 public class LearnWayApplication {
@@ -31,12 +34,21 @@ public class LearnWayApplication {
                     Role.builder().roleName("ADMIN").roleDescription("Superuser, who has access for all functionality").build(),
                     Role.builder().roleName("INSTRUCTOR").roleDescription("User, who creates courses, adds lessons and tracks students progress").build()
             ));
+
             Role instructorRole = roleRepository.findByRoleName("INSTRUCTOR");
 
-            userRepository.saveAll(Arrays.asList(
-                    User.builder().firstName("Instructor").lastName("is").username("username").password("pass")
-                            .build()
-            ));
+            Set<Role> instructorRoles = new HashSet<>();
+            //instructorRoles.add(instructorRole);
+
+            userRepository.save(User.builder()
+                    .firstName("Instructor")
+                    .lastName("is")
+                    .username("username")
+                    .password("pass")
+                    .roles(instructorRoles)
+                    .isActive(true)
+                    .build()
+            );
 
 
             categoryRepository.saveAll(Arrays.asList(

@@ -17,8 +17,8 @@ const WebDesign = () => {
         // Fetch courses from backend
         axios.get('/api/course/')
             .then(response => {
-                // Filter courses to include only those with category ID 1
-                const webDevCourses = response.data.filter(course => course.category.catId === 1);
+                // Filter courses to include only those with category ID 2
+                const webDevCourses = response.data.filter(course => course.category.catId === 2);
                 setCourses(webDevCourses);
             })
             .catch(error => {

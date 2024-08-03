@@ -91,6 +91,18 @@ const RegisterPage = () => {
           ></Form.Control>
         </Form.Group>
 
+        <Form.Group className="my-3" controlId="phone_number">
+          <Form.Label>Phone Number</Form.Label>
+          <Form.Control
+              type="phone"
+              placeholder="Enter Phone Number"
+              value={phoneNumber}
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+              }}
+          ></Form.Control>
+        </Form.Group>
+
         <Form.Group className="my-3" controlId="username">
           <Form.Label>User Name</Form.Label>
           <Form.Control
