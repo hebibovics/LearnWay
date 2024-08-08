@@ -1,11 +1,15 @@
-import React from "react";
-import { Container, Row, Col, Image } from "react-bootstrap";
+import React, {useState} from "react";
+import {Container, Row, Col, Image, Nav} from "react-bootstrap";
 import img1 from '../images/image1.jpg';
 import {Link} from "react-router-dom";
-import SidebarUser from "../components/SidebarUser";  // Import your image
+import SidebarUser from "../components/SidebarUser";
+import {LinkContainer} from "react-router-bootstrap";  // Import your image
 
 
 const AboutUs = () => {
+
+    const [userRole, setUserRole] = useState("");
+
     return (
         <Container>
             <Row className="mt-5">
@@ -83,9 +87,11 @@ const AboutUs = () => {
                     <div className="mt-4">
                         <p className="mb-2">Visit our:</p>
                         <Row className="justify-content-center">
-                            <Col xs="auto">
-                                <Link to="/home" className="text-white">Homepage</Link>
-                            </Col>
+                            {userRole !== "INSTRUCTOR" && (
+                                <Col xs="auto">
+                                    <Link to="/home" className="text-white">Homepage</Link>
+                                </Col>
+                            )}
                             <Col xs="auto">
                                 <Link to="/aboutUs" className="text-white">About Us</Link>
                             </Col>

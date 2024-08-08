@@ -4,14 +4,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import unsa.ba.etf.learnway.models.User;
-import unsa.ba.etf.learnway.repository.RoleRepository;
-import unsa.ba.etf.learnway.repository.CategoryRepository;
-import unsa.ba.etf.learnway.repository.CourseRepository;
-import unsa.ba.etf.learnway.repository.UserRepository;
-import unsa.ba.etf.learnway.models.Role;
-import unsa.ba.etf.learnway.models.Category;
-import unsa.ba.etf.learnway.models.Course;
+import unsa.ba.etf.learnway.models.*;
+import unsa.ba.etf.learnway.repository.*;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +21,7 @@ public class LearnWayApplication {
     }
 
     @Bean
-    public ApplicationRunner initializer(RoleRepository roleRepository, CategoryRepository categoryRepository, CourseRepository courseRepository, UserRepository userRepository) {
+    public ApplicationRunner initializer(RoleRepository roleRepository, CategoryRepository categoryRepository, CourseRepository courseRepository, UserRepository userRepository, LessonRepository lessonRepository) {
         return args -> {
             roleRepository.saveAll(Arrays.asList(
                     Role.builder().roleName("USER").roleDescription("Default Role provided to each user - STUDENT").build(),
@@ -148,6 +142,7 @@ public class LearnWayApplication {
                     Course.builder().title("IoT Fundamentals").description("Introduction to Internet of Things.").category(otherCourses).build(),
                     Course.builder().title("AR/VR Basics").description("Learn the basics of augmented and virtual reality.").category(otherCourses).build()
             ));
+
         };
     }
 }

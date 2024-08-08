@@ -18,9 +18,9 @@ const InstructorProfilePage = () => {
         fetchCategories(dispatch, token);
     }, [dispatch]);
 
-    useEffect(() => {
-        fetchQuizzes(dispatch, token);
-    }, [dispatch]);
+   // useEffect(() => {
+     //   fetchQuizzes(dispatch, token);
+    //}, [dispatch]);
 
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");

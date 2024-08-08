@@ -23,6 +23,7 @@ const SidebarInstructor = ({ children }) => {
             name: "Add Course",
             icon: <MdQueue />,
         },
+
     ]);
 
 
@@ -33,8 +34,9 @@ const SidebarInstructor = ({ children }) => {
             setCourses(tempCourses);
 
             const newMenuItems = tempCourses.map((c) => {
+                console.log(c);
                 return {
-                    path: `/quiz/cat${c.title}?catId=${c.catId}`,
+                    path: `/courseInstructor/${c.courseId}`,
                     name: c.title,
                     icon: <TbLayoutGrid />,
                 };

@@ -1,12 +1,17 @@
 package unsa.ba.etf.learnway.services.implementation;
 
+import unsa.ba.etf.learnway.models.Course;
 import unsa.ba.etf.learnway.models.Lesson;
 import unsa.ba.etf.learnway.repository.LessonRepository;
+import unsa.ba.etf.learnway.repository.CourseRepository;
 import unsa.ba.etf.learnway.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LessonServiceImpl implements LessonService {
@@ -20,21 +25,30 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<Lesson> getLessons() {
+    public List<Lesson> getAllLessons() {
         return lessonRepository.findAll();
     }
 
-    public Lesson getLesson(Long lessonId) {
-        return lessonRepository.findById(lessonId).isPresent() ? lessonRepository.findById(lessonId).get() : null;
+    @Override
+    public Lesson getLessonById(Long id) {
+        Optional<Lesson> lesson = lessonRepository.findById(id);
+        if (lesson.isPresent()) {
+            return lesson.get();
+        } else {
+            throw new RuntimeException("Lesson not found");
+        }
     }
 
     @Override
-    public Lesson updateLesson(Lesson lesson) {
-        return lessonRepository.save(lesson);
+    public Lesson updateLesson(Long id, Lesson lesson) {
+        Lesson existingLesson = getLessonById(id);
+        existingLesson.setTitle(lesson.getTitle());
+        existingLesson.setDescription(lesson.getDescription());
+        return lessonRepository.save(existingLesson);
     }
 
     @Override
-    public void deleteLesson(Long lessonId) {
-        lessonRepository.delete(getLesson(lessonId));
+    public void deleteLesson(Long id) {
+        lessonRepository.deleteById(id);
     }
 }

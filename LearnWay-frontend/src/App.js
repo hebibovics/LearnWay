@@ -34,6 +34,9 @@ import WebDev from "./pages/course fields/WebDev";
 import CourseDetails from "./pages/course fields/CourseDetails";
 import InstructorAddCoursePage from "./pages/instructor/courses/InstructorAddCoursePage";
 import InstructorCoursesPage from "./pages/instructor/courses/InstructorCoursesPage";
+import CourseDetailsInstructor from "./pages/instructor/courses/CourseDetailsInstructor";
+import InstructorAddLesson from "./pages/instructor/lessons/InstructorAddLesson";
+import InstructorLessonsPage from "./pages/instructor/lessons/InstructorLessonsPage";
 
 const App = () => {
   return (
@@ -70,6 +73,9 @@ const App = () => {
         <Route path="/instructorProfile" element={<InstructorProfilePage />} />
         <Route path="/instructorAddCourse" element={<InstructorAddCoursePage />} />
         <Route path="/instructorCourses" element={<InstructorCoursesPage />} />
+        <Route path="/courseInstructor/:id" element={<CourseDetailsInstructor/>} />
+        <Route path="/instructorAddLesson/:id" element={<InstructorAddLesson/>} />
+        <Route path="/instructorLessons/:id" element={<InstructorLessonsPage/>} />
 
         <Route path="/aboutUs/" element={<AboutUs />} />
         <Route path="/home/" element={<Home />} />
@@ -84,6 +90,9 @@ const App = () => {
         <Route path="/SoftSkills/" element={<SoftSkills />} />
         <Route path="/WebDesign/" element={<WebDesign />} />
         <Route path="/WebDevelopment" element={<WebDev/>} />
+
+
+
       </Routes>
     </Router>
   );

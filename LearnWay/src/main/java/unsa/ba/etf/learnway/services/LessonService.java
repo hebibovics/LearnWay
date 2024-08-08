@@ -7,12 +7,8 @@ import java.util.List;
 public interface LessonService {
 
     Lesson addLesson(Lesson lesson);
-
-    List<Lesson> getLessons();
-
-    Lesson getLesson(Long lessonId);
-
-    Lesson updateLesson(Lesson lesson);
-
-    void deleteLesson(Long lessonId);
+    List<Lesson> getAllLessons();
+    Lesson getLessonById(Long id);
+    Lesson updateLesson(Long id, Lesson lesson);
+    void deleteLesson(Long id);
 }

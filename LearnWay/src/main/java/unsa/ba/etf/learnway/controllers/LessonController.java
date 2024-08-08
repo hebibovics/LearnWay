@@ -1,47 +1,71 @@
 package unsa.ba.etf.learnway.controllers;
 
-import unsa.ba.etf.learnway.models.Lesson;
-import unsa.ba.etf.learnway.services.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import unsa.ba.etf.learnway.models.Course;
+import unsa.ba.etf.learnway.models.Lesson;
+import unsa.ba.etf.learnway.services.CourseService;
+import unsa.ba.etf.learnway.services.LessonService;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api/lesson")
-
 public class LessonController {
 
     @Autowired
     private LessonService lessonService;
 
+    @Autowired
+    private CourseService courseService;
+
     @PostMapping("/")
-    public ResponseEntity<?> addLesson(@RequestBody Lesson lesson) {
-        return ResponseEntity.ok(lessonService.addLesson(lesson));
+    //http://localhost:8081/api/lesson/?courseId=1
+    public ResponseEntity<?> addLesson(@RequestBody Lesson lesson, @RequestParam Long courseId) {
+        try {
+            Course course = courseService.findCourseById(courseId);
+            lesson.setCourse(course);
+            return ResponseEntity.ok(lessonService.addLesson(lesson));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding lesson: " + e.getMessage());
+        }
     }
 
     @GetMapping("/")
-    public ResponseEntity<?> getLessons() {
-        return ResponseEntity.ok(lessonService.getLessons());
+    public ResponseEntity<List<Lesson>> getAllLessons() {
+        return ResponseEntity.ok(lessonService.getAllLessons());
     }
 
-    @GetMapping("/{lessonId}")
-    public ResponseEntity<?> getLesson(@PathVariable Long lessonId) {
-        return ResponseEntity.ok(lessonService.getLesson(lessonId));
-    }
-
-    @PutMapping("/{lessonId}")
-    public ResponseEntity<?> updateLesson(@PathVariable Long lessonId, @RequestBody Lesson lesson) {
-        if (lessonService.getLesson(lessonId) != null) {
-            return ResponseEntity.ok(lessonService.updateLesson(lesson));
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getLessonById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.ok(lessonService.getLessonById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Lesson with id : " + String.valueOf(lessonId) + ", doesn't exists");
     }
 
-    @DeleteMapping("/{lessonId}")
-    public ResponseEntity<?> deleteLesson(@PathVariable Long lessonId) {
-        lessonService.deleteLesson(lessonId);
-        return ResponseEntity.ok(true);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateLesson(@PathVariable Long id, @RequestBody Lesson lesson) {
+        try {
+            return ResponseEntity.ok(lessonService.updateLesson(id, lesson));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating lesson: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteLesson(@PathVariable Long id) {
+        try {
+            lessonService.deleteLesson(id);
+            return ResponseEntity.ok("Lesson deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting lesson: " + e.getMessage());
+        }
     }
 }
+
+
