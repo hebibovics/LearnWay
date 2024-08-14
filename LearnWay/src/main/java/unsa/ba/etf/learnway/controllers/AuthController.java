@@ -21,15 +21,19 @@ public class AuthController {
         return authService.registerUserService(user);
     }
 //
+//{
+//    "firstName":"sanis",
+//        "lastName": "saaa",
+//        "username": "saniDSDSaDSASSh1",
+//        "password": "saniS1",
+//        "phoneNumber": "0001",
+//        "isActive": true,
+//        "roles": [
 //    {
-//        "firstName":"sanis",
-//            "lastName": "saaa",
-//            "username": "sanidah1",
-//            "password": "sani1",
-//            "phoneNumber": "0001",
-//            "isActive": true,
-//            "user_role": "USER"
+//        "roleName": "INSTRUCTOR"
 //    }
+//    ]
+//}
 //
 //
 

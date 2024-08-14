@@ -23,6 +23,10 @@ public class Role {
     @Column(name="role_description")
     private String roleDescription;
 
+    public Role(String roleName) {
+        this.roleName = roleName;
+    }
+
    // @ManyToMany(mappedBy = "roles")
    // private Set<User> users = new HashSet<>();
 }

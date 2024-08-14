@@ -20,7 +20,7 @@ const RegisterPage = () => {
   const [passwordType, setPasswordType] = useState("password");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState(""); // Default role
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,21 +29,13 @@ const RegisterPage = () => {
   const showPasswordHandler = () => {
     const temp = !showPassword;
     setShowPassword(temp);
-    if (temp) {
-      setPasswordType("text");
-    } else {
-      setPasswordType("password");
-    }
+    setPasswordType(temp ? "text" : "password");
   };
 
   const showConfirmPasswordHandler = () => {
     const temp = !showConfirmPassword;
     setShowConfirmPassword(temp);
-    if (temp) {
-      setConfirmPasswordType("text");
-    } else {
-      setConfirmPasswordType("password");
-    }
+    setConfirmPasswordType(temp ? "text" : "password");
   };
 
   const submitHandler = (e) => {
@@ -54,7 +46,7 @@ const RegisterPage = () => {
       username: username,
       password: password,
       phoneNumber: phoneNumber,
-      role: "USER"
+      roles: [{ roleName: role }] // Include the role in the request
     };
     register(dispatch, user).then((data) => {
       if (data.type === authConstants.USER_REGISTER_SUCCESS) {
@@ -64,115 +56,121 @@ const RegisterPage = () => {
   };
 
   return (
-    <FormContainer>
-      <h1 className="mt-5">Sign Up</h1>
-      <Form onSubmit={submitHandler}>
-        <Form.Group className="my-3" controlId="fname">
-          <Form.Label>First Name</Form.Label>
-          <Form.Control
-            type="name"
-            placeholder="Enter First Name"
-            value={firstName}
-            onChange={(e) => {
-              setFirstName(e.target.value);
-            }}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="my-3" controlId="lname">
-          <Form.Label>Last Name</Form.Label>
-          <Form.Control
-            type="name"
-            placeholder="Enter Last Name"
-            value={lastName}
-            onChange={(e) => {
-              setLastName(e.target.value);
-            }}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="my-3" controlId="phone_number">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control
-              type="phone"
-              placeholder="Enter Phone Number"
-              value={phoneNumber}
-              onChange={(e) => {
-                setPhoneNumber(e.target.value);
-              }}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="my-3" controlId="username">
-          <Form.Label>User Name</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter User Name"
-            value={username}
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-          ></Form.Control>
-        </Form.Group>
-
-        <Form.Group className="my-3" controlId="password">
-          <Form.Label>Password</Form.Label>
-          <InputGroup>
+      <FormContainer>
+        <h1 className="mt-5">Sign Up</h1>
+        <Form onSubmit={submitHandler}>
+          <Form.Group className="my-3" controlId="fname">
+            <Form.Label>First Name</Form.Label>
             <Form.Control
-              type={`${passwordType}`}
-              placeholder="Enter Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            ></Form.Control>
-            <Button
-              onClick={showPasswordHandler}
-              variant=""
-              style={{ border: "1px solid black" }}
-            >
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </Button>
-          </InputGroup>
-        </Form.Group>
+                type="name"
+                placeholder="Enter First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+            />
+          </Form.Group>
 
-        <Form.Group className="my-3" controlId="confirmPassword">
-          <Form.Label>Confirm Password</Form.Label>
-          <InputGroup>
+          <Form.Group className="my-3" controlId="lname">
+            <Form.Label>Last Name</Form.Label>
             <Form.Control
-              type={`${confirmPasswordType}`}
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
-            ></Form.Control>
-            <Button
-              onClick={showConfirmPasswordHandler}
-              variant=""
-              style={{ border: "1px solid black" }}
+                type="name"
+                placeholder="Enter Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="my-3" controlId="phone_number">
+            <Form.Label>Phone Number</Form.Label>
+            <Form.Control
+                type="phone"
+                placeholder="Enter Phone Number"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="my-3" controlId="username">
+            <Form.Label>User Name</Form.Label>
+            <Form.Control
+                type="text"
+                placeholder="Enter User Name"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+            />
+          </Form.Group>
+
+          <Form.Group className="my-3" controlId="role">
+            <Form.Label>Role</Form.Label>
+            <Form.Control
+                as="select"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                custom
             >
-              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-            </Button>
-          </InputGroup>
-        </Form.Group>
+              <option value="">Choose Role</option>
+              <option value="USER">Student</option>
+              <option value="INSTRUCTOR">Instructor</option>
+            </Form.Control>
+          </Form.Group>
 
-        <Button variant="" className="my-3" type="submit" style={{backgroundColor:"rgb(33, 182, 168)", color:"white"}}>
-          Register
-        </Button>
-      </Form>
+          <Form.Group className="my-3" controlId="password">
+            <Form.Label>Password</Form.Label>
+            <InputGroup>
+              <Form.Control
+                  type={passwordType}
+                  placeholder="Enter Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+              />
+              <Button
+                  onClick={showPasswordHandler}
+                  variant=""
+                  style={{ border: "1px solid black" }}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </Button>
+            </InputGroup>
+          </Form.Group>
 
-      {registerReducer.loading ? (
-        <Loader />
-      ) : (
-        <Row className="py-3">
-          <Col>
-            Have an Account? <Link to="/" style={{color:"rgb(33, 182, 168)"}}> <b>Login</b> </Link>
-          </Col>
-        </Row>
-      )}
+          <Form.Group className="my-3" controlId="confirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <InputGroup>
+              <Form.Control
+                  type={confirmPasswordType}
+                  placeholder="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <Button
+                  onClick={showConfirmPasswordHandler}
+                  variant=""
+                  style={{ border: "1px solid black" }}
+              >
+                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+              </Button>
+            </InputGroup>
+          </Form.Group>
 
-    </FormContainer>
+          <Button
+              variant=""
+              className="my-3"
+              type="submit"
+              style={{ backgroundColor: "rgb(33, 182, 168)", color: "white" }}
+          >
+            Register
+          </Button>
+        </Form>
+
+        {registerReducer.loading ? (
+            <Loader />
+        ) : (
+            <Row className="py-3">
+              <Col>
+                Have an Account? <Link to="/" style={{ color: "rgb(33, 182, 168)" }}> <b>Login</b> </Link>
+              </Col>
+            </Row>
+        )}
+      </FormContainer>
   );
 };
 

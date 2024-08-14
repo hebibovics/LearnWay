@@ -30,12 +30,12 @@ const Sidebar = ({ children }) => {
     },
     {
       path: "/adminAddQuiz",
-      name: "Add Quiz",
+      name: "New Lessons",
       icon: <MdQueue />,
     },
     {
       path: "/adminallResult",
-      name: "All Result",
+      name: "All Results",
       icon: <TbReport/>,
     },
   ];

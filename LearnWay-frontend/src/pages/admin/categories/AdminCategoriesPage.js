@@ -22,7 +22,7 @@ const AdminCategoriesPage = () => {
   const [categories, setCategories] = useState(categoriesReducer.categories);
 
   const categoryClickHandler = (catId) => {
-    navigate(`/adminQuizzes/?catId=${catId}`);
+    navigate(`/adminCourseDetails/${catId}`);
   };
 
   const addNewCategoryHandler = () => {

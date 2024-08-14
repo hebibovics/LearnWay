@@ -43,15 +43,31 @@ public class AuthServiceImpl implements AuthService {
         if (temp != null) {
             throw new Exception("User Already Exists");
         } else {
-            Role role = roleRepository.findById("INSTRUCTOR").isPresent() ? roleRepository.findById("INSTRUCTOR").get() : null;
+            // Ako user_role nije postavljen, koristi podrazumijevanu rolu
+            String roleName = (user.getRoles() != null && !user.getRoles().isEmpty())
+                    ? user.getRoles().stream().findFirst().get().getRoleName()
+                    : "USER";
+
+            // Provjeri user_role iz JSON zahtjeva
+            if (user.getRoles() != null && !user.getRoles().isEmpty()) {
+                roleName = user.getRoles().stream().findFirst().get().getRoleName();
+            }
+
+            // Pronađi rolu iz roleName
+            Role role = roleRepository.findById(roleName)
+                    .orElseThrow(() -> new Exception("Role not found"));
+
+            // Inicijaliziraj set role i dodaj pronađenu rolu
             Set<Role> userRoles = new HashSet<>();
             userRoles.add(role);
+
+            // Postavi rolu u korisnički entitet
             user.setRoles(userRoles);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
+
             return userRepository.save(user);
         }
     }
-
     public LoginResponse loginUserService(LoginRequest loginRequest) throws Exception {
 
         authenticate(loginRequest.getUsername(), loginRequest.getPassword());

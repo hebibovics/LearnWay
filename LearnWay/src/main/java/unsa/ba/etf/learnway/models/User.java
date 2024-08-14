@@ -43,12 +43,12 @@ public class User implements UserDetails {
     private boolean isActive = true;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "user_roles",
             joinColumns = {
                     @JoinColumn(name = "user_id")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "role_id")
+                    @JoinColumn(name = "role_name")
             }
     )
     private Set<Role> roles;
