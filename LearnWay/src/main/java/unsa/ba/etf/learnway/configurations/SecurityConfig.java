@@ -15,6 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
 
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -35,6 +39,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:3000"); // Dodajte URL vaše frontend aplikacije
+        corsConfiguration.addAllowedMethod("*"); // Dozvolite sve HTTP metode
+        corsConfiguration.addAllowedHeader("*"); // Dozvolite sva zaglavlja
+        corsConfiguration.setAllowCredentials(true); // Dozvolite kolačiće
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration); // Primijenite CORS na sve rute
+
+
+        return new CorsFilter(source);
     }
 
     @Override
@@ -53,25 +71,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/lesson/**").permitAll()
                 .antMatchers("/api/lesson").permitAll()
                 .antMatchers("/api/lesson/").permitAll()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Dozvoli OPTIONS zahtjeve za sve rute
+
+
 
                 // .antMatchers(HttpMethod.POST, "/api/category/**").hasAuthority("ADMIN")
                 // .antMatchers(HttpMethod.GET, "/api/category/**").hasAnyAuthority("USER", "ADMIN")
                 // .antMatchers(HttpMethod.PUT, "/api/category/**").hasAuthority("ADMIN")
                 // .antMatchers(HttpMethod.DELETE, "/api/category/**").hasAuthority("ADMIN")
                 //
-                .antMatchers(HttpMethod.POST, "/api/quiz/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/quiz/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/quiz/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/quiz/**").hasAuthority("ADMIN")
+              //  .antMatchers(HttpMethod.POST, "/api/quiz/**").hasAuthority("ADMIN")
+                //.antMatchers(HttpMethod.GET, "/api/quiz/**").hasAnyAuthority("USER", "ADMIN")
+                //.antMatchers(HttpMethod.PUT, "/api/quiz/**").hasAuthority("ADMIN")
+                //.antMatchers(HttpMethod.DELETE, "/api/quiz/**").hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/api/question/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/question/**").hasAnyAuthority("USER", "ADMIN")
-                .antMatchers(HttpMethod.PUT, "/api/question/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/question/**").hasAuthority("ADMIN")
+                //.antMatchers(HttpMethod.POST, "/api/question/**").hasAuthority("ADMIN")
+                //.antMatchers(HttpMethod.GET, "/api/question/**").hasAnyAuthority("USER", "ADMIN")
+                //.antMatchers(HttpMethod.PUT, "/api/question/**").hasAuthority("ADMIN")
+                //.antMatchers(HttpMethod.DELETE, "/api/question/**").hasAuthority("ADMIN")
 
-                .antMatchers(HttpMethod.POST, "/api/quizResult/**").hasAuthority("USER")
-                .antMatchers(HttpMethod.GET, "/api/quizResult/all/**").hasAuthority("ADMIN")
-                .antMatchers(HttpMethod.GET, "/api/quizResult/**").hasAnyAuthority("USER", "ADMIN")
+                //.antMatchers(HttpMethod.POST, "/api/quizResult/**").hasAuthority("USER")
+                //.antMatchers(HttpMethod.GET, "/api/quizResult/all/**").hasAuthority("ADMIN")
+                //.antMatchers(HttpMethod.GET, "/api/quizResult/**").hasAnyAuthority("USER", "ADMIN")
 
                 .anyRequest().denyAll()
                 .and()

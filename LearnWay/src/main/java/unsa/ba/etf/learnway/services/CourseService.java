@@ -16,4 +16,6 @@ public interface CourseService {
     Course findCourseById(Long id);
 
     void deleteCourse(Long courseId);
+    List<Course> getCoursesByInstructor(Long instructorId);
+    Course addCourseForInstructor(Long instructorId, Course course);
 }

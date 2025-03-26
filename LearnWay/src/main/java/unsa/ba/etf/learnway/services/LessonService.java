@@ -1,5 +1,6 @@
 package unsa.ba.etf.learnway.services;
 
+import unsa.ba.etf.learnway.models.Course;
 import unsa.ba.etf.learnway.models.Lesson;
 
 import java.util.List;
@@ -11,4 +12,6 @@ public interface LessonService {
     Lesson getLessonById(Long id);
     Lesson updateLesson(Long id, Lesson lesson);
     void deleteLesson(Long id);
+    List<Lesson> getLessonsByCourse(Course course);
+
 }

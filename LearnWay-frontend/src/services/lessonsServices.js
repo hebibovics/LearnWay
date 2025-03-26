@@ -1,36 +1,32 @@
 import axios from "axios";
 
+const addLesson = async (lesson, courseId, token) => {
+    console.log("Token:", token); // Provjeri je li token ispravan
+
+    try {
+        const config = {
+            headers: { Authorization: `Bearer ${token}` },
+        };
+        console.log("NOVI TOKEN ", token);
+
+        const { data } = await axios.post(`/api/lesson/api/lesson/${courseId}`, lesson, config);
+        console.log("Backend response:", data); // Provjeri što backend vraća
+        console.log("Sending request to /api/lesson/", courseId); // Provjeri id
+        return { data: data, isAdded: true, error: null };
+    } catch (error) {
+        return { data: null, isAdded: false, error: error.response.statusText };
+    }
+};
+
 const fetchLessons = async (token) => {
     try {
         const config = {
             headers: { Authorization: `Bearer ${token}` },
         };
         const { data } = await axios.get("/api/lesson/", config);
-        console.log("lessonService:fetchlessons() Success: ", data);
         return data;
     } catch (error) {
-        console.error(
-            "lessonService:fetchlessons() Error: ",
-            error.response.statusText
-        );
         return error.response.statusText;
-    }
-};
-
-const addLesson = async (lesson, token) => {
-    try {
-        const config = {
-            headers: { Authorization: `Bearer ${token}` },
-        };
-        const { data } = await axios.post("/api/lesson/", lesson, config);
-        console.log("lessonService:addClesson() Success: ", data);
-        return { data: data, isAdded: true, error: null };
-    } catch (error) {
-        console.error(
-            "lessonService:addlesson() Error: ",
-            error.response.statusText
-        );
-        return { data: null, isAdded: false, error: error.response.statusText };
     }
 };
 
@@ -87,9 +83,8 @@ const addLesson = async (lesson, token) => {
 //};
 
 const lessonsService = {
-    addLesson,
+    addLesson,  // Including addLesson as part of an object
     fetchLessons,
-    //updateCourse,
-    //deleteCourse,
 };
+
 export default lessonsService;

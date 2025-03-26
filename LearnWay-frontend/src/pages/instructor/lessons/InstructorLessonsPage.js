@@ -1,22 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import axios from "axios"; // Ako koristiš axios za pozive API-ja
+import { useParams } from 'react-router-dom';
 
 const InstructorLessonsPage = () => {
     const [lessons, setLessons] = useState([]);
+    const courseId = localStorage.getItem('courseId');
+    console.log("Course ID:", courseId); // Provjeri vrijednost courseId
+
+
 
     useEffect(() => {
         const fetchLessons = async () => {
-            try {
-                const response = await axios.get("/api/lesson/"); // API poziv za dohvaćanje lekcija
-                setLessons(response.data);
-            } catch (error) {
-                console.error("There was an error fetching the lessons!", error);
+            const courseId = localStorage.getItem('courseId');
+            console.log("Course ID in localStorage:", courseId);  // Provjerite ovdje
+            if (courseId) {
+                try {
+                    console.log("Fetching lessons for Course ID:", courseId);
+                    const response = await axios.get(`/api/lesson/api/lesson/${courseId}`);
+                    setLessons(response.data);
+                } catch (error) {
+                    console.error("There was an error fetching the lessons!", error);
+                }
+            } else {
+                console.error("Course ID is missing.");
             }
         };
 
         fetchLessons();
     }, []);
+
+
 
     return (
         <Container>

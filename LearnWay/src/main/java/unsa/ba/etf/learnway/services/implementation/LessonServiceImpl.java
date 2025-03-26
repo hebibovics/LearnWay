@@ -51,4 +51,9 @@ public class LessonServiceImpl implements LessonService {
     public void deleteLesson(Long id) {
         lessonRepository.deleteById(id);
     }
+    @Override
+    public List<Lesson> getLessonsByCourse(Course course) {
+        return lessonRepository.findByCourse(course);
+    }
+
 }

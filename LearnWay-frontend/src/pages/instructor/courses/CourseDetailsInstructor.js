@@ -5,17 +5,21 @@ import axios from 'axios';
 import swal from 'sweetalert';
 
 const CourseDetailsInstructor = () => {
-    const { id } = useParams();
+    const { id } = useParams(); // Provjerite da li je id dostupan
+    console.log("Course ID from URL:", id); // Provjerite vrijednost id-a
+
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
+
         const fetchCourse = async () => {
             try {
                 const response = await axios.get(`/api/course/${id}`);
                 setCourse(response.data);
+                console.log("fetch", id);
             } catch (err) {
                 setError(err);
             } finally {
@@ -31,6 +35,8 @@ const CourseDetailsInstructor = () => {
     };
 
     const handleViewLessons = () => {
+        localStorage.setItem('courseId', id);
+        console.log("jfijd", course.id);
         navigate(`/instructorLessons/${id}`);
     };
 
@@ -69,7 +75,6 @@ const CourseDetailsInstructor = () => {
             <Row className="justify-content-center">
                 <Col md={6}>
                     <h3>Course Name: {course.title}</h3>
-                    <p>Total Hours: {course.hours}</p>
                     <p>Lessons: {course.lessons}</p>
                     <p>Rate: {course.rate}</p>
                     <p>Category: {course.catId}</p>

@@ -69,7 +69,7 @@ public class LearnWayApplication {
             Category otherCourses = categoryRepository.findByTitle("Other Courses");
 
             // Add courses to each category
-            courseRepository.saveAll(Arrays.asList(
+          /*  courseRepository.saveAll(Arrays.asList(
                     // Web Development
                     Course.builder().title("Basic CSS and HTML").description("Learn the basics of CSS and HTML.").category(webDevelopment).build(),
                     Course.builder().title("Advanced JavaScript").description("Deep dive into JavaScript advanced topics.").category(webDevelopment).build(),
@@ -141,7 +141,7 @@ public class LearnWayApplication {
                     Course.builder().title("Cloud Computing Basics").description("Learn the basics of cloud computing.").category(otherCourses).build(),
                     Course.builder().title("IoT Fundamentals").description("Introduction to Internet of Things.").category(otherCourses).build(),
                     Course.builder().title("AR/VR Basics").description("Learn the basics of augmented and virtual reality.").category(otherCourses).build()
-            ));
+            ));*/
 
         };
     }

@@ -42,10 +42,6 @@ const Programming = () => {
         switch (sortOption) {
             case 'rate-high-low':
                 return b.rate - a.rate;
-            case 'hours-min-max':
-                return a.hours - b.hours;
-            case 'hours-max-min':
-                return b.hours - a.hours;
             case 'lessons-min-max':
                 return a.lessons - b.lessons;
             case 'lessons-max-min':
@@ -82,8 +78,6 @@ const Programming = () => {
                 <Col md={4}>
                     <DropdownButton id="dropdown-basic-button" title="Sort">
                         <Dropdown.Item onClick={() => handleSort('rate-high-low')}>Sort by rate (highest to lowest)</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleSort('hours-min-max')}>Sort by total hours (min to max)</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleSort('hours-max-min')}>Sort by total hours (max to min)</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleSort('lessons-min-max')}>Sort by number of lessons (min to max)</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleSort('lessons-max-min')}>Sort by number of lessons (max to min)</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleSort('alphabet')}>Sort by alphabet</Dropdown.Item>
@@ -98,7 +92,6 @@ const Programming = () => {
                                 <Card.Title className="text-uppercase">{course.title}</Card.Title>
                                 <Card.Text>
                                     Lessons: {course.lessons}<br />
-                                    Total Hours: {course.hours}<br />
                                     Rate: {course.rate}
                                 </Card.Text>
                                 <button onClick={() => handleViewCourse(course.courseId)} className="btn btn-primary">View Course</button>

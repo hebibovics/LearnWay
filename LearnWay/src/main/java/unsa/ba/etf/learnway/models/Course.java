@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -31,7 +32,8 @@ public class Course {
     private String description;
 
     @ManyToMany(mappedBy = "courses")
-    private Set<User> users;
+    private Set<User> users = new HashSet<>();  // Inicijalizirano na prazan set
+
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)

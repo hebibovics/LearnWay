@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/course")
@@ -44,4 +46,27 @@ public class CourseController {
         courseService.deleteCourse(courseId);
         return ResponseEntity.ok(true);
     }
+    @GetMapping("/by-instructor/{instructorId}")
+    public ResponseEntity<?> getCoursesByInstructor(@PathVariable Long instructorId) {
+        List<Course> courses = courseService.getCoursesByInstructor(instructorId);
+        if (courses != null && !courses.isEmpty()) {
+            return ResponseEntity.ok(courses);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No courses found for instructor with ID: " + instructorId);
+        }
+    }
+
+
+    @PostMapping("/by-instructor/{instructorId}")
+    public ResponseEntity<?> addCourseForInstructor(@PathVariable Long instructorId, @RequestBody Course course) {
+        try {
+            Course createdCourse = courseService.addCourseForInstructor(instructorId, course);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdCourse);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error creating course: " + e.getMessage());
+        }
+    }
+
+
+
 }

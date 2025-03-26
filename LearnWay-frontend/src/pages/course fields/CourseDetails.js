@@ -10,6 +10,13 @@ const CourseDetails = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        if (course) {
+            localStorage.setItem('courseId', course.id); // Store courseId in localStorage
+            console.log("ovaj id sada ", course.id);
+        }
+    }, [course]);
+
+    useEffect(() => {
         const fetchCourse = async () => {
             try {
                 const response = await axios.get(`/api/course/${id}`);
@@ -34,7 +41,6 @@ const CourseDetails = () => {
             <Row className="justify-content-center">
                 <Col md={6}>
                     <h3>Course Name: {course.title}</h3>
-                    <p>Total Hours: {course.hours}</p>
                     <p>Lessons: {course.lessons}</p>
                     <p>Grade: {course.rate}</p>
                     <Button variant="primary">ENROLL</Button>

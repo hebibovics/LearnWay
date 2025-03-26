@@ -22,17 +22,36 @@ public class LessonController {
     @Autowired
     private CourseService courseService;
 
-    @PostMapping("/")
-    //http://localhost:8081/api/lesson/?courseId=1
-    public ResponseEntity<?> addLesson(@RequestBody Lesson lesson, @RequestParam Long courseId) {
+    @PostMapping("/api/lesson/{courseId}")
+    public ResponseEntity<?> addLesson(@RequestBody Lesson lesson, @PathVariable Long courseId) {
         try {
             Course course = courseService.findCourseById(courseId);
+            if (course == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found");
+            }
             lesson.setCourse(course);
             return ResponseEntity.ok(lessonService.addLesson(lesson));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding lesson: " + e.getMessage());
         }
     }
+
+    @GetMapping("/api/lesson/{courseId}")
+    public ResponseEntity<List<Lesson>> getLessonsByCourseId(@PathVariable Long courseId) {
+        try {
+            Course course = courseService.findCourseById(courseId);
+            if (course == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            List<Lesson> lessons = lessonService.getLessonsByCourse(course);
+            return ResponseEntity.ok(lessons);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+
+
 
     @GetMapping("/")
     public ResponseEntity<List<Lesson>> getAllLessons() {
@@ -67,5 +86,4 @@ public class LessonController {
         }
     }
 }
-
 
