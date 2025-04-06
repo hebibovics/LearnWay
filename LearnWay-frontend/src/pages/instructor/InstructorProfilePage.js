@@ -12,6 +12,8 @@ const InstructorProfilePage = () => {
     const navigate = useNavigate();
     const loginReducer = useSelector((state) => state.loginReducer);
     const user = loginReducer.user;
+    console.log("User object:", user);
+    console.log("User object:", user.firstName);
     const token = JSON.parse(localStorage.getItem("jwtToken"));
 
     useEffect(() => {
@@ -24,6 +26,7 @@ const InstructorProfilePage = () => {
 
     useEffect(() => {
         if (!localStorage.getItem("jwtToken")) navigate("/");
+        console.log("User state in Redux:", user);
     }, []);
 
     return (
@@ -33,13 +36,6 @@ const InstructorProfilePage = () => {
             </div>
             {user && (
                 <div className="userProfilePage__content">
-                    <Image
-                        className="userProfilePage__content--profilePic"
-                        width="20%"
-                        height="20%"
-                        roundedCircle
-                        src="images/user.png"
-                    />
 
                     <Table bordered className="userProfilePage__content--table">
                         <tbody>

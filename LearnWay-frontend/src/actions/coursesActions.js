@@ -1,12 +1,9 @@
 import * as coursesConstants from "../constants/coursesConstants";
 import coursesServices from "../services/coursesServices";
 
-export const addCourse = async (dispatch, course, token) => {
+export const addCourse = async (dispatch, course, token, instructorId) => {
     dispatch({ type: coursesConstants.ADD_COURSE_REQUEST });
-    const { data, isAdded, error } = await coursesServices.addCourse(
-        course,
-        token
-    );
+    const { data, isAdded, error } = await coursesServices.addCourse(course, token, instructorId);
     if (isAdded) {
         return dispatch({
             type: coursesConstants.ADD_COURSE_SUCCESS,
@@ -19,6 +16,7 @@ export const addCourse = async (dispatch, course, token) => {
         });
     }
 };
+
 
 export const fetchCourses = async (dispatch, token) => {
     dispatch({ type: coursesConstants.FETCH_COURSES_REQUEST });

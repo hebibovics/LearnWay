@@ -17,22 +17,24 @@ const fetchCourses = async (token) => {
     }
 };
 
-const addCourse = async (course, token) => {
+const addCourse = async (course, token, instructorId) => {
     try {
         const config = {
             headers: { Authorization: `Bearer ${token}` },
         };
-        const { data } = await axios.post("/api/course/", course, config);
+        const { data } = await axios.post(`/api/course/by-instructor/${instructorId}`, course, config);
         console.log("courseService:addCourse() Success: ", data);
         return { data: data, isAdded: true, error: null };
     } catch (error) {
         console.error(
             "courseService:addCourse() Error: ",
-            error.response.statusText
+            error.response?.statusText || error.message
         );
-        return { data: null, isAdded: false, error: error.response.statusText };
+        return { data: null, isAdded: false, error: error.response?.statusText || error.message };
     }
 };
+
+
 
 const deleteCourse = async (courseId, token) => {
     try {

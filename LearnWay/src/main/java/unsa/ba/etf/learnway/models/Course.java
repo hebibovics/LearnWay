@@ -48,4 +48,8 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Quiz> quizzes;
+    @ManyToOne
+    @JoinColumn(name = "instructor_id")
+    private User instructor;
+
 }

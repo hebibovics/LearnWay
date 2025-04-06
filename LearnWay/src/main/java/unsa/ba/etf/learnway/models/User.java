@@ -86,4 +86,7 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return isActive;
     }
+    //@OneToMany(mappedBy = "instructor")
+    //private Set<Course> coursesAsInstructor = new HashSet<>();
+
 }

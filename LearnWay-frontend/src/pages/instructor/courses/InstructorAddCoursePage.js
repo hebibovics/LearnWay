@@ -21,6 +21,7 @@ const InstructorAddCourse = () => {
     const categoriesReducer = useSelector((state) => state.categoriesReducer);
     const [categories, setCategories] = useState(categoriesReducer.categories);
 
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -32,7 +33,8 @@ const InstructorAddCourse = () => {
         setSelectedCategoryId(e.target.value);
     };
 
-    const token = JSON.parse(localStorage.getItem("jwtToken"));
+    const { token, user } = JSON.parse(localStorage.getItem("jwtToken"));
+    const instructorId = user?.id;
 
     const submitHandler = (e) => {
         e.preventDefault();
@@ -50,13 +52,14 @@ const InstructorAddCourse = () => {
                     )[0]["description"],
                 },
             };
-            addCourse(dispatch, course, token).then((data) => {
+            addCourse(dispatch, course, token, instructorId).then((data) => {
                 if (data.type === coursesConstants.ADD_COURSE_SUCCESS)
-                    swal("Course Added!", `${course.title} succesfully added`, "success");
+                    swal("Course Added!", `${course.title} successfully added`, "success");
                 else {
                     swal("Course Not Added!", `${course.title} not added`, "error");
                 }
             });
+
         } else {
             alert("Select valid category!");
         }

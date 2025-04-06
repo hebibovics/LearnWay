@@ -33,13 +33,6 @@ const UserProfilePage = () => {
       </div>
       {user && (
         <div className="userProfilePage__content">
-          <Image
-            className="userProfilePage__content--profilePic"
-            width="20%"
-            height="20%"
-            roundedCircle
-            src="images/user.png"
-          />
 
           <Table bordered className="userProfilePage__content--table">
             <tbody>

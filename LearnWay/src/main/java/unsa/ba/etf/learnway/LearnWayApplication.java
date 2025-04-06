@@ -29,20 +29,22 @@ public class LearnWayApplication {
                     Role.builder().roleName("INSTRUCTOR").roleDescription("User, who creates courses, adds lessons and tracks students progress").build()
             ));
 
-            Role instructorRole = roleRepository.findByRoleName("INSTRUCTOR");
+            //Role instructorRole = roleRepository.findById("INSTRUCTOR")
+              //      .orElseThrow(() -> new RuntimeException("Role INSTRUCTOR not found"));
+
 
             Set<Role> instructorRoles = new HashSet<>();
             //instructorRoles.add(instructorRole);
 
-            userRepository.save(User.builder()
-                    .firstName("Instructor")
-                    .lastName("is")
-                    .username("username")
-                    .password("pass")
-                    .roles(instructorRoles)
-                    .isActive(true)
-                    .build()
-            );
+            //userRepository.save(User.builder()
+                    //.firstName("Instructor")
+                    //.lastName("is")
+                    //.username("username")
+                    //.password("pass")
+                    //.roles(instructorRoles)
+                    //        .isActive(true)
+            //        .build()
+           // );
 
 
             categoryRepository.saveAll(Arrays.asList(

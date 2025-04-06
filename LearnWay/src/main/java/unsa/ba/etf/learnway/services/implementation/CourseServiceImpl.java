@@ -54,28 +54,29 @@ public class CourseServiceImpl implements CourseService {
         }
     }
     public List<Course> getCoursesByInstructor(Long instructorId) {
-        // Prvo provjeri da li instruktor postoji
         Optional<User> instructor = userRepository.findById(instructorId);
         if (instructor.isPresent() && instructor.get().getRoles().stream().anyMatch(role -> role.getRoleName().equals("INSTRUCTOR"))) {
-            // Ako je instruktor pronađen, filtriraj kurseve prema ovom instruktoru
-            return courseRepository.findByUsersRolesRoleNameAndUsersUserId("INSTRUCTOR", instructorId);
+            return courseRepository.findByInstructorId(instructorId);
         } else {
-            return Collections.emptyList(); // Nema kurseva za tog instruktora
+            return Collections.emptyList();
         }
     }
 
 
 
 
+
     public Course addCourseForInstructor(Long instructorId, Course course) {
-        // Dohvati profesora prema instructorId
         User instructor = userRepository.findById(instructorId)
                 .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
-        // Dodaj profesora u kurs
-        course.getUsers().add(instructor);
+        boolean isInstructor = instructor.getRoles().stream()
+                .anyMatch(role -> role.getRoleName().equalsIgnoreCase("INSTRUCTOR"));
+        if (!isInstructor) {
+            throw new RuntimeException("User is not an instructor");
+        }
 
-        // Spremi kurs i vrati
+        course.setInstructor(instructor);
         return courseRepository.save(course);
     }
 }

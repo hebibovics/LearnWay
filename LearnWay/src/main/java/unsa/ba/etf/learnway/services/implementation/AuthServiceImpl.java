@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
             // Ako user_role nije postavljen, koristi podrazumijevanu rolu
             String roleName = (user.getRoles() != null && !user.getRoles().isEmpty())
                     ? user.getRoles().stream().findFirst().get().getRoleName()
-                    : "USER";
+                    : "INSTRUCTOR";
 
             // Provjeri user_role iz JSON zahtjeva
             if (user.getRoles() != null && !user.getRoles().isEmpty()) {
