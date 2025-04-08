@@ -18,9 +18,9 @@ export const addCourse = async (dispatch, course, token, instructorId) => {
 };
 
 
-export const fetchCourses = async (dispatch, token) => {
+export const fetchCourses = async (dispatch, token, instructorId) => {
     dispatch({ type: coursesConstants.FETCH_COURSES_REQUEST });
-    const data = await coursesServices.fetchCourses(token);
+    const data = await coursesServices.fetchCourses(token, instructorId);  // Proslijedite instructorId
     if (data) {
         return dispatch({
             type: coursesConstants.FETCH_COURSES_SUCCESS,

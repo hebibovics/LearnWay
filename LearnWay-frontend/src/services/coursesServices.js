@@ -1,11 +1,17 @@
 import axios from "axios";
 
-const fetchCourses = async (token) => {
+const fetchCourses = async (token, instructorId) => {
     try {
+        console.log("Token sent in header:", token);
+
         const config = {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+                "Content-Type": "application/json"
+            }
         };
-        const { data } = await axios.get("/api/course/", config);
+        console.log (config);
+        // Dodajte instructorId u URL
+        const { data } = await axios.get(`http://localhost:8081/api/course/by-instructor/${instructorId}`, config);
         console.log("courseService:fetchCourses() Success: ", data);
         return data;
     } catch (error) {
@@ -17,12 +23,20 @@ const fetchCourses = async (token) => {
     }
 };
 
+
 const addCourse = async (course, token, instructorId) => {
     try {
+        console.log("Token sent in header:", token);
+        console.log("kurssss", JSON.stringify(course, null, 2));
+
         const config = {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: {
+                "Content-Type": "application/json"
+            }
         };
-        const { data } = await axios.post(`/api/course/by-instructor/${instructorId}`, course, config);
+        console.log("konfig", config);
+        const { data } = await axios.post(`/api/course/by-instructor/${instructorId}`, course, config)
+
         console.log("courseService:addCourse() Success: ", data);
         return { data: data, isAdded: true, error: null };
     } catch (error) {

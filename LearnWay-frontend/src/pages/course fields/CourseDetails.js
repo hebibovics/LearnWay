@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 import axios from 'axios';
+
 
 const CourseDetails = () => {
     const { id } = useParams();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const loginReducer = useSelector((state) => state.loginReducer);
+    const [userRole, setUserRole] = useState("");
+
+
 
     useEffect(() => {
         if (course) {
@@ -29,6 +36,18 @@ const CourseDetails = () => {
         };
 
         fetchCourse();
+        if (localStorage.getItem("jwtToken")) {
+            let role = "";
+            loginReducer.user.roles.forEach((r) => {
+                if (r["roleName"] === "INSTRUCTOR") {
+                    role = "INSTRUCTOR";
+                } else {
+                    role = "USER"; // Student
+                }
+            });
+            setUserRole(role);
+        }
+
     }, [id]);
 
     if (loading) return <p>Loading...</p>;
@@ -43,7 +62,14 @@ const CourseDetails = () => {
                     <h3>Course Name: {course.title}</h3>
                     <p>Lessons: {course.lessons}</p>
                     <p>Grade: {course.rate}</p>
-                    <Button variant="primary">ENROLL</Button>
+                    {userRole === "USER" && (
+                        <Button variant="outline-primary" className="mt-3">
+                            Enroll
+                        </Button>
+                    )}
+
+
+
                 </Col>
             </Row>
         </Container>

@@ -12,6 +12,11 @@ const SidebarInstructor = ({ children }) => {
     const [courses, setCourses] = useState(categoriesReducer.categories);
     const dispatch = useDispatch();
     const token = JSON.parse(localStorage.getItem("jwtToken"));
+    const user = JSON.parse(localStorage.getItem("user"));
+    const instructorId = user?.userId;
+    console.log("JWT from localStorage:", token);
+    console.log("User from localStorage:", user);
+    console.log("Instructor ID:", instructorId);
     const [menuItems, setMenuItems] = useState([
         {
             path: "/instructorProfile",
@@ -29,8 +34,9 @@ const SidebarInstructor = ({ children }) => {
 
     useEffect(() => {
         console.log("Fetching Courses because of SidebarUser");
-        fetchCourses(dispatch, token).then((data) => {
-            const tempCourses = data.payload;
+        fetchCourses(dispatch, token, instructorId).then((data) => {
+            console.log("Fetched data:", data);
+            const tempCourses = Array.isArray(data?.payload) ? data.payload : [];
             setCourses(tempCourses);
 
             const newMenuItems = tempCourses.map((c) => {

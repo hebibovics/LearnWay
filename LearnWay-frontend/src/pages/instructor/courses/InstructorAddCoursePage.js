@@ -33,8 +33,14 @@ const InstructorAddCourse = () => {
         setSelectedCategoryId(e.target.value);
     };
 
-    const { token, user } = JSON.parse(localStorage.getItem("jwtToken"));
-    const instructorId = user?.id;
+    const token = localStorage.getItem("jwtToken");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const instructorId = user?.userId;
+
+    console.log("JWT from localStorage:", token);
+    console.log("User from localStorage:", user);
+    console.log("Instructor ID:", instructorId);
+    console.log("Raw token", token);
 
     const submitHandler = (e) => {
         e.preventDefault();

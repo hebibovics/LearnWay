@@ -11,6 +11,7 @@ const Header = () => {
   const [profilePageUrl, setProfilePageUrl] = useState("");
   const [userRole, setUserRole] = useState("");
 
+
   const logoutHandler = () => {
     setIsLoggedIn(false);
     localStorage.clear();
@@ -47,11 +48,9 @@ const Header = () => {
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="justify-content-end flex-grow-1 pe-3">
                 {/* Conditionally render the Home link based on user role */}
-                {userRole !== "INSTRUCTOR" && (
                     <LinkContainer to="/home">
                       <Nav.Link>Home</Nav.Link>
                     </LinkContainer>
-                )}
 
                 <LinkContainer to="/aboutUs">
                   <Nav.Link>About Us</Nav.Link>
