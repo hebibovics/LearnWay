@@ -143,14 +143,14 @@ const InstructorAddCourse = () => {
               ></Form.Control>
             </Form.Group> */}
 
-                        <Form.Check
+                        {/*<Form.Check
                             className="my-3"
                             type="switch"
                             id="publish-switch"
                             label="Publish Course"
                             onChange={onClickPublishedHandler}
                             checked={isActive}
-                        />
+                        />*/}
 
                         <div className="my-3">
                             <label htmlFor="category-select">Choose a Category:</label>

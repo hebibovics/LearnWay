@@ -36,7 +36,9 @@ const CourseDetailsInstructor = () => {
 
     const handleViewLessons = () => {
         localStorage.setItem('courseId', id);
-        console.log("jfijd", course.id);
+        console.log("jfijd", course.courseId);
+        console.log("jfijd", course);
+
         navigate(`/instructorLessons/${id}`);
     };
 
@@ -75,9 +77,9 @@ const CourseDetailsInstructor = () => {
             <Row className="justify-content-center">
                 <Col md={6}>
                     <h3>Course Name: {course.title}</h3>
-                    <p>Lessons: {course.lessons}</p>
+                    <p>Number of Lessons: {course.lessons?.length || 0}</p>
                     <p>Rate: {course.rate}</p>
-                    <p>Category: {course.catId}</p>
+                    <p>Category: {course.category.title}</p>
                     <Button variant="primary" onClick={handleAddLesson} className="mt-3">
                         Add Lesson
                     </Button>

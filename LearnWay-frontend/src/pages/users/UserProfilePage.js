@@ -50,8 +50,13 @@ const UserProfilePage = () => {
               </tr>
               <tr>
                 <td>Role</td>
-                <td>{user.roles[0].roleName}</td>
+                <td>
+                  {user.roles[0].roleName === "USER"
+                      ? "STUDENT"
+                      : user.roles[0].roleName}
+                </td>
               </tr>
+
             </tbody>
           </Table>
         </div>

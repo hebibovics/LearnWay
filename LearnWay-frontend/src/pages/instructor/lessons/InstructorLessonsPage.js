@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Card } from "react-bootstrap";
 import axios from "axios"; // Ako koristiš axios za pozive API-ja
 import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 
 const InstructorLessonsPage = () => {
     const [lessons, setLessons] = useState([]);
@@ -37,14 +39,17 @@ const InstructorLessonsPage = () => {
             <h1 className="my-4 text-center">Lessons</h1>
             <Row>
                 {lessons.map((lesson) => (
-                    <Col key={lesson.id} sm={12} md={6} lg={4} className="mb-4">
+                    <Link
+                        to={`/instructorLessons/${courseId}/${lesson.lessonId}`}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
                         <Card>
                             <Card.Body>
                                 <Card.Title>{lesson.title}</Card.Title>
                                 <Card.Text>{lesson.description}</Card.Text>
                             </Card.Body>
                         </Card>
-                    </Col>
+                    </Link>
                 ))}
             </Row>
         </Container>

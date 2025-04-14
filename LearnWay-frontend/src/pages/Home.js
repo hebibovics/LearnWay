@@ -27,6 +27,9 @@ const categoryImages = {
 
 const Home = () => {
     const [categories, setCategories] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
 
     useEffect(() => {
         axios.get('/api/category/')
@@ -38,6 +41,17 @@ const Home = () => {
             });
     }, []);
 
+    useEffect(() => {
+        axios.get('/api/course/')
+            .then(response => {
+                setCourses(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching courses!', error);
+            });
+    }, []);
+
+
     const chunkArray = (array, size) => {
         const result = [];
         for (let i = 0; i < array.length; i += size) {
@@ -45,17 +59,52 @@ const Home = () => {
         }
         return result;
     };
+    const filteredCourses = courses.filter(course =>
+        course.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
 
     const categoryChunks = chunkArray(categories, 3);
 
     return (
         <Container>
-            <Row className="mt-5">
-                <Col>
-                    <h1>Welcome to LearnWay!</h1>
-                    <p>Learn, grow, and achieve your goals with our courses.</p>
-                </Col>
-            </Row>
+
+                    <Row className="mt-5 align-items-center">
+                        <Col md={5}>
+                            <h1>Welcome to LearnWay!</h1>
+                            <p>Learn, grow, and achieve your goals with our courses.</p>
+                        </Col>
+                        <Col md={6}>
+                            <input
+                                type="text"
+                                placeholder="Search courses..."
+                                className="form-control"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                            />
+                        </Col>
+                    </Row>
+
+                    {searchTerm && (
+                        <Row className="mt-4">
+                            <Col>
+                                <h4>Search Results:</h4>
+                                {filteredCourses.length > 0 ? (
+                                    filteredCourses.map(course => (
+                                        <div key={course.courseId} className="mb-3">
+                                            <Link to={`/course/${course.courseId}`}>
+                                                <strong>{course.title}</strong> – {course.category?.title}
+                                            </Link>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p>No courses found.</p>
+                                )}
+                            </Col>
+                        </Row>
+                    )}
+
+
 
             <Row className="mt-5">
                 <Col md={4}>

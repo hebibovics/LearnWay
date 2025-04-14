@@ -37,64 +37,65 @@ import InstructorCoursesPage from "./pages/instructor/courses/InstructorCoursesP
 import CourseDetailsInstructor from "./pages/instructor/courses/CourseDetailsInstructor";
 import InstructorAddLesson from "./pages/instructor/lessons/InstructorAddLesson";
 import InstructorLessonsPage from "./pages/instructor/lessons/InstructorLessonsPage";
+import LessonPageInstructor from  "./pages/instructor/lessons/LessonPageInstructor "
 
 const App = () => {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/adminProfile" element={<AdminProfilePage />} />
-        <Route path="/adminCategories" element={<AdminCategoriesPage />} />
-        <Route path="/adminAddCategory" element={<AdminAddCategoryPage />} />
-        <Route
-          path="/adminUpdateCategory/:catId"
-          element={<AdminUpdateCategoryPage />}
-        />
-        <Route path="/adminQuizzes" element={<AdminQuizzesPage />} />
-        <Route path="/adminAddQuiz" element={<AdminAddQuiz />} />
-        <Route path="/adminUpdateQuiz/:quizId" element={<AdminUpdateQuiz />} />
-        <Route path="/adminQuestions" element={<AdminQuestionsPage />} />
-        <Route path="/adminAddQuestion" element={<AdminAddQuestionsPage />} />
-        <Route path="/adminallResult" element={<AdminQuizResultPage />} />
-        <Route
-          path="/adminUpdateQuestion/:quesId"
-          element={<AdminUpdateQuestionPage />}
-        />
-        <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/quizzes" element={<UserQuizzesPage />} />
-        <Route path="/quiz/*" element={<UserQuizzesPage />} />
-        <Route path="/quizManual/" element={<UserQuizManualPage />} />
-        <Route path="/questions/" element={<UserQuestionsPage />} />
-        <Route path="/quizResults/" element={<UserQuizResultPage />} />
+      <Router>
+        <Header/>
+        <Routes>
+          <Route path="/" element={<LoginPage/>}/>
+          <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/register" element={<RegisterPage/>}/>
+          <Route path="/adminProfile" element={<AdminProfilePage/>}/>
+          <Route path="/adminCategories" element={<AdminCategoriesPage/>}/>
+          <Route path="/adminAddCategory" element={<AdminAddCategoryPage/>}/>
+          <Route
+              path="/adminUpdateCategory/:catId"
+              element={<AdminUpdateCategoryPage/>}
+          />
+          <Route path="/adminQuizzes" element={<AdminQuizzesPage/>}/>
+          <Route path="/adminAddQuiz" element={<AdminAddQuiz/>}/>
+          <Route path="/adminUpdateQuiz/:quizId" element={<AdminUpdateQuiz/>}/>
+          <Route path="/adminQuestions" element={<AdminQuestionsPage/>}/>
+          <Route path="/adminAddQuestion" element={<AdminAddQuestionsPage/>}/>
+          <Route path="/adminallResult" element={<AdminQuizResultPage/>}/>
+          <Route
+              path="/adminUpdateQuestion/:quesId"
+              element={<AdminUpdateQuestionPage/>}
+          />
+          <Route path="/profile" element={<UserProfilePage/>}/>
+          <Route path="/quizzes" element={<UserQuizzesPage/>}/>
+          <Route path="/quiz/*" element={<UserQuizzesPage/>}/>
+          <Route path="/quizManual/" element={<UserQuizManualPage/>}/>
+          <Route path="/questions/" element={<UserQuestionsPage/>}/>
+          <Route path="/quizResults/" element={<UserQuizResultPage/>}/>
 
-        <Route path="/instructorProfile" element={<InstructorProfilePage />} />
-        <Route path="/instructorAddCourse" element={<InstructorAddCoursePage />} />
-        <Route path="/instructorCourses" element={<InstructorCoursesPage />} />
-        <Route path="/courseInstructor/:id" element={<CourseDetailsInstructor/>} />
-        <Route path="/instructorAddLesson/:id" element={<InstructorAddLesson/>} />
-        <Route path="/instructorLessons/:id" element={<InstructorLessonsPage/>} />
+          <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>
+          <Route path="/instructorAddCourse" element={<InstructorAddCoursePage/>}/>
+          <Route path="/instructorCourses" element={<InstructorCoursesPage/>}/>
+          <Route path="/courseInstructor/:id" element={<CourseDetailsInstructor/>}/>
+          <Route path="/instructorAddLesson/:id" element={<InstructorAddLesson/>}/>
+          <Route path="/instructorLessons/:id" element={<InstructorLessonsPage/>}/>
 
-        <Route path="/aboutUs/" element={<AboutUs />} />
-        <Route path="/home/" element={<Home />} />
+          <Route path="/aboutUs/" element={<AboutUs/>}/>
+          <Route path="/home/" element={<Home/>}/>
 
-        <Route path="/dataScience/" element={<DataScience />} />
-        <Route path="/course/:id" element={<CourseDetails />} />
-        <Route path="/designTools/" element={<DesignTools />} />
-        <Route path="/DigitalMarketing/" element={<DigitalMarketing />} />
-        <Route path="/OtherCourses/" element={<OtherCourses />} />
-        <Route path="/ProgrammingLanguages/" element={<Programming />} />
-        <Route path="/ProjectManagement/" element={<ProjectManagement />} />
-        <Route path="/SoftSkills/" element={<SoftSkills />} />
-        <Route path="/WebDesign/" element={<WebDesign />} />
-        <Route path="/WebDevelopment" element={<WebDev/>} />
+          <Route path="/dataScience/" element={<DataScience/>}/>
+          <Route path="/course/:id" element={<CourseDetails/>}/>
+          <Route path="/designTools/" element={<DesignTools/>}/>
+          <Route path="/DigitalMarketing/" element={<DigitalMarketing/>}/>
+          <Route path="/OtherCourses/" element={<OtherCourses/>}/>
+          <Route path="/ProgrammingLanguages/" element={<Programming/>}/>
+          <Route path="/ProjectManagement/" element={<ProjectManagement/>}/>
+          <Route path="/SoftSkills/" element={<SoftSkills/>}/>
+          <Route path="/WebDesign/" element={<WebDesign/>}/>
+          <Route path="/WebDevelopment" element={<WebDev/>}/>
 
+          <Route path="/instructorLessons/:courseId/:lessonId" element={<LessonPageInstructor/>}/>
 
-
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
   );
 };
 

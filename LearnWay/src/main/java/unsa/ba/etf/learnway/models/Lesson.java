@@ -1,9 +1,6 @@
 package unsa.ba.etf.learnway.models;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,9 +24,10 @@ public class Lesson {
     @Column(name = "description")
     private String description;
 
-    @JsonIgnore
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "course_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "course_id")
+    @JsonBackReference
     private Course course;
+
 }
 
