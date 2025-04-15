@@ -60,8 +60,11 @@ const CourseDetails = () => {
             <Row className="justify-content-center">
                 <Col md={6}>
                     <h3>Course Name: {course.title}</h3>
-                    <p>Lessons: {course.lessons}</p>
-                    <p>Grade: {course.rate}</p>
+                    <p><b>Description:</b>  </p>
+                    <p> {course.description}</p>
+                    <p>Number of Lessons: {course.lessons?.length || 0}</p>
+                    {/*<p>Lessons: {course.lessons}</p>
+                    <p>Grade: {course.rate}</p>*/}
                     {userRole === "USER" && (
                         <Button variant="outline-primary" className="mt-3">
                             Enroll

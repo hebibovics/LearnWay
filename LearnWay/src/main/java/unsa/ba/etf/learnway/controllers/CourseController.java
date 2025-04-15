@@ -67,6 +67,15 @@ public class CourseController {
         }
     }
 
+    @PostMapping("/{courseId}/enroll/{userId}")
+    public ResponseEntity<?> enrollUserToCourse(@PathVariable Long courseId, @PathVariable Long userId) {
+        try {
+            Course course = courseService.enrollUserToCourse(courseId, userId);
+            return ResponseEntity.ok(course);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error enrolling user: " + e.getMessage());
+        }
+    }
 
 
 }

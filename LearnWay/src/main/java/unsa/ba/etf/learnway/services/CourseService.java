@@ -18,4 +18,6 @@ public interface CourseService {
     void deleteCourse(Long courseId);
     List<Course> getCoursesByInstructor(Long instructorId);
     Course addCourseForInstructor(Long instructorId, Course course);
+    Course enrollUserToCourse(Long courseId, Long userId);
+
 }

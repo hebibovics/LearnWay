@@ -79,4 +79,29 @@ public class CourseServiceImpl implements CourseService {
         course.setInstructor(instructor);
         return courseRepository.save(course);
     }
+
+    @Override
+    public Course enrollUserToCourse(Long courseId, Long userId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Provjera da li user ima rolu USER
+        boolean isStudent = user.getRoles().stream()
+                .anyMatch(role -> role.getRoleName().equalsIgnoreCase("USER"));
+        if (!isStudent) {
+            throw new RuntimeException("Only users with role USER can enroll");
+        }
+
+        // Enroll user only if not already enrolled
+        if (!course.getUsers().contains(user)) {
+            course.getUsers().add(user);
+            // Optional: user.getCourses().add(course); // ako koristiš dvosmjernu relaciju
+        }
+
+        return courseRepository.save(course);
+    }
+
 }
