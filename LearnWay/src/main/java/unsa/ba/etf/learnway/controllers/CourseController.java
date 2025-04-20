@@ -76,6 +76,10 @@ public class CourseController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error enrolling user: " + e.getMessage());
         }
     }
-
+    @GetMapping("/student/{studentId}")
+    public ResponseEntity<List<Course>> getCoursesForStudent(@PathVariable Long studentId) {
+        List<Course> courses = courseService.getCoursesByStudentId(studentId);
+        return ResponseEntity.ok(courses);
+    }
 
 }

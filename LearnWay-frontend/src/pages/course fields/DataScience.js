@@ -40,12 +40,8 @@ const DataScience = () => {
 
     const sortedCourses = [...filteredCourses].sort((a, b) => {
         switch (sortOption) {
-            case 'rate-high-low':
-                return b.rate - a.rate;
-            case 'lessons-min-max':
-                return a.lessons - b.lessons;
-            case 'lessons-max-min':
-                return b.lessons - a.lessons;
+            // case 'rate-high-low':
+            //   return b.rate - a.rate;
             case 'alphabet':
                 return a.title.localeCompare(b.title);
             default:
@@ -78,11 +74,10 @@ const DataScience = () => {
                 <Col md={4}>
                     <DropdownButton id="dropdown-basic-button" title="Sort">
                         <Dropdown.Item onClick={() => handleSort('rate-high-low')}>Sort by rate (highest to lowest)</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleSort('lessons-min-max')}>Sort by number of lessons (min to max)</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleSort('lessons-max-min')}>Sort by number of lessons (max to min)</Dropdown.Item>
                         <Dropdown.Item onClick={() => handleSort('alphabet')}>Sort by alphabet</Dropdown.Item>
                     </DropdownButton>
                 </Col>
+
             </Row>
             <Row>
                 {sortedCourses.map((course, index) => (
@@ -91,7 +86,7 @@ const DataScience = () => {
                             <Card.Body>
                                 <Card.Title className="text-uppercase">{course.title}</Card.Title>
                                 <Card.Text>
-                                    Lessons: {course.lessons}<br />
+                                    Lessons: {course.lessons?.length || 0} <br />
                                     Rate: {course.rate}
                                 </Card.Text>
                                 <button onClick={() => handleViewCourse(course.courseId)} className="btn btn-primary">View Course</button>

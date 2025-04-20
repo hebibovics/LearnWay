@@ -95,13 +95,21 @@ public class CourseServiceImpl implements CourseService {
             throw new RuntimeException("Only users with role USER can enroll");
         }
 
-        // Enroll user only if not already enrolled
-        if (!course.getUsers().contains(user)) {
+        // Enroll user if not already enrolled
+        if (!user.getCourses().contains(course)) {
+            user.getCourses().add(course);
+            // Opcionalno za dvosmjernu sinhronizaciju
             course.getUsers().add(user);
-            // Optional: user.getCourses().add(course); // ako koristiš dvosmjernu relaciju
         }
 
-        return courseRepository.save(course);
+        // Bitno: spremi user-a jer on upravlja relacijom!
+        userRepository.save(user);
+
+        return course;
     }
 
+    @Override
+    public List<Course> getCoursesByStudentId(Long studentId) {
+        return courseRepository.findCoursesByUserId(studentId);
+    }
 }

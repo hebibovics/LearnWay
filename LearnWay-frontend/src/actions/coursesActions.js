@@ -71,3 +71,23 @@ export const deleteCourse = async (dispatch, courseId, token) => {
         });
     }
 };
+
+export const fetchUserCourses = (dispatch, token, userId) => {
+    return fetch(`http://localhost:8081/api/course/student/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            dispatch({
+                type: "FETCH_USER_COURSES_SUCCESS",
+                payload: data,
+            });
+            return { payload: data };
+        })
+        .catch((error) => {
+            console.error("Error fetching user courses:", error);
+            return { payload: [] };
+        });
+};

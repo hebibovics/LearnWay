@@ -4,14 +4,20 @@ import { FaBars, FaUserAlt } from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchCourses } from "../actions/coursesActions";
+import { fetchUserCourses } from "../actions/coursesActions"; // nova funkcija
 import { TbLayoutGrid, TbReport } from "react-icons/tb";
 
+
 const SidebarUser = ({ children }) => {
-  const categoriesReducer = useSelector((state) => state.categoriesReducer);
-  const [courses, setCourses] = useState(categoriesReducer.categories);
+  const [userCourses, setUserCourses] = useState([]);
   const dispatch = useDispatch();
+
   const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const decodedToken = JSON.parse(atob(token.split('.')[1]));
+  const loginReducer = useSelector((state) => state.loginReducer);
+  const userId = loginReducer?.user?.userId;
+
+
   const [menuItems, setMenuItems] = useState([
     {
       path: "/profile",
@@ -25,23 +31,21 @@ const SidebarUser = ({ children }) => {
     },
   ]);
 
-
   useEffect(() => {
-    console.log("Fetching Courses because of SidebarUser");
-    fetchCourses(dispatch, token).then((data) => {
-      const tempCourses = data.payload;
-      setCourses(tempCourses);
+    fetchUserCourses(dispatch, token, userId).then((data) => {
+      const enrolledCourses = Array.isArray(data?.payload) ? data.payload : [];
+      setUserCourses(enrolledCourses);
 
-      const newMenuItems = tempCourses.map((c) => {
-        return {
-          path: `/quiz/cat${c.title}?catId=${c.catId}`,
-          name: c.title,
-          icon: <TbLayoutGrid />,
-        };
-      });
-      setMenuItems([...menuItems, ...newMenuItems]);
+      const newMenuItems = enrolledCourses.map((c) => ({
+        path: `/course/${c.courseId}`, // ili neka tvoja ruta
+        name: c.title,
+        icon: <TbLayoutGrid />,
+      }));
+
+      setMenuItems((prev) => [...prev, ...newMenuItems]);
     });
   }, []);
+
 
   return (
       <div

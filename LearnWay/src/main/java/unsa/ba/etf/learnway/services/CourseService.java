@@ -20,4 +20,6 @@ public interface CourseService {
     Course addCourseForInstructor(Long instructorId, Course course);
     Course enrollUserToCourse(Long courseId, Long userId);
 
+    List<Course> getCoursesByStudentId(Long studentId);
+
 }

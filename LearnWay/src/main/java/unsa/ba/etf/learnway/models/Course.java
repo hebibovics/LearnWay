@@ -8,6 +8,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "courseId"
+)
 @Entity
 @Getter
 @Setter
