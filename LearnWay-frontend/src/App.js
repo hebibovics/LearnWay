@@ -38,6 +38,7 @@ import CourseDetailsInstructor from "./pages/instructor/courses/CourseDetailsIns
 import InstructorAddLesson from "./pages/instructor/lessons/InstructorAddLesson";
 import InstructorLessonsPage from "./pages/instructor/lessons/InstructorLessonsPage";
 import LessonPageInstructor from  "./pages/instructor/lessons/LessonPageInstructor "
+import UserLessonPage from "./pages/users/UserLessonPage";
 
 const App = () => {
   return (
@@ -93,6 +94,8 @@ const App = () => {
           <Route path="/WebDevelopment" element={<WebDev/>}/>
 
           <Route path="/instructorLessons/:courseId/:lessonId" element={<LessonPageInstructor/>}/>
+          <Route path="/lesson/:lessonId" element={<UserLessonPage/>}/>
+
 
         </Routes>
       </Router>

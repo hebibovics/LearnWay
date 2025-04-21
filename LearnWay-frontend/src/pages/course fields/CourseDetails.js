@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, ListGroup } from 'react-bootstrap';
+import { Container, Row, Col, Button, ListGroup, Form } from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -14,8 +14,17 @@ const CourseDetails = () => {
     const loginReducer = useSelector((state) => state.loginReducer);
     const [userRole, setUserRole] = useState("");
     const [isEnrolled, setIsEnrolled] = useState(false);
+    const [searchTerm, setSearchTerm] = useState(""); // novo stanje za search
+    const [userRating, setUserRating] = useState(null);
+    const [selectedRating, setSelectedRating] = useState(0);
 
     const userId = loginReducer?.user?.userId;
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+    const filteredLessons = lessons.filter(lesson =>
+        lesson.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     useEffect(() => {
         if (course) {
@@ -23,6 +32,23 @@ const CourseDetails = () => {
 
             const enrolled = course.users?.some(user => user.userId === userId);
             setIsEnrolled(enrolled);
+            if (enrolled) {
+                const fetchUserReview = async () => {
+                    try {
+                        const response = await axios.get(`/api/review/`);
+                        const review = response.data.find(r =>
+                            r.course.id === parseInt(id) && r.course && r.user && r.user.userId === userId
+                        );
+                        if (review) {
+                            setUserRating(review.rate);
+                        }
+                    } catch (err) {
+                        console.error("Error fetching review", err);
+                    }
+                };
+                fetchUserReview();
+            }
+
         }
     }, [course, userId]);
 
@@ -111,18 +137,75 @@ const CourseDetails = () => {
                         <>
                             <div className="mt-5">
                                 <h5><strong>LESSONS:</strong></h5>
+                                {/* SEARCH BAR */}
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Search lessons..."
+                                    className="mb-3"
+                                    value={searchTerm}
+                                    onChange={handleSearchChange}
+                                />
                                 <ListGroup>
-                                    {lessons.length > 0 ? (
-                                        lessons.map(lesson => (
+                                    {filteredLessons.length > 0 ? (
+                                        filteredLessons.map(lesson => (
                                             <ListGroup.Item key={lesson.id}>
-                                                <Link to={`/lesson/${lesson.id}`}>{lesson.title}</Link>
+                                                <Link to={`/lesson/${lesson.lessonId}`}>{lesson.title}</Link>
                                             </ListGroup.Item>
                                         ))
                                     ) : (
-                                        <p>No lessons available.</p>
+                                        <p>No matching lessons found.</p>
                                     )}
                                 </ListGroup>
+
                             </div>
+                            <hr />
+                            <div className="mt-4">
+                                <h5><strong>Rate this Course:</strong></h5>
+
+                                {userRating ? (
+                                    <p>Your rating: {"⭐".repeat(userRating)} ({userRating})</p>
+                                ) : (
+                                    <>
+                                        <div style={{ fontSize: "24px" }}>
+                                            {[1, 2, 3, 4, 5].map((star) => (
+                                                <span
+                                                    key={star}
+                                                    style={{
+                                                        cursor: "pointer",
+                                                        color: star <= selectedRating ? "#ffc107" : "#e4e5e9"
+                                                    }}
+                                                    onClick={() => setSelectedRating(star)}
+                                                >
+                        ★
+                    </span>
+                                            ))}
+                                        </div>
+                                        <Button
+                                            className="mt-2"
+                                            variant="success"
+                                            onClick={async () => {
+                                                try {
+                                                    await axios.post('/api/review/rate', {
+                                                        rate: selectedRating,
+                                                        course: {
+                                                            courseId: id
+                                                        }
+                                                    });
+
+                                                    swal("Thank you!", "Your rating has been submitted.", "success");
+                                                    setUserRating(selectedRating);
+                                                } catch (error) {
+                                                    swal("Error", "You must be logged in and enrolled to rate.", "error");
+                                                }
+                                            }}
+                                            disabled={selectedRating === 0}
+                                        >
+                                            Rate
+                                        </Button>
+                                    </>
+                                )}
+                            </div>
+
                         </>
                     )}
                 </Col>

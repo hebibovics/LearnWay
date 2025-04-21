@@ -37,4 +37,11 @@ public class ReviewController {
         reviewService.deleteReview(reviewId);
         return ResponseEntity.ok(true);
     }
+
+    @PostMapping("/rate")
+    public ResponseEntity<?> rateCourse(@RequestBody Review review) {
+        Review savedReview = reviewService.rateCourse(review);
+        return ResponseEntity.ok(savedReview);
+    }
+
 }

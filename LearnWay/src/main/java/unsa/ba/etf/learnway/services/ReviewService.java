@@ -14,4 +14,7 @@ public interface ReviewService {
 
 
     void deleteReview(Long reviewId);
+
+    Review rateCourse(Review review);
+
 }

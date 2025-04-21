@@ -74,6 +74,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/course/by-instructor/**").hasRole("INSTRUCTOR")
 
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Dozvoli OPTIONS zahtjeve za sve rute
+                .antMatchers("/api/review/rate").permitAll()
 
 
 
