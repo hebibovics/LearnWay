@@ -11,6 +11,8 @@ const CourseDetailsInstructor = () => {
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [averageRating, setAverageRating] = useState(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,6 +31,29 @@ const CourseDetailsInstructor = () => {
 
         fetchCourse();
     }, [id]);
+
+    useEffect(() => {
+        const fetchReviewsAndCalculateAverage = async () => {
+            try {
+                const response = await axios.get(`/api/review/course/${id}`);
+                const reviews = response.data;
+
+                if (reviews.length > 0) {
+                    const sum = reviews.reduce((acc, review) => acc + review.rate, 0);
+                    const average = sum / reviews.length;
+                    setAverageRating(average.toFixed(2));
+                } else {
+                    setAverageRating("No ratings yet");
+                }
+            } catch (err) {
+                console.error("Error fetching reviews", err);
+                setAverageRating("N/A");
+            }
+        };
+
+        fetchReviewsAndCalculateAverage();
+    }, [id]);
+
 
     const handleAddLesson = () => {
         navigate(`/instructorAddLesson/${id}`);
@@ -78,7 +103,7 @@ const CourseDetailsInstructor = () => {
                 <Col md={6}>
                     <h3>Course Name: {course.title}</h3>
                     <p>Number of Lessons: {course.lessons?.length || 0}</p>
-                    <p>Rate: {course.rate}</p>
+                    <p>Rate: {averageRating}</p>
                     <p>Category: {course.category.title}</p>
                     <Button variant="primary" onClick={handleAddLesson} className="mt-3">
                         Add Lesson

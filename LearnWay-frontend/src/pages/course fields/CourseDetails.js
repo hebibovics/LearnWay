@@ -17,8 +17,11 @@ const CourseDetails = () => {
     const [searchTerm, setSearchTerm] = useState(""); // novo stanje za search
     const [userRating, setUserRating] = useState(null);
     const [selectedRating, setSelectedRating] = useState(0);
+    const [averageRating, setAverageRating] = useState(null);
 
     const userId = loginReducer?.user?.userId;
+    const token = localStorage.getItem("jwtToken");
+    console.log(token);
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
@@ -28,24 +31,20 @@ const CourseDetails = () => {
 
     useEffect(() => {
         if (course) {
-            localStorage.setItem('courseId', course.id);
-
+            localStorage.setItem('courseId', course.courseId);
+console.log('kurs', course)
             const enrolled = course.users?.some(user => user.userId === userId);
             setIsEnrolled(enrolled);
             if (enrolled) {
                 const fetchUserReview = async () => {
                     try {
-                        const response = await axios.get(`/api/review/`);
-                        const review = response.data.find(r =>
-                            r.course.id === parseInt(id) && r.course && r.user && r.user.userId === userId
-                        );
-                        if (review) {
-                            setUserRating(review.rate);
-                        }
+                        const response = await axios.get(`http://localhost:8081/api/review/user/${userId}/course/${id}`);
+                        setUserRating(response.data.rate);
                     } catch (err) {
-                        console.error("Error fetching review", err);
+                        console.error("Error fetching user review", err);
                     }
                 };
+
                 fetchUserReview();
             }
 
@@ -68,6 +67,7 @@ const CourseDetails = () => {
 
         if (localStorage.getItem("jwtToken")) {
             let role = "";
+            console.log("jwtToken")
             loginReducer.user.roles.forEach((r) => {
                 if (r["roleName"] === "INSTRUCTOR") {
                     role = "INSTRUCTOR";
@@ -94,12 +94,40 @@ const CourseDetails = () => {
         fetchLessons();
     }, [id, isEnrolled]);
 
+
+    useEffect(() => {
+        const fetchReviewsAndCalculateAverage = async () => {
+            try {
+                const response = await axios.get(`/api/review/course/${id}`);
+                const reviews = response.data;
+
+                if (reviews.length > 0) {
+                    const sum = reviews.reduce((acc, review) => acc + review.rate, 0);
+                    const average = sum / reviews.length;
+                    setAverageRating(average.toFixed(2));
+                } else {
+                    setAverageRating("No ratings yet");
+                }
+            } catch (err) {
+                console.error("Error fetching reviews", err);
+                setAverageRating("N/A");
+            }
+        };
+
+        fetchReviewsAndCalculateAverage();
+    }, [id]);
+
+
+
     const handleEnroll = async () => {
         try {
             const token = localStorage.getItem("jwtToken");
+            console.log(token);
             const config = {
+
                 headers: {
                     // Authorization: `Bearer ${token}`,
+
                 },
             };
 
@@ -118,6 +146,7 @@ const CourseDetails = () => {
     if (error) return <p>Error loading course details.</p>;
     if (!course) return <p>Course not found</p>;
 
+
     return (
         <Container>
             <h1 className="my-4 text-center">Course Details</h1>
@@ -126,7 +155,8 @@ const CourseDetails = () => {
                     <h3>{course.title}</h3>
                     <p><strong>Description:</strong> {course.description}</p>
                     <p><strong>Number of Lessons:</strong> {course.lessons?.length || 0}</p>
-
+                    <p>Rate: {averageRating}</p>
+                    <p>Category: {course.category.title}</p>
                     {userRole === "USER" && !isEnrolled && (
                         <Button variant="outline-primary" className="mt-3" onClick={handleEnroll}>
                             Enroll
@@ -185,12 +215,13 @@ const CourseDetails = () => {
                                             variant="success"
                                             onClick={async () => {
                                                 try {
-                                                    await axios.post('/api/review/rate', {
-                                                        rate: selectedRating,
-                                                        course: {
-                                                            courseId: id
+                                                    await axios.post(
+                                                        `http://localhost:8081/api/review/add?courseId=${id}&userId=${userId}`,
+                                                        {
+                                                            rate: selectedRating,
+                                                            comment: "Great course!" // ako želiš komentar, nije obavezan
                                                         }
-                                                    });
+                                                    );
 
                                                     swal("Thank you!", "Your rating has been submitted.", "success");
                                                     setUserRating(selectedRating);
