@@ -178,56 +178,58 @@ console.log('kurs', course)
                         </Button>
                     )}
                     <hr />
-                    <div className="mt-4">
-                        <h5><strong>FORUM: Comments</strong></h5>
-
-                        {/* Forma za dodavanje novog komentara */}
-                        <Form onSubmit={async (e) => {
-                            e.preventDefault();
-                            try {
-                                await axios.post(
-                                    `/api/comments/course/${id}/user/${userId}`,
-                                    { content: newComment }
-                                );
-                                swal("Success", "Comment added!", "success");
-                                setNewComment("");
-                                // Ponovo dohvatiti komentare
-                                const response = await axios.get(`/api/comments/course/${id}`);
-                                setForumComments(response.data);
-                            } catch (error) {
-                                console.error("Comment post error", error);
-                                swal("Error", "You must be logged in and enrolled to comment.", "error");
-                            }
-                        }}>
-                            <Form.Group controlId="comment">
-                                <Form.Control
-                                    as="textarea"
-                                    rows={3}
-                                    placeholder="Leave your comment..."
-                                    value={newComment}
-                                    onChange={(e) => setNewComment(e.target.value)}
-                                />
-                            </Form.Group>
-                            <Button className="mt-2" variant="primary" type="submit" disabled={!newComment.trim()}>
-                                Post Comment
-                            </Button>
-                        </Form>
-
-                        {/* Lista komentara */}
+                    {isEnrolled && (
                         <div className="mt-4">
-                            {forumComments.length > 0 ? (
-                                <ListGroup>
-                                    {forumComments.map((comment, index) => (
-                                        <ListGroup.Item key={index}>
-                                            <strong>{comment.username}:</strong> {comment.content}
-                                        </ListGroup.Item>
-                                    ))}
-                                </ListGroup>
-                            ) : (
-                                <p>No comments yet. Be the first to comment!</p>
-                            )}
+                            <h5><strong>FORUM: Comments</strong></h5>
+
+                            {/* Forma za dodavanje novog komentara */}
+                            <Form onSubmit={async (e) => {
+                                e.preventDefault();
+                                try {
+                                    await axios.post(
+                                        `/api/comments/course/${id}/user/${userId}`,
+                                        { content: newComment }
+                                    );
+                                    swal("Success", "Comment added!", "success");
+                                    setNewComment("");
+                                    // Ponovo dohvatiti komentare
+                                    const response = await axios.get(`/api/comments/course/${id}`);
+                                    setForumComments(response.data);
+                                } catch (error) {
+                                    console.error("Comment post error", error);
+                                    swal("Error", "You must be logged in and enrolled to comment.", "error");
+                                }
+                            }}>
+                                <Form.Group controlId="comment">
+                                    <Form.Control
+                                        as="textarea"
+                                        rows={3}
+                                        placeholder="Leave your comment..."
+                                        value={newComment}
+                                        onChange={(e) => setNewComment(e.target.value)}
+                                    />
+                                </Form.Group>
+                                <Button className="mt-2" variant="primary" type="submit" disabled={!newComment.trim()}>
+                                    Post Comment
+                                </Button>
+                            </Form>
+
+                            {/* Lista komentara */}
+                            <div className="mt-4">
+                                {forumComments.length > 0 ? (
+                                    <ListGroup>
+                                        {forumComments.map((comment, index) => (
+                                            <ListGroup.Item key={index}>
+                                                <strong>{comment.username}:</strong> {comment.content}
+                                            </ListGroup.Item>
+                                        ))}
+                                    </ListGroup>
+                                ) : (
+                                    <p>No comments yet. Be the first to comment!</p>
+                                )}
+                            </div>
                         </div>
-                    </div>
+                    )}
 
                     {userRole === "USER" && isEnrolled && (
                         <>

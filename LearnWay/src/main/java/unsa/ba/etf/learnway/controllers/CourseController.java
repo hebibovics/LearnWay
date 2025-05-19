@@ -1,6 +1,8 @@
 package unsa.ba.etf.learnway.controllers;
 
+import unsa.ba.etf.learnway.dtos.StudentDTO;
 import unsa.ba.etf.learnway.models.Course;
+import unsa.ba.etf.learnway.models.User;
 import unsa.ba.etf.learnway.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -81,5 +84,17 @@ public class CourseController {
         List<Course> courses = courseService.getCoursesByStudentId(studentId);
         return ResponseEntity.ok(courses);
     }
+
+    @GetMapping("/{courseId}/students")
+    public ResponseEntity<?> getStudentsByCourseId(@PathVariable Long courseId) {
+        try {
+            Set<StudentDTO> students = courseService.getStudentsDTOByCourseId(courseId);
+            return ResponseEntity.ok(students);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Error fetching students: " + e.getMessage());
+        }
+    }
+
 
 }

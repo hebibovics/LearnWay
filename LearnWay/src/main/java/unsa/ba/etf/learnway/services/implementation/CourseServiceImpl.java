@@ -1,5 +1,6 @@
 package unsa.ba.etf.learnway.services.implementation;
 
+import unsa.ba.etf.learnway.dtos.StudentDTO;
 import unsa.ba.etf.learnway.models.Course;
 import unsa.ba.etf.learnway.models.User;
 import unsa.ba.etf.learnway.repository.CourseRepository;
@@ -8,9 +9,8 @@ import unsa.ba.etf.learnway.services.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -112,4 +112,25 @@ public class CourseServiceImpl implements CourseService {
     public List<Course> getCoursesByStudentId(Long studentId) {
         return courseRepository.findCoursesByUserId(studentId);
     }
+
+    @Override
+    public Set<StudentDTO> getStudentsDTOByCourseId(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found with id: " + courseId));
+
+        Set<StudentDTO> dtos = new HashSet<>();
+        for (User user : course.getUsers()) {
+            dtos.add(new StudentDTO(
+                    user.getUserId(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getUsername(),
+                    user.getPhoneNumber()
+            ));
+        }
+        return dtos;
+    }
+
+
+
 }

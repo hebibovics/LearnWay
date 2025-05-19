@@ -1,8 +1,11 @@
 package unsa.ba.etf.learnway.services;
 
+import unsa.ba.etf.learnway.dtos.StudentDTO;
 import unsa.ba.etf.learnway.models.Course;
+import unsa.ba.etf.learnway.models.User;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CourseService {
 
@@ -21,5 +24,8 @@ public interface CourseService {
     Course enrollUserToCourse(Long courseId, Long userId);
 
     List<Course> getCoursesByStudentId(Long studentId);
+    Set<StudentDTO> getStudentsDTOByCourseId(Long courseId);
+
+
 
 }
