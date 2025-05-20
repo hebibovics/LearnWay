@@ -25,6 +25,8 @@ public interface CourseService {
 
     List<Course> getCoursesByStudentId(Long studentId);
     Set<StudentDTO> getStudentsDTOByCourseId(Long courseId);
+    Course unenrollUserFromCourse(Long courseId, Long userId);
+
 
 
 

@@ -131,6 +131,25 @@ public class CourseServiceImpl implements CourseService {
         return dtos;
     }
 
+    @Override
+    public Course unenrollUserFromCourse(Long courseId, Long userId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new RuntimeException("Course not found with ID: " + courseId));
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found with ID: " + userId));
+
+        if (!course.getUsers().contains(user)) {
+            throw new RuntimeException("User is not enrolled in this course.");
+        }
+
+        course.getUsers().remove(user);
+        user.getCourses().remove(course);
+
+        // Spasi oba entiteta kako bi se relacija ažurirala u bazi
+        userRepository.save(user);
+        return courseRepository.save(course);
+    }
 
 
 }

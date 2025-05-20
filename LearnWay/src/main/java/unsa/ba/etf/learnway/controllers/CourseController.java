@@ -96,5 +96,15 @@ public class CourseController {
         }
     }
 
+    @DeleteMapping("/{courseId}/unenroll/{userId}")
+    public ResponseEntity<?> unenrollUserFromCourse(@PathVariable Long courseId, @PathVariable Long userId) {
+        try {
+            Course course = courseService.unenrollUserFromCourse(courseId, userId);
+            return ResponseEntity.ok(course);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error unenrolling user: " + e.getMessage());
+        }
+    }
+
 
 }

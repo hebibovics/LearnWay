@@ -161,6 +161,29 @@ console.log('kurs', course)
     if (error) return <p>Error loading course details.</p>;
     if (!course) return <p>Course not found</p>;
 
+    const handleUnenroll = async () => {
+        try {
+            const config = {
+                headers: {
+                    // Authorization: `Bearer ${token}`, // dodaj ako trebaš token
+                },
+            };
+
+            await axios.delete(`http://localhost:8081/api/course/${id}/unenroll/${userId}`, config);
+
+            swal("Success", "You have been unenrolled successfully!", "success");
+
+            // Ažuriraj lokalno stanje
+            setIsEnrolled(false);
+            setCourse(prevCourse => ({
+                ...prevCourse,
+                users: prevCourse.users?.filter(user => user.userId !== userId)
+            }));
+        } catch (err) {
+            console.error("Unenroll error:", err.response?.data || err.message);
+            swal("Error", err.response?.data || "Unenrollment failed", "error");
+        }
+    };
 
     return (
         <Container>
@@ -172,11 +195,20 @@ console.log('kurs', course)
                     <p><strong>Number of Lessons:</strong> {course.lessons?.length || 0}</p>
                     <p>Rate: {averageRating}</p>
                     <p>Category: {course.category.title}</p>
-                    {userRole === "USER" && !isEnrolled && (
-                        <Button variant="outline-primary" className="mt-3" onClick={handleEnroll}>
-                            Enroll
-                        </Button>
+                    {userRole === "USER" && (
+                        <>
+                            {!isEnrolled ? (
+                                <Button variant="outline-primary" className="mt-3" onClick={handleEnroll}>
+                                    Enroll
+                                </Button>
+                            ) : (
+                                <Button variant="outline-danger" className="mt-3" onClick={handleUnenroll}>
+                                    Unenroll
+                                </Button>
+                            )}
+                        </>
                     )}
+
                     <hr />
                     {isEnrolled && (
                         <div className="mt-4">
