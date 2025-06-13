@@ -8,6 +8,8 @@ import FormContainer from "../components/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as authConstants from "../constants/authConstants";
 import { Link } from "react-router-dom";
+import "./page.css";
+
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -125,6 +127,7 @@ const RegisterPage = () => {
               <Button
                   onClick={showPasswordHandler}
                   variant=""
+                  className="my-3 btn-submit"
                   style={{ border: "1px solid black" }}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}

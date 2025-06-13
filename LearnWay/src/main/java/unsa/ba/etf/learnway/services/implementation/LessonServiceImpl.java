@@ -56,4 +56,27 @@ public class LessonServiceImpl implements LessonService {
         return lessonRepository.findByCourse(course);
     }
 
+    @Override
+    public String getVideoUrlByLessonId(Long lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        return lesson.getVideoUrl();
+    }
+
+    @Override
+    public void updateVideoUrl(Long lessonId, String videoUrl) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        lesson.setVideoUrl(videoUrl);
+        lessonRepository.save(lesson);
+    }
+
+    @Override
+    public void deleteVideoUrl(Long lessonId) {
+        Lesson lesson = lessonRepository.findById(lessonId)
+                .orElseThrow(() -> new RuntimeException("Lesson not found"));
+        lesson.setVideoUrl(null);
+        lessonRepository.save(lesson);
+    }
+
 }

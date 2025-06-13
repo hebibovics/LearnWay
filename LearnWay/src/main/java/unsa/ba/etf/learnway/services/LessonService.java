@@ -13,5 +13,8 @@ public interface LessonService {
     Lesson updateLesson(Long id, Lesson lesson);
     void deleteLesson(Long id);
     List<Lesson> getLessonsByCourse(Course course);
+    String getVideoUrlByLessonId(Long lessonId);
+    void updateVideoUrl(Long lessonId, String videoUrl);
+    void deleteVideoUrl(Long lessonId);
 
 }

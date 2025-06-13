@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, ListGroup, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, ListGroup, Form, Card} from 'react-bootstrap';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -20,6 +20,7 @@ const CourseDetails = () => {
     const [averageRating, setAverageRating] = useState(null);
     const [forumComments, setForumComments] = useState([]);
     const [newComment, setNewComment] = useState("");
+    const [expandedLessonId, setExpandedLessonId] = useState(null);
 
 
     const userId = loginReducer?.user?.userId;
@@ -31,6 +32,9 @@ const CourseDetails = () => {
     const filteredLessons = lessons.filter(lesson =>
         lesson.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    const toggleLesson = (id) => {
+        setExpandedLessonId(expandedLessonId === id ? null : id);
+    };
 
     useEffect(() => {
         if (course) {
@@ -275,18 +279,38 @@ console.log('kurs', course)
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                 />
-                                <ListGroup>
-                                    {filteredLessons.length > 0 ? (
-                                        filteredLessons.map(lesson => (
-                                            <ListGroup.Item key={lesson.id}>
-                                                <Link to={`/lesson/${lesson.lessonId}`}>{lesson.title}</Link>
-                                            </ListGroup.Item>
-                                        ))
+                                {filteredLessons.length > 0 ? (
+                                    filteredLessons.map((lesson) => (
+                                        <Card key={lesson.id} className="mb-3">
+                                            <Card.Header
+                                                style={{ cursor: "pointer" }}
+                                                onClick={() => toggleLesson(lesson.id)}
+                                            >
+                                                {lesson.title}
+                                            </Card.Header>
+                                            {expandedLessonId === lesson.id && (
+                                                <Card.Body>
+                                                    <Card.Text>{lesson.description}</Card.Text>
+                                                    {lesson.videoUrl && (
+                                                        <div className="video-container" style={{ maxWidth: "100%", aspectRatio: "16/9" }}>
+                                                            <iframe
+                                                                width="100%"
+                                                                height="315"
+                                                                src={lesson.videoUrl}
+                                                                title={lesson.title}
+                                                                frameBorder="0"
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                                allowFullScreen
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </Card.Body>
+                                            )}
+                                        </Card>
+                                    ))
                                     ) : (
-                                        <p>No matching lessons found.</p>
-                                    )}
-                                </ListGroup>
-
+                                    <p>No matching lessons found.</p>
+                                )}
                             </div>
                             <hr />
                             <div className="mt-4">

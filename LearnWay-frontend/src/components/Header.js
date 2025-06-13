@@ -40,8 +40,8 @@ const Header = () => {
 
   return (
       <header>
-        <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
-          <Container>
+        <Navbar style={{ backgroundColor: "#1b263b" }} variant="dark" expand="lg" collapseOnSelect>
+        <Container>
             <Navbar.Brand>LearnWay</Navbar.Brand>
 
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />

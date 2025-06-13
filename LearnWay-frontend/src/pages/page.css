@@ -1,0 +1,99 @@
+/* page.css */
+
+/* Osnovna pozadina i tekst */
+body {
+    background-color: #0d1b2a; /* tamno plava (midnight blue) */
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+.login-form-card form,
+.register-page-container form,
+.form-container form {
+    width: 100%; /* forma se neće širiti preko roditelja */
+}
+
+/* Karte/form container */
+.login-page-container,
+.register-page-container,
+.login-form-card,
+.form-container {
+    background-color: #1b263b; /* tamnija plava za kartice */
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 700px;
+}
+
+/* Akcenti */
+.btn-submit,
+.btn-submit:hover {
+    background-color: #00d1b2; /* tirkizna */
+    color: white;
+    border: none;
+}
+
+.btn-submit:focus,
+.btn-submit:active {
+    box-shadow: 0 0 0 0.2rem rgba(0, 209, 178, 0.5);
+}
+
+/* Input polja */
+.form-control {
+    background-color: #0d1b2a;
+    color: white;
+    border: 1px solid #00d1b2;
+}
+
+.form-control:focus {
+    background-color: #0d1b2a;
+    color: white;
+    border-color: #00d1b2;
+    box-shadow: 0 0 0 0.2rem rgba(0, 209, 178, 0.25);
+}
+
+/* Label */
+.form-label {
+    color: white;
+}
+
+/* Linkovi */
+a {
+    color: white;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+/* Dugmad za prikazivanje lozinke */
+.input-group button {
+    background-color: transparent;
+    color: white;
+}
+.input-group {
+    width: 100%;
+}
+
+.input-group .form-control {
+    flex: 1 1 auto; /* ovo većinom već postoji, ali potvrdi! */
+}
+
+.input-group .btn {
+    flex: 0 0 auto; /* sprječava da dugme širi grupu */
+}
+
+/* Loader centriranje */
+.loader-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Dodatno za header (ako ga imaš) */
+h1, h4 {
+    color: white;
+}

@@ -23,11 +23,16 @@ public class Lesson {
 
     @Column(name = "description")
     private String description;
+    @Column(name = "video_url")
+    private String videoUrl;
+
 
     @ManyToOne
     @JoinColumn(name = "course_id")
     @JsonBackReference
     private Course course;
+
+
 
 }
 

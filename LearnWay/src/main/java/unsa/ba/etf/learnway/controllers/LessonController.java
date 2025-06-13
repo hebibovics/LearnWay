@@ -85,5 +85,27 @@ public class LessonController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting lesson: " + e.getMessage());
         }
     }
+
+    // GET video URL by lessonId
+    @GetMapping("/{lessonId}/video")
+    public ResponseEntity<String> getVideoUrl(@PathVariable Long lessonId) {
+        String videoUrl = lessonService.getVideoUrlByLessonId(lessonId);
+        return ResponseEntity.ok(videoUrl);
+    }
+
+    // UPDATE or ADD video URL
+    @PutMapping("/{lessonId}/video")
+    public ResponseEntity<String> updateVideoUrl(@PathVariable Long lessonId,
+                                                 @RequestBody String videoUrl) {
+        lessonService.updateVideoUrl(lessonId, videoUrl);
+        return ResponseEntity.ok("Video URL updated successfully");
+    }
+
+    // DELETE video URL
+    @DeleteMapping("/{lessonId}/video")
+    public ResponseEntity<String> deleteVideoUrl(@PathVariable Long lessonId) {
+        lessonService.deleteVideoUrl(lessonId);
+        return ResponseEntity.ok("Video URL deleted successfully");
+    }
 }
 
