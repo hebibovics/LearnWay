@@ -39,6 +39,9 @@ import InstructorAddLesson from "./pages/instructor/lessons/InstructorAddLesson"
 import InstructorLessonsPage from "./pages/instructor/lessons/InstructorLessonsPage";
 import LessonPageInstructor from  "./pages/instructor/lessons/LessonPageInstructor "
 import UserLessonPage from "./pages/users/UserLessonPage";
+import QuizListPage from "./pages/users/QuizListPage";
+import QuizSolvePage from "./pages/users/QuizSolvePage";
+import QuizDetailsPage from "./pages/users/QuizDetailsPage";
 
 const App = () => {
   return (
@@ -66,11 +69,7 @@ const App = () => {
               element={<AdminUpdateQuestionPage/>}
           />
           <Route path="/profile" element={<UserProfilePage/>}/>
-          <Route path="/quizzes" element={<UserQuizzesPage/>}/>
-          <Route path="/quiz/*" element={<UserQuizzesPage/>}/>
-          <Route path="/quizManual/" element={<UserQuizManualPage/>}/>
-          <Route path="/questions/" element={<UserQuestionsPage/>}/>
-          <Route path="/quizResults/" element={<UserQuizResultPage/>}/>
+
 
           <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>
           <Route path="/instructorAddCourse" element={<InstructorAddCoursePage/>}/>

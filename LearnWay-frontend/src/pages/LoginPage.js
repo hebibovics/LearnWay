@@ -6,7 +6,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { login } from "../actions/authActions";
 import Loader from "../components/Loader";
 import * as authConstants from "../constants/authConstants";
-import "./page.css"; // Dodaj ovu liniju
+import "./page.css";
 
 const LoginPage = () => {
   const [username, setUsername] = useState("");
@@ -29,7 +29,8 @@ const LoginPage = () => {
     e.preventDefault();
     login(dispatch, username, password).then((data) => {
       if (data.type === authConstants.USER_LOGIN_SUCCESS) {
-        data.payload.roles.map((r) => {
+        data.payload?.roles?.map((r) => {
+
           if (r["roleName"] === "ADMIN") {
             return navigate("/adminProfile");
           }
@@ -45,7 +46,7 @@ const LoginPage = () => {
 
   useEffect(() => {
     if (token && user) {
-      user.roles.map((r) => {
+      user?.roles?.map((r) => {
         if (r["roleName"] === "ADMIN") return navigate("/adminProfile");
         else return navigate("/profile");
       });

@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Image from "react-bootstrap/Image";
 import { fetchCategories } from "../../actions/categoriesActions";
-import { fetchQuizzes } from "../../actions/quizzesActions";
 import SidebarUser from "../../components/SidebarUser";
 import "./UserProfilePage.css";
 const UserProfilePage = () => {
@@ -18,9 +17,7 @@ const UserProfilePage = () => {
     fetchCategories(dispatch, token);
   }, [dispatch]);
 
-  useEffect(() => {
-    fetchQuizzes(dispatch, token);
-  }, [dispatch]);
+
 
   useEffect(() => {
     if (!localStorage.getItem("jwtToken")) navigate("/");

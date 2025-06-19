@@ -22,7 +22,8 @@ const Header = () => {
     if (localStorage.getItem("jwtToken")) {
       setIsLoggedIn(true);
       let role = "";
-      loginReducer.user.roles.map((r) => {
+        loginReducer.user?.roles?.map((r) => {
+
         if (r["roleName"] === "ADMIN") {
           setProfilePageUrl("/adminProfile");
           role = "ADMIN";
