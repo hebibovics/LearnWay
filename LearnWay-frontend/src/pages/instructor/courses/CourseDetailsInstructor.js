@@ -148,6 +148,12 @@ const CourseDetailsInstructor = () => {
                     <Button variant="danger" onClick={confirmDeleteCourse} className="mt-3">
                         Delete Course
                     </Button>
+                    <Button variant="warning" onClick={() => navigate(`/instructorCourse/${id}/addQuiz`)} className="mt-3">
+                        Add Quiz
+                    </Button>
+                    <Button variant="warning" onClick={() => navigate(`/instructor/course/${course.courseId}/quizzes`)} className="mt-3">
+                        View Quizzes
+                    </Button>
                 </Col>
                 <hr />
                 <div className="mt-4">

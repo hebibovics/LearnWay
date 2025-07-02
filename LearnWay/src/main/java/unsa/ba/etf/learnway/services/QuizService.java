@@ -18,4 +18,7 @@ public interface QuizService {
 
     void deleteQuiz(Long quizId);
 
+    List<Quiz> getQuizzesByCourse(Long courseId);
+
+
 }

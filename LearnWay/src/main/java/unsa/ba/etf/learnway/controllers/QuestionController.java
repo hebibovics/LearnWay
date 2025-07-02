@@ -2,6 +2,7 @@ package unsa.ba.etf.learnway.controllers;
 
 import unsa.ba.etf.learnway.models.Question;
 import unsa.ba.etf.learnway.models.Quiz;
+import unsa.ba.etf.learnway.repository.QuizRepository;
 import unsa.ba.etf.learnway.services.QuestionService;
 import unsa.ba.etf.learnway.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin
@@ -18,6 +20,8 @@ public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private QuizRepository quizRepository;
 
     @Autowired
     private QuizService quizService;
@@ -37,12 +41,6 @@ public class QuestionController {
         return ResponseEntity.ok(questionService.getQuestion(questionId));
     }
 
-    @GetMapping(value = "/", params = "quizId")
-    public ResponseEntity<?> getQuestionsByQuiz(@RequestParam Long quizId) {
-        Quiz quiz = quizService.getQuiz(quizId);
-        Set<Question> questions = quiz.getQuestions();
-        return ResponseEntity.ok(questions);
-    }
 
     @PutMapping("/{questionId}")
     public ResponseEntity<?> updateQuestion(@PathVariable Long questionId, @RequestBody Question question) {
@@ -56,5 +54,13 @@ public class QuestionController {
     public ResponseEntity<?> deleteQuestion(@PathVariable Long questionId) {
         questionService.deleteQuestion(questionId);
         return ResponseEntity.ok(true);
+    }
+
+    @GetMapping("/quiz/{quizId}")
+    public ResponseEntity<List<Question>> getQuestionsByQuiz(@PathVariable Long quizId) {
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new RuntimeException("Quiz not found with id " + quizId));
+        List<Question> questions = questionService.getQuestionsByQuiz(quiz);
+        return ResponseEntity.ok(questions);
     }
 }

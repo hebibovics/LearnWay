@@ -20,4 +20,5 @@ public interface QuestionService {
     //Extra Methods
     List<Question> getQuestionsByQuiz(Quiz quiz);
 
+
 }

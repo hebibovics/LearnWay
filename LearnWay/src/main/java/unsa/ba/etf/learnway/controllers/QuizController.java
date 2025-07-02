@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @RestController
 @RequestMapping("/api/quiz")
@@ -34,6 +36,13 @@ public class QuizController {
     public ResponseEntity<?> getQuiz(@PathVariable Long quizId) {
         return ResponseEntity.ok(quizService.getQuiz(quizId));
     }
+
+    @GetMapping("/course/{courseId}/quizzes")
+    public ResponseEntity<List<Quiz>> getQuizzesByCourse(@PathVariable Long courseId) {
+        List<Quiz> quizzes = quizService.getQuizzesByCourse(courseId);
+        return ResponseEntity.ok(quizzes);
+    }
+
 
 
 

@@ -40,4 +40,10 @@ public class QuizServiceImpl implements QuizService {
         quizRepository.deleteById(quizId);
     }
 
+    @Override
+    public List<Quiz> getQuizzesByCourse(Long courseId) {
+        return quizRepository.findByCourse_CourseId(courseId);
+    }
+
+
 }

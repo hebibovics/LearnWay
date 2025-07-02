@@ -78,6 +78,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Dozvoli OPTIONS zahtjeve za sve rute
                 .antMatchers("/api/review/rate").permitAll()
 
+                .antMatchers("/api/question/**").permitAll()
+                .antMatchers("/api/quiz/**").permitAll()
+
+
 
 
                 // .antMatchers(HttpMethod.POST, "/api/category/**").hasAuthority("ADMIN")

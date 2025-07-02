@@ -21,11 +21,21 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question addQuestion(Question question) {
-        Quiz quiz = quizRepository.findById(question.getQuiz().getQuizId()).get();
+        Long quizId = question.getQuiz().getQuizId();
+        Quiz quiz = quizRepository.findById(quizId)
+                .orElseThrow(() -> new RuntimeException("Quiz not found with id: " + quizId));
+
+        // Postavi pravi entitet u pitanje
+        question.setQuiz(quiz);
+
+        // Ažuriraj broj pitanja ako želiš
         quiz.setNumOfQuestions(quiz.getNumOfQuestions() + 1);
         quizRepository.save(quiz);
+
         return questionRepository.save(question);
     }
+
+
 
     @Override
     public List<Question> getQuestions() {
@@ -51,4 +61,5 @@ public class QuestionServiceImpl implements QuestionService {
     public List<Question> getQuestionsByQuiz(Quiz quiz) {
         return questionRepository.findByQuiz(quiz);
     }
+
 }

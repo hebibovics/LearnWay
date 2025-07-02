@@ -42,6 +42,10 @@ import UserLessonPage from "./pages/users/UserLessonPage";
 import QuizListPage from "./pages/users/QuizListPage";
 import QuizSolvePage from "./pages/users/QuizSolvePage";
 import QuizDetailsPage from "./pages/users/QuizDetailsPage";
+import InstructorAddQuiz from "./pages/instructor/quizzes/InstructorAddQuiz";
+import InstructorViewQuizzes from "./pages/instructor/quizzes/InstructorViewQuizzes";
+import InstructorAddQuestion from "./pages/instructor/questions/InstructorAddQuestion";
+import InstructorQuestionsPage from "./pages/instructor/questions/InstructorQuestionsPage";
 
 const App = () => {
   return (
@@ -95,6 +99,12 @@ const App = () => {
           <Route path="/instructorLessons/:courseId/:lessonId" element={<LessonPageInstructor/>}/>
           <Route path="/lesson/:lessonId" element={<UserLessonPage/>}/>
 
+
+
+          <Route path="/instructorCourse/:id/addQuiz" element={<InstructorAddQuiz />} />
+          <Route path="/instructor/course/:id/quizzes" element={<InstructorViewQuizzes />} />
+          <Route path="/instructor/quiz/:quizId/add-questions" element={<InstructorAddQuestion />} />
+          <Route path="/instructor/quiz/:quizId/questions" element={<InstructorQuestionsPage />} />
 
         </Routes>
       </Router>
