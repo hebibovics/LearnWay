@@ -360,6 +360,12 @@ console.log('kurs', course)
                                     </>
                                 )}
                             </div>
+                            <div className="mt-4 text-center">
+                                <Link to={`/studentQuizzes/${id}`}>
+                                    <Button variant="info">View Quizzes</Button>
+                                </Link>
+                            </div>
+
 
                         </>
                     )}
