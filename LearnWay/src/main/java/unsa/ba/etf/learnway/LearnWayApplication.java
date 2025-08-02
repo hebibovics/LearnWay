@@ -4,6 +4,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import unsa.ba.etf.learnway.models.*;
 import unsa.ba.etf.learnway.repository.*;
 
@@ -21,30 +22,53 @@ public class LearnWayApplication {
     }
 
     @Bean
-    public ApplicationRunner initializer(RoleRepository roleRepository, CategoryRepository categoryRepository, CourseRepository courseRepository, UserRepository userRepository, LessonRepository lessonRepository) {
+    public ApplicationRunner initializer(PasswordEncoder passwordEncoder, RoleRepository roleRepository, CategoryRepository categoryRepository, CourseRepository courseRepository, UserRepository userRepository, LessonRepository lessonRepository) {
         return args -> {
-            roleRepository.saveAll(Arrays.asList(
-                    Role.builder().roleName("USER").roleDescription("Default Role provided to each user - STUDENT").build(),
-                    Role.builder().roleName("ADMIN").roleDescription("Superuser, who has access for all functionality").build(),
-                    Role.builder().roleName("INSTRUCTOR").roleDescription("User, who creates courses, adds lessons and tracks students progress").build()
-            ));
+            System.out.println("Running initializer...");
 
-            //Role instructorRole = roleRepository.findById("INSTRUCTOR")
-              //      .orElseThrow(() -> new RuntimeException("Role INSTRUCTOR not found"));
+            String[] roles = {"USER", "ADMIN", "INSTRUCTOR"};
 
+            for (String roleName : roles) {
+                boolean exists = roleRepository.existsById(roleName);
+                System.out.println("Role " + roleName + " exists? " + exists);
 
-            Set<Role> instructorRoles = new HashSet<>();
-            //instructorRoles.add(instructorRole);
+                if (!exists) {
+                    Role newRole = Role.builder()
+                            .roleName(roleName)
+                            .roleDescription(
+                                    switch (roleName) {
+                                        case "USER" -> "Default Role provided to each user - STUDENT";
+                                        case "ADMIN" -> "Superuser, who has access for all functionality";
+                                        case "INSTRUCTOR" -> "User, who creates courses, adds lessons and tracks students progress";
+                                        default -> "Role description";
+                                    }
+                            )
+                            .build();
+                    System.out.println("Saving role: " + newRole);
+                    roleRepository.save(newRole);
+                }
+            }
 
-            //userRepository.save(User.builder()
-                    //.firstName("Instructor")
-                    //.lastName("is")
-                    //.username("username")
-                    //.password("pass")
-                    //.roles(instructorRoles)
-                    //        .isActive(true)
-            //        .build()
-           // );
+            // Probaj opet dohvatiti admin role
+            Role adminRole = roleRepository.findById("ADMIN")
+                    .orElseThrow(() -> new RuntimeException("Role ADMIN not found"));
+
+            // Provjeri admin korisnika
+            User adminUser = userRepository.findByUsername("admin");
+            System.out.println("Admin user exists? " + (adminUser != null));
+
+            if (adminUser == null) {
+                User admin = User.builder()
+                        .firstName("Admin")
+                        .lastName("Admin")
+                        .username("admin")
+                        .password(passwordEncoder.encode("admin123"))
+                        .isActive(true)
+                        .roles(new HashSet<>(Collections.singletonList(adminRole)))
+                        .build();
+                System.out.println("Saving admin user: " + admin);
+                userRepository.save(admin);
+            }
 
 
             categoryRepository.saveAll(Arrays.asList(
