@@ -139,21 +139,35 @@ const CourseDetailsInstructor = () => {
                     <p>Number of Lessons: {course.lessons?.length || 0}</p>
                     <p>Rate: {averageRating}</p>
                     <p>Category: {course.category.title}</p>
-                    <Button variant="primary" onClick={handleAddLesson} className="mt-3">
-                        Add Lesson
-                    </Button>
-                    <Button variant="success" onClick={handleViewLessons} className="mt-3">
-                        View Lessons
-                    </Button>
-                    <Button variant="danger" onClick={confirmDeleteCourse} className="mt-3">
-                        Delete Course
-                    </Button>
-                    <Button variant="warning" onClick={() => navigate(`/instructorCourse/${id}/addQuiz`)} className="mt-3">
-                        Add Quiz
-                    </Button>
-                    <Button variant="warning" onClick={() => navigate(`/instructor/course/${course.courseId}/quizzes`)} className="mt-3">
-                        View Quizzes
-                    </Button>
+                    <Row className="mt-3 g-2">
+                        <Col xs={12} md={6}>
+                            <Button variant="primary" className="w-100 text-white" onClick={handleAddLesson}>
+                                Add Lesson
+                            </Button>
+                        </Col>
+                        <Col xs={12} md={6}>
+                            <Button variant="success" className="w-100 text-white" onClick={handleViewLessons}>
+                                View Lessons
+                            </Button>
+                        </Col>
+                        <Col xs={12} md={6}>
+                            <Button variant="danger" className="w-100 text-white" onClick={confirmDeleteCourse}>
+                                Delete Course
+                            </Button>
+                        </Col>
+                        <Col xs={12} md={6}>
+                            <Button variant="warning" className="w-100 text-white" onClick={() => navigate(`/instructorCourse/${id}/addQuiz`)}>
+                                Add Quiz
+                            </Button>
+                        </Col>
+                        <Col xs={12} md={6}>
+                            <Button variant="info" className="w-100 text-white" onClick={() => navigate(`/instructor/course/${course.courseId}/quizzes`)}>
+                                View Quizzes
+                            </Button>
+                        </Col>
+                    </Row>
+
+
                 </Col>
                 <hr />
                 <div className="mt-4">

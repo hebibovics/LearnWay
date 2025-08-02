@@ -43,7 +43,8 @@ const Header = () => {
       <header>
         <Navbar style={{ backgroundColor: "#1b263b" }} variant="dark" expand="lg" collapseOnSelect>
         <Container>
-            <Navbar.Brand>LearnWay</Navbar.Brand>
+            {!isLoggedIn && <Navbar.Brand>LearnWay</Navbar.Brand>}
+
 
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">

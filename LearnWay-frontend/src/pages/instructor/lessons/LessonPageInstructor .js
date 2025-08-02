@@ -47,7 +47,7 @@ const LessonPageInstructor = () => {
 
     return (
         <Container className="mt-4">
-            <Card>
+            <Card className="text-dark">
                 <Card.Body>
                     {lesson ? (
                         <>

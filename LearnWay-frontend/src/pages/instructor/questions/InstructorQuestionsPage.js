@@ -28,18 +28,18 @@ const InstructorQuestionsPage = () => {
     }, [quizId]);
 
     if (loading) {
-        return <p>Učitavanje pitanja...</p>;
+        return <p>Loading questions...</p>;
     }
 
     if (questions.length === 0) {
-        return <p>Nema pitanja za ovaj kviz.</p>;
+        return <p>No questions for this quiz yet.</p>;
     }
 
     return (
         <div className="container mt-4">
             <h2>Pitanja za kviz #{quizId}</h2>
             {questions.map((q) => (
-                <Card className="mb-3" key={q.quesId}>
+                <Card className="mb-3" key={q.quesId} className="text-dark">
                     <Card.Body>
                         <Card.Title>{q.content}</Card.Title>
                         {q.image && (

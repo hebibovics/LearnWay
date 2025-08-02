@@ -14,12 +14,28 @@ const ProjectManagement = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch courses from backend
         axios.get('/api/course/')
-            .then(response => {
-                // Filter courses to include only those with category ID 7
-                const webDevCourses = response.data.filter(course => course.category.catId === 7);
-                setCourses(webDevCourses);
+            .then(async response => {
+                const webDevCourses = response.data.filter(course => course.category.catId === 9);
+
+                // Za svaki kurs dohvatiti recenzije i izračunati prosjek (ovo je loše za performance)
+                const coursesWithRates = await Promise.all(webDevCourses.map(async (course) => {
+                    try {
+                        const reviewsResp = await axios.get(`/api/review/course/${course.courseId}`);
+                        const reviews = reviewsResp.data;
+                        if(reviews.length > 0){
+                            const sum = reviews.reduce((acc, review) => acc + review.rate, 0);
+                            course.rate = (sum / reviews.length).toFixed(2);
+                        } else {
+                            course.rate = "N/A";
+                        }
+                    } catch(e) {
+                        course.rate = "N/A";
+                    }
+                    return course;
+                }));
+
+                setCourses(coursesWithRates);
             })
             .catch(error => {
                 console.error('There was an error fetching the courses!', error);
@@ -82,7 +98,7 @@ const ProjectManagement = () => {
             <Row>
                 {sortedCourses.map((course, index) => (
                     <Col md={3} key={index} className="mb-4">
-                        <Card className="h-100">
+                        <Card className="h-100" className="text-dark">
                             <Card.Body>
                                 <Card.Title className="text-uppercase">{course.title}</Card.Title>
                                 <Card.Text>
@@ -97,7 +113,7 @@ const ProjectManagement = () => {
             </Row>
 
             {/* Footer Section */}
-            <Row className="mt-5 bg-dark text-white p-4 footer">
+            <Row className="mt-5 text-white p-4 footer" style={{ backgroundColor: '#1b263b' }}>
                 <Col className="footer-content text-center">
                     <h3 className="mb-4">Contact Us</h3>
                     <p>Email: <a href="mailto:mail@mail.com" className="text-white">mail@mail.com</a></p>

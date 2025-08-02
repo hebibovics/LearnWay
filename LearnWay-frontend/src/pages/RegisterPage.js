@@ -117,41 +117,49 @@ const RegisterPage = () => {
 
           <Form.Group className="my-3" controlId="password">
             <Form.Label>Password</Form.Label>
-            <InputGroup>
-              <Form.Control
-                  type={passwordType}
-                  placeholder="Enter Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-              />
-              <Button
-                  onClick={showPasswordHandler}
-                  variant=""
-                  className="my-3 btn-submit"
-                  style={{ border: "1px solid black" }}
-              >
-                {showPassword ? <FaEyeSlash /> : <FaEye />}
-              </Button>
-            </InputGroup>
+            <Row>
+              <Col xs={10}>
+                <Form.Control
+                    type={passwordType}
+                    placeholder="Enter Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+              </Col>
+              <Col xs={2} className="d-flex align-items-center">
+                <Button
+                    onClick={showPasswordHandler}
+                    variant=""
+                    className="btn-submit w-100"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </Col>
+            </Row>
           </Form.Group>
+
 
           <Form.Group className="my-3" controlId="confirmPassword">
             <Form.Label>Confirm Password</Form.Label>
-            <InputGroup>
-              <Form.Control
-                  type={confirmPasswordType}
-                  placeholder="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-              <Button
-                  onClick={showConfirmPasswordHandler}
-                  variant=""
-                  style={{ border: "1px solid black" }}
-              >
-                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-              </Button>
-            </InputGroup>
+            <Row>
+              <Col xs={10}>
+                <Form.Control
+                    type={confirmPasswordType}
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+              </Col>
+              <Col xs={2} className="d-flex align-items-center">
+                <Button
+                    onClick={showConfirmPasswordHandler}
+                    variant=""
+                    className="btn-submit w-100"
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </Col>
+            </Row>
           </Form.Group>
 
           <Button

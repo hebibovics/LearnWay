@@ -9,7 +9,7 @@ import swal from "sweetalert";
 const StudentTakeQuizPage = () => {
     const { quizId } = useParams();
     const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState({}); // { quesId: selectedOption }
+    const [answers, setAnswers] = useState({}); // { quesId: 'option1' }
     const [submitted, setSubmitted] = useState(false);
     const [result, setResult] = useState({ correct: 0, total: 0 });
 
@@ -26,8 +26,8 @@ const StudentTakeQuizPage = () => {
         fetchQuestions();
     }, [quizId]);
 
-    const handleOptionChange = (quesId, selectedOption) => {
-        setAnswers((prev) => ({ ...prev, [quesId]: selectedOption }));
+    const handleOptionChange = (quesId, optLabel) => {
+        setAnswers((prev) => ({ ...prev, [quesId]: optLabel }));
     };
 
     const handleSubmit = () => {
@@ -53,7 +53,7 @@ const StudentTakeQuizPage = () => {
             <h2 className="mb-4 text-center">Take Quiz</h2>
 
             {questions.map((q, index) => (
-                <Card className="mb-4 shadow-sm" key={q.quesId}>
+                <Card className="mb-4 shadow-sm text-dark" key={q.quesId}>
                     <Card.Body>
                         <Card.Title>
                             {index + 1}. {q.content}
@@ -61,8 +61,8 @@ const StudentTakeQuizPage = () => {
                         <Form>
                             {[q.option1, q.option2, q.option3, q.option4].map((opt, i) => {
                                 const optLabel = `option${i + 1}`;
-                                const isCorrect = submitted && q.answer === opt;
-                                const isSelected = answers[q.quesId] === opt;
+                                const isCorrect = submitted && q.answer === optLabel;
+                                const isSelected = answers[q.quesId] === optLabel;
 
                                 return (
                                     <Form.Check
@@ -74,9 +74,9 @@ const StudentTakeQuizPage = () => {
                                                 ? `${opt}${isCorrect ? " ✔️" : isSelected ? " ❌" : ""}`
                                                 : opt
                                         }
-                                        value={opt}
+                                        value={optLabel}
                                         checked={isSelected}
-                                        onChange={() => handleOptionChange(q.quesId, opt)}
+                                        onChange={() => handleOptionChange(q.quesId, optLabel)}
                                         disabled={submitted}
                                     />
                                 );

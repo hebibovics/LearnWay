@@ -24,7 +24,7 @@ h1, h2{
 .userProfilePage__content--table {
     width: 60%;
     border-collapse: collapse;
-    background: #1e1e1e;
+    background: #1b263b;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     overflow: hidden;
@@ -39,7 +39,7 @@ h1, h2{
 }
 
 .userProfilePage__content--table tr:nth-child(even) {
-    background-color: #2a2a2a;
+    background-color: #1b263b;
 }
 
 .userProfilePage__content--table tr:first-child td {

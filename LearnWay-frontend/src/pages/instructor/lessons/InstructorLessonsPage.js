@@ -43,12 +43,13 @@ const InstructorLessonsPage = () => {
                         to={`/instructorLessons/${courseId}/${lesson.lessonId}`}
                         style={{ textDecoration: 'none', color: 'inherit' }}
                     >
-                        <Card>
+                        <Card className="text-dark">
                             <Card.Body>
                                 <Card.Title>{lesson.title}</Card.Title>
                                 <Card.Text>{lesson.description}</Card.Text>
                             </Card.Body>
                         </Card>
+
                     </Link>
                 ))}
             </Row>

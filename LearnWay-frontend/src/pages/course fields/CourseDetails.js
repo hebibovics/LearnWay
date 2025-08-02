@@ -281,7 +281,7 @@ console.log('kurs', course)
                                 />
                                 {filteredLessons.length > 0 ? (
                                     filteredLessons.map((lesson) => (
-                                        <Card key={lesson.id} className="mb-3">
+                                        <Card key={lesson.id} className="mb-3" className="text-dark">
                                             <Card.Header
                                                 style={{ cursor: "pointer" }}
                                                 onClick={() => toggleLesson(lesson.id)}

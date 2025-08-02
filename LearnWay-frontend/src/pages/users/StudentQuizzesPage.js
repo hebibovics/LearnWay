@@ -31,7 +31,7 @@ const StudentQuizzesPage = () => {
                 <Row xs={1} md={2} lg={3} className="g-4">
                     {quizzes.map((quiz) => (
                         <Col key={quiz.id}>
-                            <Card className="h-100 shadow-sm">
+                            <Card className="h-100 shadow-sm" className="text-dark">
                                 <Card.Body>
                                     <Card.Title>{quiz.title || "Untitled Quiz"}</Card.Title>
                                     <Card.Text>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-
+import swal from 'sweetalert';
 const InstructorAddQuiz = () => {
     const navigate = useNavigate();
     const { id  } = useParams(); // courseId iz URL-a
@@ -28,20 +28,30 @@ const InstructorAddQuiz = () => {
         try {
             const res = await axios.post("http://localhost:8081/api/quiz/", quizData);
             setCreatedQuizId(res.data.quizId);
-            alert("Kviz je uspješno dodan!");
+            swal({
+                title: "Success!",
+                text: "Quiz has been added successfully.",
+                icon: "success",
+                button: "OK",
+            });
         } catch (error) {
-            console.error("Greška pri dodavanju kviza:", error);
-            alert("Greška pri dodavanju kviza.");
+            console.error("Error adding quiz:", error);
+            swal({
+                title: "Error!",
+                text: "There was a problem adding the quiz.",
+                icon: "error",
+                button: "OK",
+            });
         }
     };
 
 
     return (
         <div className="container mt-4">
-            <h2>Dodaj kviz za kurs</h2>
+            <h2>Add quiz for the course</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                    <label>Naziv kviza</label>
+                    <label>Quiz title</label>
                     <input
                         type="text"
                         className="form-control"
@@ -53,7 +63,7 @@ const InstructorAddQuiz = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label>Opis</label>
+                    <label>Description</label>
                     <textarea
                         className="form-control"
                         name="description"
@@ -64,7 +74,7 @@ const InstructorAddQuiz = () => {
                 </div>
 
                 <div className="mb-3">
-                    <label>Broj pitanja</label>
+                    <label>Number of questions</label>
                     <input
                         type="number"
                         className="form-control"
@@ -75,20 +85,8 @@ const InstructorAddQuiz = () => {
                     />
                 </div>
 
-                <div className="mb-3 form-check">
-                    <input
-                        type="checkbox"
-                        className="form-check-input"
-                        name="iActive"
-                        checked={quizData.iActive}
-                        onChange={(e) =>
-                            setQuizData({ ...quizData, iActive: e.target.checked })
-                        }
-                    />
-                    <label className="form-check-label">Aktivan</label>
-                </div>
 
-                <button type="submit" className="btn btn-primary me-2">Dodaj kviz</button>
+                <button type="submit" className="btn btn-primary me-2">Add Quiz</button>
 
             </form>
         </div>
