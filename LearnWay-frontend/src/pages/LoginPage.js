@@ -87,6 +87,18 @@ const LoginPage = () => {
                 </Button>
               </InputGroup>
             </Form.Group>
+            {loginReducer.error && (
+                <div style={{ color: "red", marginTop: "5px" }}>
+                  {loginReducer.error && (
+                      <div style={{ color: "red", marginTop: "5px" }}>
+                        Username or Password are incorrect.
+                      </div>
+                  )}
+
+
+                </div>
+            )}
+
 
             <Button
                 variant=""

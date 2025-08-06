@@ -3,15 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { register } from "../actions/authActions";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../components/Loader";
-import { Form, Button, InputGroup, Row, Col } from "react-bootstrap";
+import { Form, Button, Row, Col } from "react-bootstrap";
 import FormContainer from "../components/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as authConstants from "../constants/authConstants";
 import { Link } from "react-router-dom";
-import { FaAngleDown } from "react-icons/fa";
-
 import "./page.css";
-
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
@@ -24,7 +21,8 @@ const RegisterPage = () => {
   const [passwordType, setPasswordType] = useState("password");
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
-  const [role, setRole] = useState(""); // Default role
+  const [role, setRole] = useState("");
+  const [errors, setErrors] = useState({});
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,14 +42,39 @@ const RegisterPage = () => {
 
   const submitHandler = (e) => {
     e.preventDefault();
+    let formErrors = {};
+
+    if (!firstName) formErrors.firstName = "Please enter First Name";
+    if (!lastName) formErrors.lastName = "Please enter Last Name";
+    if (!username) formErrors.username = "Please enter Username";
+    if (!password) formErrors.password = "Please enter Password";
+    if (!confirmPassword)
+      formErrors.confirmPassword = "Please confirm Password";
+    if (!role) formErrors.role = "Please choose Role";
+
+    if (password && confirmPassword && password !== confirmPassword) {
+      formErrors.notMatch = "Passwords do not match";
+    }
+    const regex = /^(?=.*[A-Z])(?=.*\d).+$/;
+    if (password && !regex.test(password)) {
+      formErrors.pwdStrength =
+          "Password must include at least one uppercase letter and one number";
+    }
+
+    setErrors(formErrors);
+    if (Object.keys(formErrors).length > 0) {
+      return;
+    }
+
     const user = {
-      firstName: firstName,
-      lastName: lastName,
-      username: username,
-      password: password,
-      phoneNumber: phoneNumber,
-      roles: [{ roleName: role }] // Include the role in the request
+      firstName,
+      lastName,
+      username,
+      password,
+      phoneNumber,
+      roles: [{ roleName: role }],
     };
+
     register(dispatch, user).then((data) => {
       if (data.type === authConstants.USER_REGISTER_SUCCESS) {
         navigate("/login");
@@ -70,7 +93,13 @@ const RegisterPage = () => {
                 placeholder="Enter First Name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
+                style={{ borderColor: errors.firstName ? "red" : "" }}
             />
+            {errors.firstName && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
+                  {errors.firstName}
+                </div>
+            )}
           </Form.Group>
 
           <Form.Group className="my-3" controlId="lname">
@@ -80,11 +109,17 @@ const RegisterPage = () => {
                 placeholder="Enter Last Name"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
+                style={{ borderColor: errors.lastName ? "red" : "" }}
             />
+            {errors.lastName && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
+                  {errors.lastName}
+                </div>
+            )}
           </Form.Group>
 
           <Form.Group className="my-3" controlId="phone_number">
-            <Form.Label>Phone Number</Form.Label>
+            <Form.Label>Phone Number </Form.Label>
             <Form.Control
                 type="phone"
                 placeholder="Enter Phone Number"
@@ -94,21 +129,21 @@ const RegisterPage = () => {
           </Form.Group>
 
           <Form.Group className="my-3" controlId="role">
-            <Form.Label>
-              Role
-            </Form.Label>
+            <Form.Label>Role</Form.Label>
             <Form.Control
                 as="select"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                custom
+                style={{ borderColor: errors.role ? "red" : "" }}
             >
               <option value="">Choose Role ▼</option>
               <option value="USER">Student</option>
               <option value="INSTRUCTOR">Instructor</option>
             </Form.Control>
+            {errors.role && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>{errors.role}</div>
+            )}
           </Form.Group>
-
 
           <Form.Group className="my-3" controlId="username">
             <Form.Label>User Name</Form.Label>
@@ -117,10 +152,14 @@ const RegisterPage = () => {
                 placeholder="Enter User Name"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                style={{ borderColor: errors.username ? "red" : "" }}
             />
+            {errors.username && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
+                  {errors.username}
+                </div>
+            )}
           </Form.Group>
-
-
 
           <Form.Group className="my-3" controlId="password">
             <Form.Label>Password</Form.Label>
@@ -131,20 +170,31 @@ const RegisterPage = () => {
                     placeholder="Enter Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    style={{
+                      borderColor:
+                          errors.password || errors.notMatch || errors.pwdStrength
+                              ? "red"
+                              : "",
+                    }}
                 />
               </Col>
               <Col xs={2} className="d-flex align-items-center">
-                <Button
-                    onClick={showPasswordHandler}
-                    variant=""
-                    className="btn-submit w-100"
-                >
+                <Button onClick={showPasswordHandler} variant="" className="btn-submit w-100">
                   {showPassword ? <FaEyeSlash /> : <FaEye />}
                 </Button>
               </Col>
             </Row>
+            {errors.password && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
+                  {errors.password}
+                </div>
+            )}
+            {errors.pwdStrength && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
+                  {errors.pwdStrength}
+                </div>
+            )}
           </Form.Group>
-
 
           <Form.Group className="my-3" controlId="confirmPassword">
             <Form.Label>Confirm Password</Form.Label>
@@ -155,18 +205,30 @@ const RegisterPage = () => {
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
+                    style={{
+                      borderColor:
+                          errors.confirmPassword || errors.notMatch
+                              ? "red"
+                              : "",
+                    }}
                 />
               </Col>
               <Col xs={2} className="d-flex align-items-center">
-                <Button
-                    onClick={showConfirmPasswordHandler}
-                    variant=""
-                    className="btn-submit w-100"
-                >
+                <Button onClick={showConfirmPasswordHandler} variant="" className="btn-submit w-100">
                   {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                 </Button>
               </Col>
             </Row>
+            {errors.confirmPassword && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
+                  {errors.confirmPassword}
+                </div>
+            )}
+            {errors.notMatch && (
+                <div style={{ color: "red", fontSize: "0.8rem" }}>
+                  {errors.notMatch}
+                </div>
+            )}
           </Form.Group>
 
           <Button
@@ -184,7 +246,11 @@ const RegisterPage = () => {
         ) : (
             <Row className="py-3">
               <Col>
-                Have an Account? <Link to="/" style={{ color: "rgb(33, 182, 168)" }}> <b>Login</b> </Link>
+                Have an Account?{" "}
+                <Link to="/" style={{ color: "rgb(33, 182, 168)" }}>
+                  {" "}
+                  <b>Login</b>{" "}
+                </Link>
               </Col>
             </Row>
         )}
