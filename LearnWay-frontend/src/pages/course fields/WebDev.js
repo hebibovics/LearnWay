@@ -13,7 +13,7 @@ const WebDev = () => {
     useEffect(() => {
         axios.get('/api/course/')
             .then(async response => {
-                const webDevCourses = response.data.filter(course => course.category.catId === 9);
+                const webDevCourses = response.data.filter(course => course.category.catId === 1);
 
                 // Za svaki kurs dohvatiti recenzije i izračunati prosjek (ovo je loše za performance)
                 const coursesWithRates = await Promise.all(webDevCourses.map(async (course) => {
@@ -113,7 +113,7 @@ const WebDev = () => {
             <Row className="mt-5 text-white p-4 footer" style={{ backgroundColor: '#1b263b' }}>
                 <Col className="footer-content text-center">
                     <h3 className="mb-4">Contact Us</h3>
-                    <p>Email: <a href="mailto:mail@mail.com" className="text-white">mail@mail.com</a></p>
+                    <p>Email: <a href="mailto:admin@learnway.com" className="text-white">admin@learnway.com</a></p>
                     <div className="mt-4">
                         <p className="mb-2">Visit our:</p>
                         <Row className="justify-content-center">

@@ -2,71 +2,64 @@ import React, { useEffect } from "react";
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "../../components/Sidebar";
-import "./AdminProfilePage.css";
 import Image from "react-bootstrap/Image";
 import { fetchCategories } from "../../actions/categoriesActions";
 import { fetchQuizzes } from "../../actions/quizzesActions";
-
+import Sidebar from "../../components/Sidebar";
+import "../users/UserProfilePage.css";
 const AdminProfilePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const loginReducer = useSelector((state) => state.loginReducer);
   const user = loginReducer.user;
+  console.log("User object:", user);
+  console.log("User object:", user.firstName);
   const token = JSON.parse(localStorage.getItem("jwtToken"));
-
-  useEffect(() => {
-    if (!localStorage.getItem("jwtToken")) navigate("/");
-  }, []);
 
   useEffect(() => {
     fetchCategories(dispatch, token);
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   fetchQuizzes(dispatch, token);
+  //}, [dispatch]);
+
   useEffect(() => {
-    fetchQuizzes(dispatch, token);
-  }, [dispatch]);
+    if (!localStorage.getItem("jwtToken")) navigate("/");
+    console.log("User state in Redux:", user);
+  }, []);
 
   return (
-    <div className="adminProfilePage__container">
-      <div className="adminProfilePage__sidebar">
-        <Sidebar />
-      </div>
-      <div className="adminProfilePage__content">
-        <Image
-          className="adminProfilePage__content--profilePic"
-          width="20%"
-          height="20%"
-          roundedCircle
-          src="images/user.png"
-        />
+      <div className="userProfilePage__container">
+        <div className="userProfilePage__sidebar">
+          <Sidebar />
+        </div>
+        {user && (
+            <div className="userProfilePage__content">
 
-        <Table bordered className="adminProfilePage__content--table">
-          <tbody>
-            <tr>
-              <td>Name</td>
-              <td>{`${user.firstName} ${user.lastName}`}</td>
-            </tr>
-            <tr>
-              <td>Username</td>
-              <td>{user.username}</td>
-            </tr>
-            <tr>
-              <td>Phone</td>
-              <td>{user.phoneNumber}</td>
-            </tr>
-            <tr>
-              <td>Role</td>
-              <td>{user.roles[0].roleName}</td>
-            </tr>
-            <tr>
-              <td>Status</td>
-              <td>{`${user.active}`}</td>
-            </tr>
-          </tbody>
-        </Table>
+              <Table bordered className="userProfilePage__content--table">
+                <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td>{`${user.firstName} ${user.lastName}`}</td>
+                </tr>
+                <tr>
+                  <td>Username</td>
+                  <td>{user.username}</td>
+                </tr>
+                <tr>
+                  <td>Mail</td>
+                  <td>admin@learnway.com</td>
+                </tr>
+                <tr>
+                  <td>Role</td>
+                  <td>{user.roles[0].roleName}</td>
+                </tr>
+                </tbody>
+              </Table>
+            </div>
+        )}
       </div>
-    </div>
   );
 };
 

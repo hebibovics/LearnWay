@@ -279,38 +279,18 @@ console.log('kurs', course)
                                     value={searchTerm}
                                     onChange={handleSearchChange}
                                 />
-                                {filteredLessons.length > 0 ? (
-                                    filteredLessons.map((lesson) => (
-                                        <Card key={lesson.id} className="mb-3" className="text-dark">
-                                            <Card.Header
-                                                style={{ cursor: "pointer" }}
-                                                onClick={() => toggleLesson(lesson.id)}
-                                            >
-                                                {lesson.title}
-                                            </Card.Header>
-                                            {expandedLessonId === lesson.id && (
-                                                <Card.Body>
-                                                    <Card.Text>{lesson.description}</Card.Text>
-                                                    {lesson.videoUrl && (
-                                                        <div className="video-container" style={{ maxWidth: "100%", aspectRatio: "16/9" }}>
-                                                            <iframe
-                                                                width="100%"
-                                                                height="315"
-                                                                src={lesson.videoUrl}
-                                                                title={lesson.title}
-                                                                frameBorder="0"
-                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                                                allowFullScreen
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </Card.Body>
-                                            )}
-                                        </Card>
-                                    ))
-                                    ) : (
-                                    <p>No matching lessons found.</p>
-                                )}
+                                {filteredLessons.map((lesson) => (
+                                    <Card key={lesson.lessonId} className="mb-3 text-dark">
+                                        <Card.Header
+                                            as={Link}
+                                            to={`/lessonPage/${id}/${lesson.lessonId}`}
+                                            style={{ cursor: "pointer", textDecoration: "none", color: "#000" }}
+                                        >
+                                            {lesson.title}
+                                        </Card.Header>
+                                    </Card>
+                                ))}
+
                             </div>
                             <hr />
                             <div className="mt-4">

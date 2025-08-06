@@ -1,50 +1,64 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Container, Button, Form } from "react-bootstrap";
-import "../courses/InstructorAddCoursePage.css";
-    import swal from "sweetalert";
-    import addLesson from "../../../services/lessonsServices";
-import lessonsService from "../../../services/lessonsServices"; // Import as default export
-
+import swal from "sweetalert";
+import axios from "axios";
 
 const InstructorAddLesson = () => {
-    const { id } = useParams();
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
+    const { id } = useParams(); // courseId
     const navigate = useNavigate();
 
-    // Assuming you have a way to retrieve the token (e.g., from Redux or localStorage)
-    const token = JSON.parse(localStorage.getItem("jwtToken")); // Koristi pravi ključ "jwtToken"
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+    const [videoUrl, setVideoUrl] = useState('');
+
+    const token = JSON.parse(localStorage.getItem("jwtToken"));
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const lesson = { title, description }; // Prepare the lesson object to be added
-        console.log("Submitting lesson:", lesson, id, token); // Log the values
+        const lesson = { title, description };
 
         try {
-            const response = await lessonsService.addLesson(lesson, id, token); // Send request with correct token
-            console.log("addLesson response:", response); // Log the response
+            // 1) ADD LESSON
+            const response = await axios.post(
+                `http://localhost:8081/api/lesson/api/lesson/${id}`,
+                lesson,
+                {
+                    headers: { Authorization: `Bearer ${token}` }
+                }
+            );
 
-            if (response.isAdded) {
-                swal("Success!", "Lesson has been added successfully.", "success")
-                    .then(() => navigate(`/instructorLessons/${id}`)); // Redirect after successful addition
-            } else {
-                swal("Error!", `Error: ${response.error}`, "error");
+            const createdLesson = response.data; // ovdje dobijes lessonId
+
+            // 2) UPDATE VIDEO URL (ako je uneseno)
+            if (videoUrl.trim() !== "") {
+                await axios.put(
+                    `http://localhost:8081/api/lesson/${createdLesson.lessonId}/video`,
+                    videoUrl,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "text/plain"
+                        }
+                    }
+                );
             }
+
+            swal("Success!", "Lesson added successfully.", "success")
+                .then(() => navigate(`/instructorLessons/${id}`));
+
         } catch (err) {
-            console.error("Error occurred:", err); // Log error if catch block is triggered
+            console.error(err);
             swal("Error!", "There was an error adding the lesson.", "error");
         }
     };
-
-
 
     return (
         <Container>
             <h1 className="my-4 text-center">Add Lesson</h1>
             <Form onSubmit={handleSubmit}>
-                <Form.Group controlId="formLessonTitle">
+                <Form.Group>
                     <Form.Label>Title</Form.Label>
                     <Form.Control
                         type="text"
@@ -54,7 +68,8 @@ const InstructorAddLesson = () => {
                         required
                     />
                 </Form.Group>
-                <Form.Group controlId="formLessonDescription" className="mt-3">
+
+                <Form.Group className="mt-2">
                     <Form.Label>Description</Form.Label>
                     <Form.Control
                         as="textarea"
@@ -65,6 +80,17 @@ const InstructorAddLesson = () => {
                         required
                     />
                 </Form.Group>
+
+                <Form.Group className="mt-2">
+                    <Form.Label>Video URL (optional)</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="https://youtube.com/watch?v=..."
+                        value={videoUrl}
+                        onChange={(e) => setVideoUrl(e.target.value)}
+                    />
+                </Form.Group>
+
                 <Button variant="primary" type="submit" className="mt-3">
                     Add Lesson
                 </Button>

@@ -8,6 +8,8 @@ import FormContainer from "../components/FormContainer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import * as authConstants from "../constants/authConstants";
 import { Link } from "react-router-dom";
+import { FaAngleDown } from "react-icons/fa";
+
 import "./page.css";
 
 
@@ -91,6 +93,23 @@ const RegisterPage = () => {
             />
           </Form.Group>
 
+          <Form.Group className="my-3" controlId="role">
+            <Form.Label>
+              Role
+            </Form.Label>
+            <Form.Control
+                as="select"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                custom
+            >
+              <option value="">Choose Role ▼</option>
+              <option value="USER">Student</option>
+              <option value="INSTRUCTOR">Instructor</option>
+            </Form.Control>
+          </Form.Group>
+
+
           <Form.Group className="my-3" controlId="username">
             <Form.Label>User Name</Form.Label>
             <Form.Control
@@ -101,19 +120,7 @@ const RegisterPage = () => {
             />
           </Form.Group>
 
-          <Form.Group className="my-3" controlId="role">
-            <Form.Label>Role</Form.Label>
-            <Form.Control
-                as="select"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                custom
-            >
-              <option value="">Choose Role</option>
-              <option value="USER">Student</option>
-              <option value="INSTRUCTOR">Instructor</option>
-            </Form.Control>
-          </Form.Group>
+
 
           <Form.Group className="my-3" controlId="password">
             <Form.Label>Password</Form.Label>

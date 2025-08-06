@@ -48,6 +48,9 @@ import InstructorAddQuestion from "./pages/instructor/questions/InstructorAddQue
 import InstructorQuestionsPage from "./pages/instructor/questions/InstructorQuestionsPage";
 import StudentQuizzesPage from "./pages/users/StudentQuizzesPage"
 import StudentTakeQuizPage from "./pages/users/StudentTakeQuizPage";
+import UpdateLessonInstructor from "./pages/instructor/lessons/UpdateLessonInstructor";
+import LessonPageStudent from "./pages/users/LessonPageSudent";
+import StudentQuizResultsPage from "./pages/users/StudentQuizResultsPage";
 
 const App = () => {
   return (
@@ -57,7 +60,6 @@ const App = () => {
           <Route path="/" element={<LoginPage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/register" element={<RegisterPage/>}/>
-          <Route path="/adminProfile" element={<AdminProfilePage/>}/>
           <Route path="/adminCategories" element={<AdminCategoriesPage/>}/>
           <Route path="/adminAddCategory" element={<AdminAddCategoryPage/>}/>
           <Route
@@ -75,6 +77,7 @@ const App = () => {
               element={<AdminUpdateQuestionPage/>}
           />
           <Route path="/profile" element={<UserProfilePage/>}/>
+          <Route path="/adminProfile" element={<AdminProfilePage/>}/>
 
 
           <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>
@@ -83,6 +86,12 @@ const App = () => {
           <Route path="/courseInstructor/:id" element={<CourseDetailsInstructor/>}/>
           <Route path="/instructorAddLesson/:id" element={<InstructorAddLesson/>}/>
           <Route path="/instructorLessons/:id" element={<InstructorLessonsPage/>}/>
+          <Route path="/updateLesson/:courseId/:lessonId" element={<UpdateLessonInstructor/>} />
+
+          <Route path="/lessonPage/:courseId/:lessonId" element={<LessonPageStudent />} />
+          <Route path="/quizResults" element={<StudentQuizResultsPage />} />
+
+
 
           <Route path="/aboutUs/" element={<AboutUs/>}/>
           <Route path="/home/" element={<Home/>}/>
