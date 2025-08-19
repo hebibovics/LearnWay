@@ -73,18 +73,6 @@ const InstructorAddQuiz = () => {
                     />
                 </div>
 
-                <div className="mb-3">
-                    <label>Number of questions</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        name="numOfQuestions"
-                        value={quizData.numOfQuestions}
-                        onChange={handleChange}
-                        min={0}
-                    />
-                </div>
-
 
                 <button type="submit" className="btn btn-primary me-2">Add Quiz</button>
 

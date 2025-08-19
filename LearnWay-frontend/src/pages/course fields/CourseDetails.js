@@ -200,18 +200,25 @@ console.log('kurs', course)
                     <p>Rate: {averageRating}</p>
                     <p>Category: {course.category.title}</p>
                     {userRole === "USER" && (
-                        <>
+                        <div className="mt-3 d-flex gap-2">
                             {!isEnrolled ? (
-                                <Button variant="outline-primary" className="mt-3" onClick={handleEnroll}>
+                                <Button variant="outline-primary" onClick={handleEnroll}>
                                     Enroll
                                 </Button>
                             ) : (
-                                <Button variant="outline-danger" className="mt-3" onClick={handleUnenroll}>
-                                    Unenroll
-                                </Button>
+                                <>
+                                    <Button variant="outline-danger" onClick={handleUnenroll}>
+                                        Unenroll
+                                    </Button>
+                                    {/* Dugme za Quizzes prikaz, samo ako je upisan */}
+                                    <Link to={`/studentQuizzes/${id}`}>
+                                        <Button variant="info">View Quizzes</Button>
+                                    </Link>
+                                </>
                             )}
-                        </>
+                        </div>
                     )}
+
 
                     <hr />
                     {isEnrolled && (
@@ -340,11 +347,7 @@ console.log('kurs', course)
                                     </>
                                 )}
                             </div>
-                            <div className="mt-4 text-center">
-                                <Link to={`/studentQuizzes/${id}`}>
-                                    <Button variant="info">View Quizzes</Button>
-                                </Link>
-                            </div>
+
 
 
                         </>

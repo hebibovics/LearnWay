@@ -165,6 +165,8 @@ const CourseDetailsInstructor = () => {
                                 View Quizzes
                             </Button>
                         </Col>
+
+
                     </Row>
 
 

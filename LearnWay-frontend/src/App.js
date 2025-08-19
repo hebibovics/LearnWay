@@ -51,6 +51,7 @@ import StudentTakeQuizPage from "./pages/users/StudentTakeQuizPage";
 import UpdateLessonInstructor from "./pages/instructor/lessons/UpdateLessonInstructor";
 import LessonPageStudent from "./pages/users/LessonPageSudent";
 import StudentQuizResultsPage from "./pages/users/StudentQuizResultsPage";
+import UpdateCourseInstructor from "./pages/instructor/courses/UpdateCourseInstructor";
 
 const App = () => {
   return (
@@ -112,6 +113,7 @@ const App = () => {
           <Route path="/instructorLessons/:courseId/:lessonId" element={<LessonPageInstructor/>}/>
           <Route path="/lesson/:lessonId" element={<UserLessonPage/>}/>
 
+          <Route path="/instructor/course/:courseId/update" element={<UpdateCourseInstructor />} />
 
 
           <Route path="/instructorCourse/:id/addQuiz" element={<InstructorAddQuiz />} />

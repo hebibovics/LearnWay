@@ -43,12 +43,10 @@ public class AuthServiceImpl implements AuthService {
         if (temp != null) {
             throw new Exception("User Already Exists");
         } else {
-            // Ako user_role nije postavljen, koristi podrazumijevanu rolu
             String roleName = (user.getRoles() != null && !user.getRoles().isEmpty())
                     ? user.getRoles().stream().findFirst().get().getRoleName()
                     : "INSTRUCTOR";
 
-            // Provjeri user_role iz JSON zahtjeva
             if (user.getRoles() != null && !user.getRoles().isEmpty()) {
                 roleName = user.getRoles().stream().findFirst().get().getRoleName();
             }
