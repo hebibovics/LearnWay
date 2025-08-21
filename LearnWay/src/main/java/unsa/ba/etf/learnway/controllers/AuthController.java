@@ -20,22 +20,6 @@ public class AuthController {
     public User registerUser(@RequestBody User user) throws Exception {
         return authService.registerUserService(user);
     }
-//
-//{
-//    "firstName":"sanis",
-//        "lastName": "saaa",
-//        "username": "saniDSDSaDSASSh1",
-//        "password": "saniS1",
-//        "phoneNumber": "0001",
-//        "isActive": true,
-//        "roles": [
-//    {
-//        "roleName": "INSTRUCTOR"
-//    }
-//    ]
-//}
-//
-//
 
 
 

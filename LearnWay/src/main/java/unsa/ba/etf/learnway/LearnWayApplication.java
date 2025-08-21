@@ -49,11 +49,9 @@ public class LearnWayApplication {
                 }
             }
 
-            // Probaj opet dohvatiti admin role
             Role adminRole = roleRepository.findById("ADMIN")
                     .orElseThrow(() -> new RuntimeException("Role ADMIN not found"));
 
-            // Provjeri admin korisnika
             User adminUser = userRepository.findByUsername("admin");
             System.out.println("Admin user exists? " + (adminUser != null));
 
@@ -163,7 +161,7 @@ public class LearnWayApplication {
                     // Other Courses
                     Course.builder().title("Introduction to Blockchain").description("Learn the basics of blockchain technology.").category(otherCourses).build(),
                     Course.builder().title("Ethical Hacking").description("Introduction to ethical hacking.").category(otherCourses).build(),
-                    Course.builder().title("Cyber Security Essentials").description("Learn the essentials of cyber security.").category(otherCourses).build(),
+                    Course.builder().title("Cyber Security Essentials").description("Learn the essentials of cybersecurity.").category(otherCourses).build(),
                     Course.builder().title("Cloud Computing Basics").description("Learn the basics of cloud computing.").category(otherCourses).build(),
                     Course.builder().title("IoT Fundamentals").description("Introduction to Internet of Things.").category(otherCourses).build(),
                     Course.builder().title("AR/VR Basics").description("Learn the basics of augmented and virtual reality.").category(otherCourses).build()

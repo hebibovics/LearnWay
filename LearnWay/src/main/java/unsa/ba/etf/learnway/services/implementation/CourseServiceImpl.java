@@ -88,21 +88,17 @@ public class CourseServiceImpl implements CourseService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Provjera da li user ima rolu USER
         boolean isStudent = user.getRoles().stream()
                 .anyMatch(role -> role.getRoleName().equalsIgnoreCase("USER"));
         if (!isStudent) {
             throw new RuntimeException("Only users with role USER can enroll");
         }
 
-        // Enroll user if not already enrolled
         if (!user.getCourses().contains(course)) {
             user.getCourses().add(course);
-            // Opcionalno za dvosmjernu sinhronizaciju
             course.getUsers().add(user);
         }
 
-        // Bitno: spremi user-a jer on upravlja relacijom!
         userRepository.save(user);
 
         return course;
@@ -146,7 +142,6 @@ public class CourseServiceImpl implements CourseService {
         course.getUsers().remove(user);
         user.getCourses().remove(course);
 
-        // Spasi oba entiteta kako bi se relacija ažurirala u bazi
         userRepository.save(user);
         return courseRepository.save(course);
     }

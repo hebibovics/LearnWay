@@ -51,15 +51,15 @@ public class AuthServiceImpl implements AuthService {
                 roleName = user.getRoles().stream().findFirst().get().getRoleName();
             }
 
-            // Pronađi rolu iz roleName
+
             Role role = roleRepository.findById(roleName)
                     .orElseThrow(() -> new Exception("Role not found"));
 
-            // Inicijaliziraj set role i dodaj pronađenu rolu
+
             Set<Role> userRoles = new HashSet<>();
             userRoles.add(role);
 
-            // Postavi rolu u korisnički entitet
+
             user.setRoles(userRoles);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
 

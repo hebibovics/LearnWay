@@ -33,5 +33,5 @@ public class CommentController {
             @RequestBody Comment comment) {
         return ResponseEntity.ok(commentService.saveCommentForCourseAndUser(comment, courseId, userId));
     }
-
+// DODATI ZA DELETE ZA ADMINA
 }

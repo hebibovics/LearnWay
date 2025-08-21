@@ -25,10 +25,8 @@ public class QuestionServiceImpl implements QuestionService {
         Quiz quiz = quizRepository.findById(quizId)
                 .orElseThrow(() -> new RuntimeException("Quiz not found with id: " + quizId));
 
-        // Postavi pravi entitet u pitanje
         question.setQuiz(quiz);
 
-        // Ažuriraj broj pitanja ako želiš
         quiz.setNumOfQuestions(quiz.getNumOfQuestions() + 1);
         quizRepository.save(quiz);
 

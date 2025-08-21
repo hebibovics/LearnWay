@@ -54,7 +54,7 @@ public class QuizResultController {
         quizResult.setUserId(userId);
         quizResult.setQuiz(quizService.getQuiz(quizId));
         quizResult.setTotalObtainedMarks(totalObtainedMarks);
-        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+        final ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Europe/Sarajevo"));
         quizResult.setAttemptDatetime(now.toLocalDate().toString() + " " + now.toLocalTime().toString().substring(0,8));
 
         quizResultService.addQuizResult(quizResult);

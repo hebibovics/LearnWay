@@ -17,7 +17,6 @@ public interface QuestionService {
 
     void deleteQuestion(Long questionId);
 
-    //Extra Methods
     List<Question> getQuestionsByQuiz(Quiz quiz);
 
 

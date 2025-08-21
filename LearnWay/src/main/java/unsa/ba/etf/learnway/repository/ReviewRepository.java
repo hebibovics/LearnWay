@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    //Optional<Review> findByUserAndCourse(User user, Course course);
+
     Optional<Review> findByUserUserIdAndCourseCourseId(Long userId, Long courseId);
 
     List<Review> findByCourse_CourseId(Long courseId);
