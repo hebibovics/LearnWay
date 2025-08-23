@@ -41,8 +41,25 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void deleteCourse(Long courseId) {
-        courseRepository.delete(getCourse(courseId));
+        Course course = getCourse(courseId);
+        if (course == null) {
+            throw new RuntimeException("Course not found with ID: " + courseId);
+        }
+
+        // Očisti komentare povezane sa kursom
+        course.getComments().clear();
+
+        // Očisti studente povezane sa kursom
+        for (User user : new HashSet<>(course.getUsers())) {
+            user.getCourses().remove(course);
+            course.getUsers().remove(user);
+            userRepository.save(user);
+        }
+
+        courseRepository.delete(course);
     }
+
+
 
     @Override
     public Course findCourseById(Long id) {

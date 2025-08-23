@@ -69,6 +69,9 @@ public class User implements UserDetails {
         this.roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleName())));
         return authorities;
     }
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Comment> comments = new HashSet<>();
+
 
     @Override
     public boolean isAccountNonExpired() {

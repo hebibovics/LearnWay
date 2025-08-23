@@ -50,6 +50,7 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> comments = commentRepository.findByCourse_CourseId(courseId);
         return comments.stream()
                 .map(comment -> new CommentResponseDTO(
+                        comment.getCommentId(),
                         comment.getContent(),
                         comment.getUser().getUsername(),
                         comment.getCreatedAt()

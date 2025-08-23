@@ -46,7 +46,7 @@ const InstructorAddLesson = () => {
             }
 
             swal("Success!", "Lesson added successfully.", "success")
-                .then(() => navigate(`/instructorLessons/${id}`));
+                .then(() => navigate(`/courseInstructor/${id}`));
 
         } catch (err) {
             console.error(err);

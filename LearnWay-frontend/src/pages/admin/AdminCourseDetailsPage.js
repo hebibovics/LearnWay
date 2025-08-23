@@ -108,13 +108,16 @@ const AdminCourseDetailsPage = () => {
             icon: "warning",
             buttons: true,
             dangerMode: true,
+
         }).then((willDelete) => {
             if (willDelete) {
+
                 axios
                     .delete(`/api/comments/${commentId}`)
                     .then(() => {
                         swal("Comment deleted!", "The comment has been removed.", "success");
                         setForumComments(forumComments.filter(c => c.commentId !== commentId));
+
                     })
                     .catch((err) => {
                         console.error(err);
@@ -123,6 +126,7 @@ const AdminCourseDetailsPage = () => {
             }
         });
     };
+
 
 
     if (loading) return <p>Loading...</p>;
@@ -190,26 +194,29 @@ const AdminCourseDetailsPage = () => {
                     <h5>Forum Comments:</h5>
                     {forumComments.length > 0 ? (
                         <ListGroup>
-                            {forumComments.map((comment, idx) => (
-                                <ListGroup.Item
-                                    key={idx}
-                                    className="d-flex justify-content-between align-items-center"
-                                >
+                            {forumComments.map((comment, idx) => {
+                                console.log("COMMENT OBJECT:", comment);
+                                return (
+                                    <ListGroup.Item
+                                        key={idx}
+                                        className="d-flex justify-content-between align-items-center"
+                                    >
             <span>
-              <strong>{comment.user?.fullName || comment.username}:</strong>{" "}
+                <strong>{comment.user?.fullName || comment.username}:</strong>{" "}
                 {comment.content}
             </span>
 
-                                    {/* Trash ikonica */}
-                                    <Button
-                                        variant="outline-danger"
-                                        size="sm"
-                                        onClick={() => handleDeleteComment(comment.commentId)}
-                                    >
-                                        🗑
-                                    </Button>
-                                </ListGroup.Item>
-                            ))}
+                                        <Button
+                                            variant="outline-danger"
+                                            size="sm"
+                                            onClick={() => handleDeleteComment(comment.commentId)}
+                                        >
+                                            🗑
+                                        </Button>
+                                    </ListGroup.Item>
+                                );
+                            })}
+
                         </ListGroup>
                     ) : (
                         <p>No comments yet.</p>

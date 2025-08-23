@@ -55,6 +55,7 @@ import UpdateCourseInstructor from "./pages/instructor/courses/UpdateCourseInstr
 import AdminCoursesPage from "./pages/admin/AdminCoursesPage";
 import AdminCourseDetailsPage from "./pages/admin/AdminCourseDetailsPage";
 import AdminLessonPage from "./pages/admin/AdminLessonPage";
+import AdminUsersPage from "./pages/admin/AdminUsersPage";
 
 const App = () => {
   return (
@@ -85,6 +86,7 @@ const App = () => {
           <Route path="/adminCourses" element={<AdminCoursesPage/>}/>
           <Route path="/admin/course/:id" element={<AdminCourseDetailsPage/>}/>
           <Route path="/adminLesson/:id" element={<AdminLessonPage/>}/>
+          <Route path="/adminUsers" element={<AdminUsersPage/>}/>
 
 
           <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>

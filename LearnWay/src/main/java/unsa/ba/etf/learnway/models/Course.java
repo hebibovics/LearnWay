@@ -54,4 +54,9 @@ public class Course {
     @JoinColumn(name = "instructor_id")
     private User instructor;
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Set<Comment> comments = new HashSet<>();
+
+
 }

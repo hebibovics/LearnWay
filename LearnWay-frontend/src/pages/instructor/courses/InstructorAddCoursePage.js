@@ -49,6 +49,7 @@ const InstructorAddCourse = () => {
 
     const submitHandler = (e) => {
         e.preventDefault();
+
         if (selectedCategoryId !== null && selectedCategoryId !== "n/a") {
             const course = {
                 title: title,
@@ -64,14 +65,18 @@ const InstructorAddCourse = () => {
                 },
             };
             addCourse(dispatch, course, token, instructorId).then((data) => {
-                if (data.type === coursesConstants.ADD_COURSE_SUCCESS) {
-                    swal("Course Added!", `${course.title} successfully added`, "success").then(() => {
 
-                    });
+                console.log("data payload:", data.payload);
+                if (data.type === coursesConstants.ADD_COURSE_SUCCESS) {
+                    swal("Course Added!", `${course.title} successfully added`, "success")
+                        .then(() => {
+                            navigate("/instructorProfile");
+                        });
                 } else {
                     swal("Course Not Added!", `${course.title} not added`, "error");
                 }
             });
+
 
 
         } else {
@@ -86,6 +91,7 @@ const InstructorAddCourse = () => {
     useEffect(() => {
         if (categories.length === 0) {
             fetchCategories(dispatch, token).then((data) => {
+                console.log("data payload:", data.payload);
                 setCategories(data.payload);
             });
         }

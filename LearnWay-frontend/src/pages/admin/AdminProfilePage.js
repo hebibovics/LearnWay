@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ const AdminProfilePage = () => {
   console.log("User object:", user.firstName);
   const token = JSON.parse(localStorage.getItem("jwtToken"));
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   useEffect(() => {
     fetchCategories(dispatch, token);
   }, [dispatch]);
@@ -31,7 +33,24 @@ const AdminProfilePage = () => {
 
   return (
       <div className="userProfilePage__container">
-        <div className="userProfilePage__sidebar">
+          {/* Toggle dugme za mobitel */}
+          {!sidebarOpen && (
+              <button
+                  className="userProfilePage__toggleBtn"
+                  onClick={() => setSidebarOpen(true)}
+              >
+                ☰
+              </button>
+          )}
+
+
+          {/* Overlay (klik van sidebar zatvara) */}
+          <div
+              className={`userProfilePage__overlay ${sidebarOpen ? "active" : ""}`}
+              onClick={() => setSidebarOpen(false)}
+          ></div>
+
+          <div className={`userProfilePage__sidebar ${sidebarOpen ? "open" : ""}`}>
           <Sidebar />
         </div>
         {user && (
