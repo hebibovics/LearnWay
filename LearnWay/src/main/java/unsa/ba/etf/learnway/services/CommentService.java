@@ -11,4 +11,5 @@ public interface CommentService {
     Comment saveCommentForCourseAndUser(Comment comment, Long courseId, Long userId);
     List<CommentResponseDTO> getCommentDTOsByCourseId(Long courseId);
 
+    void deleteComment(Long id);
 }

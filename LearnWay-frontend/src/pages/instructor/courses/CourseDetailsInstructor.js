@@ -228,7 +228,7 @@ const CourseDetailsInstructor = () => {
                         <ListGroup>
                             {enrolledStudents.map((student, index) => (
                                 <ListGroup.Item key={index}>
-                                    <strong>{student.firstName} {student.lastName}</strong> - {student.email}
+                                    <strong>{student.firstName} {student.lastName}</strong>
                                 </ListGroup.Item>
                             ))}
                         </ListGroup>

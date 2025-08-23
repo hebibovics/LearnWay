@@ -33,5 +33,11 @@ public class CommentController {
             @RequestBody Comment comment) {
         return ResponseEntity.ok(commentService.saveCommentForCourseAndUser(comment, courseId, userId));
     }
-// DODATI ZA DELETE ZA ADMINA
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
+        return ResponseEntity.ok("Comment deleted successfully.");
+    }
+
 }

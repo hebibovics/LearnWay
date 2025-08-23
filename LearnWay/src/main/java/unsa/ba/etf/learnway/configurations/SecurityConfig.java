@@ -70,20 +70,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/category/").permitAll()
                 .antMatchers("/api/category/**").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/api/comments/**").hasAnyAuthority("USER", "INSTRUCTOR")
-                .antMatchers(HttpMethod.GET, "/api/comments/**").hasAnyAuthority("USER", "INSTRUCTOR")
-                .antMatchers(HttpMethod.DELETE, "/api/comments/**").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/comments/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll()
 
 
-                .antMatchers(HttpMethod.POST, "/api/course/**").hasAuthority("INSTRUCTOR")
-                .antMatchers(HttpMethod.GET, "/api/course/**").hasAnyAuthority("USER", "INSTRUCTOR")
-
+                .antMatchers(HttpMethod.POST, "/api/course/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/course/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/course/**").permitAll()
 
                 .antMatchers("/api/lesson/**").permitAll()
                 .antMatchers("/api/lesson").permitAll()
                 .antMatchers("/api/lesson/").permitAll()
                 .antMatchers("/api/review/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/course/by-instructor/**").hasRole("INSTRUCTOR")
+                .antMatchers(HttpMethod.POST, "/api/course/by-instructor/**").permitAll()
 
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Dozvoli OPTIONS zahtjeve za sve rute
                 .antMatchers("/api/review/rate").permitAll()

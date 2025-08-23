@@ -60,8 +60,9 @@ const Home = () => {
         return result;
     };
     const filteredCourses = courses.filter(course =>
-        course.title.toLowerCase().includes(searchTerm.toLowerCase())
+        (course.title || "").toLowerCase().includes(searchTerm.toLowerCase())
     );
+
 
 
     const categoryChunks = chunkArray(categories, 3);

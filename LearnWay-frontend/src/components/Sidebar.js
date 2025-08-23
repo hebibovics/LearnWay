@@ -28,6 +28,11 @@ const Sidebar = ({ children }) => {
       name: "View All Courses",
       icon: <MdQueue />,
     },
+    {
+      path: "/adminUsers",
+      name: "View All Users",
+      icon: <MdQueue />,
+    },
 
   ]);
 

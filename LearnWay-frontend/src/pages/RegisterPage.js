@@ -48,8 +48,7 @@ const RegisterPage = () => {
     if (!lastName) formErrors.lastName = "Please enter Last Name";
     if (!username) formErrors.username = "Please enter Username";
     if (!password) formErrors.password = "Please enter Password";
-    if (!confirmPassword)
-      formErrors.confirmPassword = "Please confirm Password";
+    if (!confirmPassword) formErrors.confirmPassword = "Please confirm Password";
     if (!role) formErrors.role = "Please choose Role";
 
     if (password && confirmPassword && password !== confirmPassword) {
@@ -78,9 +77,15 @@ const RegisterPage = () => {
     register(dispatch, user).then((data) => {
       if (data.type === authConstants.USER_REGISTER_SUCCESS) {
         navigate("/login");
+      } else if (data.type === authConstants.USER_REGISTER_FAILURE) {
+        // ovdje hvatamo poruku iz backenda
+        if (data.payload && data.payload.includes("User Already Exists")) {
+          setErrors({ username: "Username already exists" });
+        }
       }
     });
   };
+
 
   return (
       <FormContainer>

@@ -16,6 +16,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +43,7 @@ public class AuthServiceImpl implements AuthService {
     public User registerUserService(User user) throws Exception {
         User temp = userRepository.findByUsername(user.getUsername());
         if (temp != null) {
-            throw new Exception("User Already Exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Already Exists");
         } else {
             String roleName = (user.getRoles() != null && !user.getRoles().isEmpty())
                     ? user.getRoles().stream().findFirst().get().getRoleName()

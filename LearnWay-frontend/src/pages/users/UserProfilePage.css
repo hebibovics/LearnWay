@@ -1,16 +1,19 @@
-h1, h2{
+h1, h2 {
     color: #00d1b2
 }
+
 .userProfilePage__container {
     display: flex;
 }
 
+/* Sidebar desktop */
 .userProfilePage__sidebar {
     position: sticky;
     top: 0;
     height: 100vh;
 }
 
+/* Content desktop */
 .userProfilePage__content {
     flex-grow: 1;
     padding: 40px;
@@ -44,6 +47,65 @@ h1, h2{
 
 .userProfilePage__content--table tr:first-child td {
     font-weight: bold;
-    background:lightskyblue;
+    background: lightskyblue;
     color: #212529;
 }
+
+/* Mobile sidebar toggle */
+@media (max-width: 768px) {
+    .userProfilePage__sidebar {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 55%; /* manji drawer */
+        max-width: 280px; /* plafon širine */
+        background: #1b263b;
+        z-index: 1000;
+        padding: 20px;
+        box-shadow: 2px 0 15px rgba(0,0,0,0.6);
+        border-top-right-radius: 16px;
+        border-bottom-right-radius: 16px;
+        transition: transform 0.3s ease-in-out;
+        transform: translateX(-100%); /* defaultno skriven */
+    }
+
+    .userProfilePage__sidebar.open {
+        display: block;
+        transform: translateX(0); /* animirano otvaranje */
+    }
+
+    .userProfilePage__toggleBtn {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 26px;
+        color: #00d1b2;
+        margin: 12px;
+        cursor: pointer;
+        z-index: 1100;
+    }
+
+    .userProfilePage__overlay {
+        display: none;
+    }
+
+    .userProfilePage__overlay.active {
+        display: block;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+    }
+}
+
+@media (min-width: 769px) {
+    .userProfilePage__toggleBtn {
+        display: none;
+    }
+}
+

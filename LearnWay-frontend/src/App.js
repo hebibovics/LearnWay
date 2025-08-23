@@ -52,6 +52,9 @@ import UpdateLessonInstructor from "./pages/instructor/lessons/UpdateLessonInstr
 import LessonPageStudent from "./pages/users/LessonPageSudent";
 import StudentQuizResultsPage from "./pages/users/StudentQuizResultsPage";
 import UpdateCourseInstructor from "./pages/instructor/courses/UpdateCourseInstructor";
+import AdminCoursesPage from "./pages/admin/AdminCoursesPage";
+import AdminCourseDetailsPage from "./pages/admin/AdminCourseDetailsPage";
+import AdminLessonPage from "./pages/admin/AdminLessonPage";
 
 const App = () => {
   return (
@@ -79,6 +82,9 @@ const App = () => {
           />
           <Route path="/profile" element={<UserProfilePage/>}/>
           <Route path="/adminProfile" element={<AdminProfilePage/>}/>
+          <Route path="/adminCourses" element={<AdminCoursesPage/>}/>
+          <Route path="/admin/course/:id" element={<AdminCourseDetailsPage/>}/>
+          <Route path="/adminLesson/:id" element={<AdminLessonPage/>}/>
 
 
           <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>
