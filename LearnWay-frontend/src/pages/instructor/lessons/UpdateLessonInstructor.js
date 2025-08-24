@@ -12,38 +12,55 @@ const UpdateLessonInstructor = () => {
     const [description, setDescription] = useState('');
     const [videoUrl, setVideoUrl] = useState('');
 
-    const token = JSON.parse(localStorage.getItem("jwtToken"));
+    // Uzmi token i očisti eventualne navodnike
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
     useEffect(() => {
         // Fetch existing lesson
         const fetchLesson = async () => {
-            const res = await axios.get(`/api/lesson/${lessonId}`);
-            setTitle(res.data.title);
-            setDescription(res.data.description);
-            setVideoUrl(res.data.videoUrl || '');
+            try {
+                const res = await axios.get(`/api/lesson/${lessonId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setTitle(res.data.title);
+                setDescription(res.data.description);
+                setVideoUrl(res.data.videoUrl || '');
+            } catch (err) {
+                swal("Error!", "Could not fetch lesson details.", "error");
+            }
         };
         fetchLesson();
-    }, [lessonId]);
+    }, [lessonId, token]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
             // update title + description
-            await axios.put(`/api/lesson/${lessonId}`, { title, description }, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-
-            // update video URL
-            await axios.put(`/api/lesson/${lessonId}/video`, videoUrl, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    "Content-Type": "text/plain"
+            await axios.put(
+                `/api/lesson/${lessonId}`,
+                { title, description },
+                {
+                    headers: { Authorization: `Bearer ${token}` }
                 }
-            });
+            );
+
+            // update video URL (ako je popunjen)
+            if (videoUrl) {
+                await axios.put(
+                    `/api/lesson/${lessonId}/video`,
+                    videoUrl,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            "Content-Type": "text/plain"
+                        }
+                    }
+                );
+            }
 
             swal("Updated!", "Lesson updated successfully.", "success")
-                .then(() => navigate(`/lessonPageInstructor/${courseId}/${lessonId}`));
+                .then(() => navigate(`/instructorLessons/${courseId}/${lessonId}`));
 
         } catch (err) {
             swal("Error!", "Could not update lesson.", "error");

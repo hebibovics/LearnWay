@@ -16,7 +16,11 @@ import swal from "sweetalert";
 const InstructorCoursesPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = JSON.parse(localStorage.getItem("jwtToken"));
+    const rawToken = localStorage.getItem("jwtToken");
+    const token = rawToken ? rawToken.replace(/^"|"$/g, "") : null;
+    console.log("Raw token from localStorage:", localStorage.getItem("jwtToken"));
+
+
 
     const categoriesReducer = useSelector((state) => state.categoriesReducer);
     const [courses, setCourses] = useState(categoriesReducer.categories);
@@ -45,6 +49,9 @@ const InstructorCoursesPage = () => {
         }).then((willDelete) => {
             if (willDelete) {
                 deleteCourse(dispatch, course.id, token).then((data) => {
+console.log("sad ovaj", token);
+                    console.log("Deleting course with token:", token);
+
                     if (data.type === coursesConstants.DELETE_COURSE_SUCCESS) {
                         swal(
                             "Course Deleted!",
@@ -52,6 +59,7 @@ const InstructorCoursesPage = () => {
                             "success"
                         );
                     } else {
+                        console.log("sad ovaj", token);
                         swal(
                             "Course Not Deleted!",
                             `${course.title} not deleted`,

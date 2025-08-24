@@ -9,10 +9,15 @@ const StudentQuizzesPage = () => {
     const { id } = useParams(); // id kursa
     const [quizzes, setQuizzes] = useState([]);
 
+    // Uzmi JWT token iz localStorage i očisti eventualne navodnike
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+
     useEffect(() => {
         const fetchQuizzes = async () => {
             try {
-                const response = await axios.get(`/api/quiz/course/${id}/quizzes`);
+                const response = await axios.get(`/api/quiz/course/${id}/quizzes`, {
+                    headers: { Authorization: `Bearer ${token}` } // dodan JWT header
+                });
                 setQuizzes(response.data);
             } catch (error) {
                 console.error("Error fetching quizzes:", error);
@@ -20,7 +25,7 @@ const StudentQuizzesPage = () => {
         };
 
         fetchQuizzes();
-    }, [id]);
+    }, [id, token]);
 
     return (
         <div className="container mt-4">
@@ -30,8 +35,8 @@ const StudentQuizzesPage = () => {
             ) : (
                 <Row xs={1} md={2} lg={3} className="g-4">
                     {quizzes.map((quiz) => (
-                        <Col key={quiz.id}>
-                            <Card className="h-100 shadow-sm" className="text-dark">
+                        <Col key={quiz.quizId}>
+                            <Card className="h-100 shadow-sm text-dark">
                                 <Card.Body>
                                     <Card.Title>{quiz.title || "Untitled Quiz"}</Card.Title>
                                     <Card.Text>

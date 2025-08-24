@@ -5,9 +5,7 @@ const fetchCourses = async (token, instructorId) => {
         console.log("Token sent in header:", token);
 
         const config = {
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: { Authorization: `Bearer ${token}` },
         };
         console.log (config);
         // Dodajte instructorId u URL
@@ -29,11 +27,12 @@ const addCourse = async (course, token, instructorId) => {
         console.log("Token sent in header:", token);
         console.log("kurssss", JSON.stringify(course, null, 2));
 
+        const cleanToken = token?.replace(/^"|"$/g, '');
+
         const config = {
-            headers: {
-                "Content-Type": "application/json"
-            }
+            headers: { Authorization: `Bearer ${cleanToken}` },
         };
+
         console.log("konfig", config);
         const { data } = await axios.post(`/api/course/by-instructor/${instructorId}`, course, config)
 
@@ -52,26 +51,23 @@ const addCourse = async (course, token, instructorId) => {
 
 const deleteCourse = async (courseId, token) => {
     try {
-        const config = {
-            headers: { Authorization: `Bearer ${token}` },
-        };
-        const { data } = await axios.delete(`/api/course/${courseId}/`, config);
+        if (!token) throw new Error("No token provided");
+
+        const cleanToken = token.replace(/^"|"$/g, '');
+
+        const { data } = await axios.delete(`/api/course/${courseId}/`, {
+            headers: { Authorization: `Bearer ${cleanToken}` }
+        });
+
         console.log("courseService:deleteCourse()  Success: ", data);
-        return {
-            isDeleted: true,
-            error: null,
-        };
+
+        return { isDeleted: true, error: null };
     } catch (error) {
-        console.error(
-            "courseService:deleteCourse()  Error: ",
-            error.response.statusText
-        );
-        return {
-            isDeleted: false,
-            error: error.response.statusText,
-        };
+        console.error("courseService:deleteCourse()  Error: ", error.response?.statusText || error.message);
+        return { isDeleted: false, error: error.response?.statusText || error.message };
     }
 };
+
 
 const updateCourse = async (course, token) => {
     try {

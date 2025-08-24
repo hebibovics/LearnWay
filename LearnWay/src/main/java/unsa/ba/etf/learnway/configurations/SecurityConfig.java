@@ -65,32 +65,56 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/api/register").permitAll()
                 .antMatchers("/api/login").permitAll()
-                .antMatchers("/api/users/**").permitAll()
+
+
+                .antMatchers("/api/users/**").hasAuthority("ADMIN") //GET i DELETE
 
 
                 .antMatchers("/api/category/").permitAll()
                 .antMatchers("/api/category/**").permitAll()
 
-                .antMatchers(HttpMethod.POST, "/api/comments/**").permitAll()
+
+
+                .antMatchers(HttpMethod.POST, "/api/comments/**").hasAnyAuthority("USER", "INSTRUCTOR")
                 .antMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/comments/**").hasAuthority("ADMIN")
 
 
-                .antMatchers(HttpMethod.POST, "/api/course/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/course/**/enroll/**").hasAuthority("USER")
+                .antMatchers(HttpMethod.DELETE, "/api/course/**/unenroll/**").hasAnyAuthority("USER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/course/**").hasAuthority("INSTRUCTOR")
                 .antMatchers(HttpMethod.GET, "/api/course/**").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/course/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/api/course/**").hasAnyAuthority("ADMIN", "INSTRUCTOR")
 
-                .antMatchers("/api/lesson/**").permitAll()
-                .antMatchers("/api/lesson").permitAll()
-                .antMatchers("/api/lesson/").permitAll()
-                .antMatchers("/api/review/**").permitAll()
+
+
+                .antMatchers(HttpMethod.POST,"/api/lesson/**").hasAuthority("INSTRUCTOR")
+                .antMatchers(HttpMethod.PUT,"/api/lesson/**").hasAuthority("INSTRUCTOR")
+                .antMatchers(HttpMethod.GET,"/api/lesson/**").permitAll()
+                .antMatchers(HttpMethod.DELETE,"/api/lesson/**").hasAnyAuthority("ADMIN", "INSTRUCTOR")
+
+
+
+                .antMatchers("/api/review/**").hasAnyAuthority("ADMIN", "USER")
+
+
+
+
                 .antMatchers(HttpMethod.POST, "/api/course/by-instructor/**").permitAll()
 
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Dozvoli OPTIONS zahtjeve za sve rute
-                .antMatchers("/api/review/rate").permitAll()
 
-                .antMatchers("/api/question/**").permitAll()
-                .antMatchers("/api/quiz/**").permitAll()
+
+              //  .antMatchers("/api/review/rate").permitAll()
+
+                .antMatchers(HttpMethod.POST, "/api/question/**").hasAuthority("INSTRUCTOR")
+                .antMatchers(HttpMethod.GET, "/api/question/**").hasAnyAuthority("USER", "INSTRUCTOR")
+                .antMatchers(HttpMethod.DELETE, "/api/question/**").hasAuthority("INSTRUCTOR")
+
+                .antMatchers(HttpMethod.POST,"/api/quiz/**").hasAuthority("INSTRUCTOR")
+                .antMatchers(HttpMethod.GET,"/api/quiz/**").hasAnyAuthority("USER", "INSTRUCTOR")
+                .antMatchers(HttpMethod.DELETE,"/api/quiz/**").hasAuthority("INSTRUCTOR")
+
                 .antMatchers("/api/quizResult/**").permitAll()
 
 

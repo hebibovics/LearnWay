@@ -9,17 +9,21 @@ const LessonPageInstructor = () => {
     const [lesson, setLesson] = useState(null);
     const navigate = useNavigate();
 
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+
     useEffect(() => {
         const fetchLesson = async () => {
             try {
-                const res = await axios.get(`/api/lesson/${lessonId}`);
+                const res = await axios.get(`/api/lesson/${lessonId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 setLesson(res.data);
             } catch (err) {
                 swal("Error!", "Could not fetch lesson details.", "error");
             }
         };
         fetchLesson();
-    }, [lessonId]);
+    }, [lessonId, token]);
 
     const handleDelete = async () => {
         const confirm = await swal({
@@ -31,7 +35,9 @@ const LessonPageInstructor = () => {
         });
         if (confirm) {
             try {
-                await axios.delete(`/api/lesson/${lessonId}`);
+                await axios.delete(`/api/lesson/${lessonId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
                 swal("Deleted!", "Lesson has been deleted.", "success");
                 navigate(`/instructorLessons/${courseId}`);
             } catch (err) {
@@ -60,12 +66,14 @@ const LessonPageInstructor = () => {
                                     >
                                         {lesson.videoUrl}
                                     </a>
-
                                 </Card.Text>
                             )}
 
                             <div className="d-flex gap-2">
-                                <Button variant="warning" onClick={() => navigate(`/updateLesson/${courseId}/${lessonId}`)}>
+                                <Button
+                                    variant="warning"
+                                    onClick={() => navigate(`/updateLesson/${courseId}/${lessonId}`)}
+                                >
                                     Update Lesson
                                 </Button>
                                 <Button variant="danger" onClick={handleDelete}>

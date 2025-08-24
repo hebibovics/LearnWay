@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import {Container, Row, Col, Button, ListGroup, Form} from 'react-bootstrap';
+import { Container, Row, Col, Button, ListGroup, Form } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
-import {useSelector} from "react-redux";
+import { useSelector } from "react-redux";
 
 const CourseDetailsInstructor = () => {
-    const { id } = useParams(); // Provjerite da li je id dostupan
-    console.log("Course ID from URL:", id); // Provjerite vrijednost id-a
-
+    const { id } = useParams();
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [averageRating, setAverageRating] = useState(null);
-
     const [newComment, setNewComment] = useState("");
     const [forumComments, setForumComments] = useState([]);
     const loginReducer = useSelector((state) => state.loginReducer);
@@ -21,11 +18,13 @@ const CourseDetailsInstructor = () => {
 
     const navigate = useNavigate();
     const [enrolledStudents, setEnrolledStudents] = useState([]);
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+    const axiosConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 
     useEffect(() => {
         const fetchEnrolledStudents = async () => {
             try {
-                const response = await axios.get(`/api/course/${id}/students`);
+                const response = await axios.get(`/api/course/${id}/students`, axiosConfig);
                 setEnrolledStudents(response.data);
             } catch (error) {
                 console.error("Error fetching enrolled students:", error);
@@ -35,14 +34,11 @@ const CourseDetailsInstructor = () => {
         fetchEnrolledStudents();
     }, [id]);
 
-
     useEffect(() => {
-
         const fetchCourse = async () => {
             try {
-                const response = await axios.get(`/api/course/${id}`);
+                const response = await axios.get(`/api/course/${id}`, axiosConfig);
                 setCourse(response.data);
-                console.log("fetch", id);
             } catch (err) {
                 setError(err);
             } finally {
@@ -56,9 +52,8 @@ const CourseDetailsInstructor = () => {
     useEffect(() => {
         const fetchReviewsAndCalculateAverage = async () => {
             try {
-                const response = await axios.get(`/api/review/course/${id}`);
+                const response = await axios.get(`/api/review/course/${id}`, axiosConfig);
                 const reviews = response.data;
-
                 if (reviews.length > 0) {
                     const sum = reviews.reduce((acc, review) => acc + review.rate, 0);
                     const average = sum / reviews.length;
@@ -75,11 +70,10 @@ const CourseDetailsInstructor = () => {
         fetchReviewsAndCalculateAverage();
     }, [id]);
 
-
     useEffect(() => {
         const fetchForumComments = async () => {
             try {
-                const response = await axios.get(`/api/comments/course/${id}`);
+                const response = await axios.get(`/api/comments/course/${id}`, axiosConfig);
                 setForumComments(response.data);
             } catch (err) {
                 console.error("Error fetching forum comments", err);
@@ -95,17 +89,14 @@ const CourseDetailsInstructor = () => {
 
     const handleViewLessons = () => {
         localStorage.setItem('courseId', id);
-        console.log("jfijd", course.courseId);
-        console.log("jfijd", course);
-
         navigate(`/instructorLessons/${id}`);
     };
 
     const handleDeleteCourse = async () => {
         try {
-            await axios.delete(`/api/course/${id}`);
+            await axios.delete(`/api/course/${id}`, axiosConfig);
             swal("Course Deleted!", "The course has been successfully deleted.", "success")
-                .then(() => navigate('/instructorProfile')); // Preusmjeravanje na profil stranicu nakon brisanja
+                .then(() => navigate('/instructorProfile'));
         } catch (err) {
             swal("Deletion Failed!", "There was an error deleting the course.", "error");
         }
@@ -118,12 +109,11 @@ const CourseDetailsInstructor = () => {
             icon: "warning",
             buttons: true,
             dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete) {
-                    handleDeleteCourse();
-                }
-            });
+        }).then((willDelete) => {
+            if (willDelete) {
+                handleDeleteCourse();
+            }
+        });
     };
 
     if (loading) return <p>Loading...</p>;
@@ -139,6 +129,7 @@ const CourseDetailsInstructor = () => {
                     <p>Number of Lessons: {course.lessons?.length || 0}</p>
                     <p>Rate: {averageRating}</p>
                     <p>Category: {course.category.title}</p>
+
                     <Row className="mt-3 g-2">
                         <Col xs={12} md={6}>
                             <Button variant="primary" className="w-100 text-white" onClick={handleAddLesson}>
@@ -165,28 +156,24 @@ const CourseDetailsInstructor = () => {
                                 View Quizzes
                             </Button>
                         </Col>
-
-
                     </Row>
-
-
                 </Col>
+
                 <hr />
+
                 <div className="mt-4">
                     <h5><strong>FORUM: Comments</strong></h5>
-
-                    {/* Forma za dodavanje novog komentara */}
                     <Form onSubmit={async (e) => {
                         e.preventDefault();
                         try {
                             await axios.post(
                                 `/api/comments/course/${id}/user/${userId}`,
-                                { content: newComment }
+                                { content: newComment },
+                                axiosConfig
                             );
                             swal("Success", "Comment added!", "success");
                             setNewComment("");
-                            // Ponovo dohvatiti komentare
-                            const response = await axios.get(`/api/comments/course/${id}`);
+                            const response = await axios.get(`/api/comments/course/${id}`, axiosConfig);
                             setForumComments(response.data);
                         } catch (error) {
                             console.error("Comment post error", error);
@@ -207,7 +194,6 @@ const CourseDetailsInstructor = () => {
                         </Button>
                     </Form>
 
-                    {/* Lista komentara */}
                     <div className="mt-4">
                         {forumComments.length > 0 ? (
                             <ListGroup>
@@ -222,6 +208,7 @@ const CourseDetailsInstructor = () => {
                         )}
                     </div>
                 </div>
+
                 <div className="mt-5">
                     <h5><strong>Enrolled Students</strong></h5>
                     {enrolledStudents.length > 0 ? (
@@ -236,7 +223,6 @@ const CourseDetailsInstructor = () => {
                         <p>No students enrolled yet.</p>
                     )}
                 </div>
-
             </Row>
         </Container>
     );

@@ -8,10 +8,16 @@ const AdminUsersPage = () => {
     const [users, setUsers] = useState([]);
     const [expandedUserId, setExpandedUserId] = useState(null);
     const [courses, setCourses] = useState({}); // cache za kurseve po useru
+    const rawToken = localStorage.getItem("jwtToken");
+    const token = rawToken ? rawToken.replace(/^"|"$/g, "") : null;
+    console.log("Token:", token);
+
 
     const fetchUsers = async () => {
         try {
-            const response = await axios.get("/api/users");
+            const response = await axios.get("/api/users", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             setUsers(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -19,12 +25,15 @@ const AdminUsersPage = () => {
         }
     };
 
+
     const fetchInstructorCourses = async (userId) => {
         try {
-            // Ako vec imamo u state-u, ne gadjamo opet backend
             if (courses[userId]) return;
 
-            const response = await axios.get(`/api/course/by-instructor/${userId}`);
+            const response = await axios.get(`/api/course/by-instructor/${userId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
             setCourses((prev) => ({ ...prev, [userId]: response.data }));
         } catch (error) {
             console.error("Error fetching courses:", error);
@@ -37,6 +46,11 @@ const AdminUsersPage = () => {
     }, []);
 
     const handleDeactivate = async (userId) => {
+        if (!token) {
+            swal("Error", "You are not authenticated!", "error");
+            return;
+        }
+
         swal({
             title: "Are you sure?",
             text: "Once deactivated, this user will be removed from the system!",
@@ -46,16 +60,19 @@ const AdminUsersPage = () => {
         }).then(async (willDelete) => {
             if (willDelete) {
                 try {
-                    await axios.delete(`/api/users/${userId}`);
+                    await axios.delete(`/api/users/${userId}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
                     swal("Success", "User has been deactivated!", "success");
                     fetchUsers();
                 } catch (error) {
                     console.error("Error deleting user:", error);
-                    swal("Error", "Could not deactivate user because of his active courses", "error");
+                    swal("Error", "Could not deactivate user because of active courses", "error");
                 }
             }
         });
     };
+
 
     const toggleExpand = (userId) => {
         if (expandedUserId === userId) {

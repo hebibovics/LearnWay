@@ -20,7 +20,7 @@ export const addCourse = async (dispatch, course, token, instructorId) => {
 
 export const fetchCourses = async (dispatch, token, instructorId) => {
     dispatch({ type: coursesConstants.FETCH_COURSES_REQUEST });
-    const data = await coursesServices.fetchCourses(token, instructorId);  // Proslijedite instructorId
+    const data = await coursesServices.fetchCourses(token, instructorId);
     if (data) {
         return dispatch({
             type: coursesConstants.FETCH_COURSES_SUCCESS,
@@ -55,9 +55,10 @@ export const updateCourse = async (dispatch, course, token) => {
 
 export const deleteCourse = async (dispatch, courseId, token) => {
     dispatch({ type: coursesConstants.DELETE_COURSE_REQUEST });
+    console.log("Ovsj token", token);
     const { isDeleted, error } = await coursesServices.deleteCourse(
         courseId,
-        token
+        token,
     );
     if (isDeleted) {
         return dispatch({

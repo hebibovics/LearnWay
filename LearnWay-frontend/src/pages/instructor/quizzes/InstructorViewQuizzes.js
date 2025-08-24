@@ -8,12 +8,27 @@ const InstructorViewQuizzes = () => {
     const [quizzes, setQuizzes] = useState([]);
     const navigate = useNavigate();
 
+    // Uzmi token i očisti eventualne navodnike
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+
     useEffect(() => {
-        axios
-            .get(`http://localhost:8081/api/quiz/course/${id}/quizzes`)
-            .then((res) => setQuizzes(res.data))
-            .catch((err) => console.error("Error fetching quizzes:", err));
-    }, [id]);
+        const fetchQuizzes = async () => {
+            try {
+                const res = await axios.get(
+                    `http://localhost:8081/api/quiz/course/${id}/quizzes`,
+                    {
+                        headers: { Authorization: `Bearer ${token}` } // JWT header
+                    }
+                );
+                setQuizzes(res.data);
+            } catch (err) {
+                console.error("Error fetching quizzes:", err);
+                swal("Error", "Could not fetch quizzes.", "error");
+            }
+        };
+
+        fetchQuizzes();
+    }, [id, token]);
 
     const handleAddQuestion = (quizId) => {
         navigate(`/instructor/quiz/${quizId}/add-questions`);
@@ -30,18 +45,21 @@ const InstructorViewQuizzes = () => {
             icon: "warning",
             buttons: ["Cancel", "Delete"],
             dangerMode: true,
-        }).then((willDelete) => {
+        }).then(async (willDelete) => {
             if (willDelete) {
-                axios
-                    .delete(`http://localhost:8081/api/quiz/${quizId}`)
-                    .then(() => {
-                        setQuizzes(quizzes.filter((q) => q.quizId !== quizId));
-                        swal("Deleted!", "The quiz has been deleted successfully.", "success");
-                    })
-                    .catch((err) => {
-                        console.error("Error deleting the quiz:", err);
-                        swal("Error", "There was an error deleting the quiz.", "error");
-                    });
+                try {
+                    await axios.delete(
+                        `http://localhost:8081/api/quiz/${quizId}`,
+                        {
+                            headers: { Authorization: `Bearer ${token}` } // JWT header
+                        }
+                    );
+                    setQuizzes(quizzes.filter((q) => q.quizId !== quizId));
+                    swal("Deleted!", "The quiz has been deleted successfully.", "success");
+                } catch (err) {
+                    console.error("Error deleting the quiz:", err);
+                    swal("Error", "There was an error deleting the quiz.", "error");
+                }
             }
         });
     };

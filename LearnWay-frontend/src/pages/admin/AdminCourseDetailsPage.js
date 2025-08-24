@@ -16,9 +16,12 @@ const AdminCourseDetailsPage = () => {
     const [forumComments, setForumComments] = useState([]);
     const [lessons, setLessons] = useState([]);
 
-
     const [searchStudentTerm, setSearchStudentTerm] = useState("");
     const [searchLessonTerm, setSearchLessonTerm] = useState("");
+
+    // Dohvati token i očisti navodnike ako ih ima
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+    const axiosConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 
     const filteredLessons = Array.isArray(lessons)
         ? lessons.filter(lesson =>
@@ -29,7 +32,7 @@ const AdminCourseDetailsPage = () => {
     useEffect(() => {
         const fetchCourse = async () => {
             try {
-                const response = await axios.get(`/api/course/${id}`);
+                const response = await axios.get(`/api/course/${id}`, axiosConfig);
                 setCourse(response.data);
             } catch (err) {
                 setError(err);
@@ -40,7 +43,7 @@ const AdminCourseDetailsPage = () => {
 
         const fetchEnrolledStudents = async () => {
             try {
-                const response = await axios.get(`/api/course/${id}/students`);
+                const response = await axios.get(`/api/course/${id}/students`, axiosConfig);
                 setEnrolledStudents(response.data);
             } catch (err) {
                 console.error("Error fetching students:", err);
@@ -49,7 +52,7 @@ const AdminCourseDetailsPage = () => {
 
         const fetchForumComments = async () => {
             try {
-                const response = await axios.get(`/api/comments/course/${id}`);
+                const response = await axios.get(`/api/comments/course/${id}`, axiosConfig);
                 setForumComments(response.data);
             } catch (err) {
                 console.error("Error fetching comments:", err);
@@ -58,16 +61,12 @@ const AdminCourseDetailsPage = () => {
 
         const fetchLessons = async () => {
             try {
-                const response = await axios.get(`/api/lesson/api/lesson/${id}`);
-                console.log("LESSONS RESPONSE:", response.data);
-                setLessons(response.data); // backend vraća niz, ne objekt sa {lessons: []}
+                const response = await axios.get(`/api/lesson/api/lesson/${id}`, axiosConfig);
+                setLessons(response.data);
             } catch (err) {
                 console.error("Error fetching lessons:", err);
             }
         };
-
-
-
 
         fetchCourse();
         fetchEnrolledStudents();
@@ -84,7 +83,7 @@ const AdminCourseDetailsPage = () => {
             dangerMode: true,
         }).then((willDelete) => {
             if (willDelete) {
-                axios.delete(`/api/course/${id}`)
+                axios.delete(`/api/course/${id}`, axiosConfig)
                     .then(() => {
                         swal("Course deleted!", "The course has been successfully deleted.", "success");
                         navigate("/adminCourses");
@@ -108,16 +107,13 @@ const AdminCourseDetailsPage = () => {
             icon: "warning",
             buttons: true,
             dangerMode: true,
-
         }).then((willDelete) => {
             if (willDelete) {
-
                 axios
-                    .delete(`/api/comments/${commentId}`)
+                    .delete(`/api/comments/${commentId}`, axiosConfig)
                     .then(() => {
                         swal("Comment deleted!", "The comment has been removed.", "success");
                         setForumComments(forumComments.filter(c => c.commentId !== commentId));
-
                     })
                     .catch((err) => {
                         console.error(err);
@@ -126,8 +122,6 @@ const AdminCourseDetailsPage = () => {
             }
         });
     };
-
-
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading course details.</p>;
@@ -153,7 +147,7 @@ const AdminCourseDetailsPage = () => {
                     <p><strong>Description:</strong> {course.description}</p>
                     <p><strong>Category:</strong> {course.category?.title || "N/A"}</p>
                     <p><strong>Number of Lessons:</strong> {course.lessons?.length || 0}</p>
-                    <p><strong>Instructor:</strong> {course.instructor.firstName || 0} {course.instructor.lastName || 0}</p>
+                    <p><strong>Instructor:</strong> {course.instructor.firstName || ""} {course.instructor.lastName || ""}</p>
                 </Col>
             </Row>
 
@@ -188,42 +182,36 @@ const AdminCourseDetailsPage = () => {
             </Row>
 
             {/* Forum Comments */}
-            {/* Forum Comments */}
             <Row className="mb-4">
                 <Col>
                     <h5>Forum Comments:</h5>
                     {forumComments.length > 0 ? (
                         <ListGroup>
-                            {forumComments.map((comment, idx) => {
-                                console.log("COMMENT OBJECT:", comment);
-                                return (
-                                    <ListGroup.Item
-                                        key={idx}
-                                        className="d-flex justify-content-between align-items-center"
+                            {forumComments.map((comment, idx) => (
+                                <ListGroup.Item
+                                    key={idx}
+                                    className="d-flex justify-content-between align-items-center"
+                                >
+                                    <span>
+                                        <strong>{comment.user?.fullName || comment.username}:</strong>{" "}
+                                        {comment.content}
+                                    </span>
+
+                                    <Button
+                                        variant="outline-danger"
+                                        size="sm"
+                                        onClick={() => handleDeleteComment(comment.commentId)}
                                     >
-            <span>
-                <strong>{comment.user?.fullName || comment.username}:</strong>{" "}
-                {comment.content}
-            </span>
-
-                                        <Button
-                                            variant="outline-danger"
-                                            size="sm"
-                                            onClick={() => handleDeleteComment(comment.commentId)}
-                                        >
-                                            🗑
-                                        </Button>
-                                    </ListGroup.Item>
-                                );
-                            })}
-
+                                        🗑
+                                    </Button>
+                                </ListGroup.Item>
+                            ))}
                         </ListGroup>
                     ) : (
                         <p>No comments yet.</p>
                     )}
                 </Col>
             </Row>
-
 
             {/* Search Lessons */}
             <Row className="mb-3">
@@ -245,8 +233,7 @@ const AdminCourseDetailsPage = () => {
                             <Card
                                 onClick={() => navigate(`/adminLesson/${lesson.lessonId}`)}
                                 style={{ cursor: "pointer" }}
-                                className="h-100 shadow-sm"
-                                className="mb-3 text-dark"
+                                className="h-100 shadow-sm mb-3 text-dark"
                             >
                                 <Card.Body>
                                     <Card.Title>{lesson.title}</Card.Title>
@@ -263,7 +250,6 @@ const AdminCourseDetailsPage = () => {
                     </Col>
                 )}
             </Row>
-
         </Container>
     );
 };

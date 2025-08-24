@@ -14,29 +14,36 @@ const StudentTakeQuizPage = () => {
     const [result, setResult] = useState({ correct: 0, total: 0 });
     const [courseTitle, setCourseTitle] = useState("");
 
+    // Uzmi JWT token iz localStorage i očisti eventualne navodnike
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get(`/api/question/quiz/${quizId}`);
+                const response = await axios.get(`/api/question/quiz/${quizId}`, {
+                    headers: { Authorization: `Bearer ${token}` } // JWT header
+                });
                 setQuestions(response.data);
             } catch (error) {
                 console.error("Error fetching questions:", error);
             }
         };
         fetchQuestions();
-    }, [quizId]);
+    }, [quizId, token]);
 
     useEffect(() => {
         const fetchCourseTitle = async () => {
             try {
-                const response = await axios.get(`/api/quiz/${quizId}`);
+                const response = await axios.get(`/api/quiz/${quizId}`, {
+                    headers: { Authorization: `Bearer ${token}` } // JWT header
+                });
                 setCourseTitle(response.data.course?.title || response.data.title || "");
             } catch (error) {
                 console.error("Error fetching course title:", error);
             }
         };
         fetchCourseTitle();
-    }, [quizId]);
+    }, [quizId, token]);
 
     const user = JSON.parse(localStorage.getItem("user"));
     const studentName = user ? `${user.firstName} ${user.lastName}` : "Student";
@@ -58,14 +65,11 @@ const StudentTakeQuizPage = () => {
         setSubmitted(true);
 
         axios.post(`/api/quizResult/submit`, answers, {
+            headers: { Authorization: `Bearer ${token}` }, // JWT header
             params: { userId: user.userId, quizId: quizId },
         })
-            .then(res => {
-                console.log("Saved result:", res.data);
-            })
-            .catch(err => {
-                console.error("Error saving quiz result:", err);
-            });
+            .then(res => console.log("Saved result:", res.data))
+            .catch(err => console.error("Error saving quiz result:", err));
 
         swal(
             "Quiz submitted!",
@@ -153,12 +157,11 @@ const StudentTakeQuizPage = () => {
                         🏆 Download Certificate
                     </Button>
 
-                    {/* Hidden certificate for PDF generation */}
                     <div
                         id="certificate"
                         style={{
-                            width: "595px", // A4 širina u px @ 72dpi
-                            minHeight: "842px", // A4 visina u px @ 72dpi
+                            width: "595px",
+                            minHeight: "842px",
                             boxSizing: "border-box",
                             display: "none",
                             padding: "40px",

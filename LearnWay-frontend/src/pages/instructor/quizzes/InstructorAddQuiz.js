@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import swal from 'sweetalert';
+
 const InstructorAddQuiz = () => {
     const navigate = useNavigate();
     const { id  } = useParams(); // courseId iz URL-a
+
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, ''); // očisti navodnike
 
     const [quizData, setQuizData] = useState({
         title: "",
@@ -26,7 +29,13 @@ const InstructorAddQuiz = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:8081/api/quiz/", quizData);
+            const res = await axios.post(
+                "http://localhost:8081/api/quiz/",
+                quizData,
+                {
+                    headers: { Authorization: `Bearer ${token}` } // JWT header
+                }
+            );
             setCreatedQuizId(res.data.quizId);
             swal({
                 title: "Success!",
@@ -44,7 +53,6 @@ const InstructorAddQuiz = () => {
             });
         }
     };
-
 
     return (
         <div className="container mt-4">
@@ -73,9 +81,7 @@ const InstructorAddQuiz = () => {
                     />
                 </div>
 
-
                 <button type="submit" className="btn btn-primary me-2">Add Quiz</button>
-
             </form>
         </div>
     );
