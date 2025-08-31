@@ -8,7 +8,7 @@ import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "users")
 @Setter
 @Getter
 @Builder
@@ -23,10 +23,10 @@ public class Role {
     @Column(name="role_description")
     private String roleDescription;
 
+    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<User> users = new HashSet<>();
+
     public Role(String roleName) {
         this.roleName = roleName;
     }
-
-    // @ManyToMany(mappedBy = "roles")
-    // private Set<User> users = new HashSet<>();
 }

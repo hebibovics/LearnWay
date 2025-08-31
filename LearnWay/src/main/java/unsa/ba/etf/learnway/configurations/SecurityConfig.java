@@ -44,13 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("http://localhost:3000"); // Dodajte URL vaše frontend aplikacije
-        corsConfiguration.addAllowedMethod("*"); // Dozvolite sve HTTP metode
-        corsConfiguration.addAllowedHeader("*"); // Dozvolite sva zaglavlja
-        corsConfiguration.setAllowCredentials(true); // Dozvolite kolačiće
+        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration); // Primijenite CORS na sve rute
+        source.registerCorsConfiguration("/**", corsConfiguration); // pirmjenjen CORS na sve rute
 
 
         return new CorsFilter(source);
@@ -102,7 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, "/api/course/by-instructor/**").permitAll()
 
-                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Dozvoli OPTIONS zahtjeve za sve rute
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
 
               //  .antMatchers("/api/review/rate").permitAll()
@@ -112,7 +112,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, "/api/question/**").hasAuthority("INSTRUCTOR")
 
                 .antMatchers(HttpMethod.POST,"/api/quiz/**").hasAuthority("INSTRUCTOR")
-                .antMatchers(HttpMethod.GET,"/api/quiz/**").hasAnyAuthority("USER", "INSTRUCTOR")
+                .antMatchers(HttpMethod.GET,"/api/quiz/**").hasAnyAuthority("USER", "INSTRUCTOR", "ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/quiz/**").hasAuthority("INSTRUCTOR")
 
                 .antMatchers("/api/quizResult/**").permitAll()

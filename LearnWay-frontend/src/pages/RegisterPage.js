@@ -71,7 +71,7 @@ const RegisterPage = () => {
       username,
       password,
       phoneNumber,
-      roles: [{ roleName: role }],
+      role: { roleName: role },
     };
 
     register(dispatch, user).then((data) => {

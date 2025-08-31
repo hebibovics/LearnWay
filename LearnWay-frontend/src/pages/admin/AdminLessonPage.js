@@ -32,11 +32,21 @@ const AdminLessonPage = () => {
             buttons: true,
             dangerMode: true,
         }).then(async (willDelete) => {
+
             if (willDelete) {
                 try {
-                    await axios.delete(`/api/lesson/${id}`);
+                    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+
+                    console.log("DELETE request with header:", `Bearer ${token}`);
+                    await axios.delete(`/api/lesson/${id}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+
+                    });
+
                     swal("Success", "Lesson has been deleted!", "success");
-                    navigate(-1); // vrati na prethodnu stranicu (AdminCourseDetailsPage)
+                    navigate(-1); // vrati na prethodnu stranicu
                 } catch (error) {
                     console.error("Error deleting lesson:", error);
                     swal("Error", "Failed to delete lesson.", "error");
@@ -44,6 +54,7 @@ const AdminLessonPage = () => {
             }
         });
     };
+
 
     if (!lesson) {
         return (

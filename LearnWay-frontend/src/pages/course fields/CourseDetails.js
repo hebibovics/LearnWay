@@ -68,14 +68,11 @@ const CourseDetails = () => {
         };
         fetchCourse();
 
-        if (loginReducer?.user?.roles) {
-            let role = "USER";
-            loginReducer.user.roles.forEach(r => {
-                if (r.roleName === "INSTRUCTOR") role = "INSTRUCTOR";
-            });
-            setUserRole(role);
-        }
+        // Postavljanje role prema novom formatu
+        const roleName = loginReducer?.user?.role?.roleName || "USER";
+        setUserRole(roleName);
     }, [id, loginReducer]);
+
 
     useEffect(() => {
         const fetchLessons = async () => {

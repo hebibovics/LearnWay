@@ -19,9 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashSet;
-import java.util.Set;
-
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -30,12 +27,16 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     UserRepository userRepository;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
+
     @Autowired
     private JwtUtil jwtUtil;
+
     @Autowired
     private AuthenticationManager authenticationManager;
 
@@ -44,35 +45,28 @@ public class AuthServiceImpl implements AuthService {
         User temp = userRepository.findByUsername(user.getUsername());
         if (temp != null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Already Exists");
-        } else {
-            String roleName = (user.getRoles() != null && !user.getRoles().isEmpty())
-                    ? user.getRoles().stream().findFirst().get().getRoleName()
-                    : "INSTRUCTOR";
-
-            if (user.getRoles() != null && !user.getRoles().isEmpty()) {
-                roleName = user.getRoles().stream().findFirst().get().getRoleName();
-            }
-
-
-            Role role = roleRepository.findById(roleName)
-                    .orElseThrow(() -> new Exception("Role not found"));
-
-
-            Set<Role> userRoles = new HashSet<>();
-            userRoles.add(role);
-
-
-            user.setRoles(userRoles);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            return userRepository.save(user);
         }
-    }
-    public LoginResponse loginUserService(LoginRequest loginRequest) throws Exception {
 
+        // Ako korisnik pošalje rolu -> koristi tu, inače default INSTRUCTOR
+        String roleName = (user.getRole() != null)
+                ? user.getRole().getRoleName()
+                : "INSTRUCTOR";
+
+        Role role = roleRepository.findById(roleName)
+                .orElseThrow(() -> new Exception("Role not found"));
+
+        user.setRole(role);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        return userRepository.save(user);
+    }
+
+    public LoginResponse loginUserService(LoginRequest loginRequest) throws Exception {
         authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+
         UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(loginRequest.getUsername());
         String token = jwtUtil.generateToken(userDetails);
+
         return new LoginResponse(userRepository.findByUsername(loginRequest.getUsername()), token);
     }
 

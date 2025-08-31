@@ -62,7 +62,7 @@ public class LearnWayApplication {
                         .username("admin")
                         .password(passwordEncoder.encode("admin123"))
                         .isActive(true)
-                        .roles(new HashSet<>(Collections.singletonList(adminRole)))
+                        .role(adminRole)
                         .build();
                 System.out.println("Saving admin user: " + admin);
                 userRepository.save(admin);

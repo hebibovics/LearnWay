@@ -48,13 +48,9 @@ public class User implements UserDetails {
     @Column(name = "is_active")
     private boolean isActive = true;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_name")
-    )
-    private Set<Role> roles;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_name") // FK kolona u users tabeli
+    private Role role;
 
     @ManyToMany
     @JoinTable(
@@ -66,7 +62,9 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        this.roles.forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getRoleName())));
+        if (this.role != null) {
+            authorities.add(new SimpleGrantedAuthority(role.getRoleName()));
+        }
         return authorities;
     }
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

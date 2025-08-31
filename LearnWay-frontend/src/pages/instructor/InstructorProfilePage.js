@@ -72,7 +72,7 @@ const InstructorProfilePage = () => {
                         </tr>
                         <tr>
                             <td>Role</td>
-                            <td>{user.roles[0].roleName}</td>
+                            <td>{user.role?.roleName}</td>
                         </tr>
                         </tbody>
                     </Table>

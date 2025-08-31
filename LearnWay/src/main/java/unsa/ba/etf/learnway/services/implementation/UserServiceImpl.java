@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import unsa.ba.etf.learnway.models.User;
 import unsa.ba.etf.learnway.repository.UserRepository;
-
 import unsa.ba.etf.learnway.services.UserService;
 
 import javax.transaction.Transactional;
@@ -27,11 +26,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        user.getRoles().clear();
+        // više nema Set<Role>, samo jedna rola
+        user.setRole(null);
+
         userRepository.delete(user);
 
         return true;
     }
-
-
 }

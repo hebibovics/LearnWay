@@ -11,14 +11,22 @@ const StudentQuizResultsPage = () => {
     useEffect(() => {
         const fetchResults = async () => {
             try {
+                const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+
                 const response = await axios.get(`/api/quizResult/`, {
                     params: { userId: user.userId },
+                    headers: { Authorization: `Bearer ${token}` },
                 });
 
                 const resultsWithTotalQuestions = await Promise.all(
                     response.data.map(async (r) => {
                         try {
-                            const questionRes = await axios.get(`/api/question/quiz/${r.quiz.quizId}`);
+                            const questionRes = await axios.get(
+                                `/api/question/quiz/${r.quiz.quizId}`,
+                                {
+                                    headers: { Authorization: `Bearer ${token}` },
+                                }
+                            );
                             const totalQuestions = questionRes.data?.length || 0;
                             return { ...r, totalQuestions };
                         } catch (e) {

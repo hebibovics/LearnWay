@@ -13,51 +13,52 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [passwordType, setPasswordType] = useState("password");
+
   const token = JSON.parse(localStorage.getItem("jwtToken"));
   const user = JSON.parse(localStorage.getItem("user"));
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const loginReducer = useSelector((state) => state.loginReducer);
+  const { loading, error } = useSelector((state) => state.loginReducer);
 
   const showPasswordHandler = () => {
     setShowPassword((prev) => !prev);
-    setPasswordType(showPassword ? "password" : "text");
+    setPasswordType((prev) => (prev === "password" ? "text" : "password"));
+  };
+
+  const redirectUser = (roleName) => {
+    if (roleName === "ADMIN") {
+      navigate("/adminProfile");
+    } else if (roleName === "INSTRUCTOR") {
+      navigate("/instructorProfile");
+    } else {
+      navigate("/profile");
+    }
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
     login(dispatch, username, password).then((data) => {
       if (data.type === authConstants.USER_LOGIN_SUCCESS) {
-        data.payload?.roles?.map((r) => {
-
-          if (r["roleName"] === "ADMIN") {
-            return navigate("/adminProfile");
-          }
-          if (r["roleName"] === "INSTRUCTOR") {
-            return navigate("/instructorProfile");
-          } else {
-            return navigate("/profile");
-          }
-        });
+        const roleName = data.payload?.role?.roleName;
+        redirectUser(roleName);
       }
     });
   };
 
   useEffect(() => {
     if (token && user) {
-      user?.roles?.map((r) => {
-        if (r["roleName"] === "ADMIN") return navigate("/adminProfile");
-        else return navigate("/profile");
-      });
+      const roleName = user?.role?.roleName;
+      redirectUser(roleName);
     }
-  }, []);
+  }, [token, user]);
 
   return (
       <div className="login-page-container">
         <div className="login-form-card">
           <h1 className="mb-3">Welcome to LearnWay!</h1>
           <h4 className="mb-4">Sign in to explore our courses and start learning</h4>
+
           <Form onSubmit={submitHandler}>
             <Form.Group className="my-3" controlId="username">
               <Form.Label>User Name</Form.Label>
@@ -66,6 +67,7 @@ const LoginPage = () => {
                   placeholder="Enter User Name"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
+                  required
               />
             </Form.Group>
 
@@ -77,6 +79,7 @@ const LoginPage = () => {
                     placeholder="Enter Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    required
                 />
                 <Button
                     onClick={showPasswordHandler}
@@ -87,30 +90,19 @@ const LoginPage = () => {
                 </Button>
               </InputGroup>
             </Form.Group>
-            {loginReducer.error && (
+
+            {error && (
                 <div style={{ color: "red", marginTop: "5px" }}>
-                  {loginReducer.error && (
-                      <div style={{ color: "red", marginTop: "5px" }}>
-                        Username or Password are incorrect.
-                      </div>
-                  )}
-
-
+                  Username or Password are incorrect.
                 </div>
             )}
 
-
-            <Button
-                variant=""
-                className="my-3 btn-submit"
-                type="submit"
-            >
+            <Button variant="" className="my-3 btn-submit" type="submit">
               Login
             </Button>
-
           </Form>
 
-          {loginReducer.loading ? (
+          {loading ? (
               <Loader />
           ) : (
               <Row className="py-3">

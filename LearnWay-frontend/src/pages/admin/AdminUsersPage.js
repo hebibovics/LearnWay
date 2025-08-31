@@ -101,7 +101,7 @@ const AdminUsersPage = () => {
                 <tbody>
                 {users.length > 0 ? (
                     users.map((user) => {
-                        const roleName = user.roles[0]?.roleName || "N/A";
+                        const roleName = user.role?.roleName || "N/A";
                         const displayRole = roleName === "USER" ? "STUDENT" : roleName;
 
                         return (

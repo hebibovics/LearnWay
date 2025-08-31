@@ -72,7 +72,9 @@ public class CourseServiceImpl implements CourseService {
     }
     public List<Course> getCoursesByInstructor(Long instructorId) {
         Optional<User> instructor = userRepository.findById(instructorId);
-        if (instructor.isPresent() && instructor.get().getRoles().stream().anyMatch(role -> role.getRoleName().equals("INSTRUCTOR"))) {
+        if (instructor.isPresent() &&
+                instructor.get().getRole() != null &&
+                instructor.get().getRole().getRoleName().equalsIgnoreCase("INSTRUCTOR")) {
             return courseRepository.findByInstructorId(instructorId);
         } else {
             return Collections.emptyList();
@@ -87,16 +89,14 @@ public class CourseServiceImpl implements CourseService {
         User instructor = userRepository.findById(instructorId)
                 .orElseThrow(() -> new RuntimeException("Instructor not found"));
 
-        boolean isInstructor = instructor.getRoles().stream()
-                .anyMatch(role -> role.getRoleName().equalsIgnoreCase("INSTRUCTOR"));
-        if (!isInstructor) {
+        if (instructor.getRole() == null ||
+                !instructor.getRole().getRoleName().equalsIgnoreCase("INSTRUCTOR")) {
             throw new RuntimeException("User is not an instructor");
         }
 
         course.setInstructor(instructor);
         return courseRepository.save(course);
     }
-
     @Override
     public Course enrollUserToCourse(Long courseId, Long userId) {
         Course course = courseRepository.findById(courseId)
@@ -105,9 +105,8 @@ public class CourseServiceImpl implements CourseService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        boolean isStudent = user.getRoles().stream()
-                .anyMatch(role -> role.getRoleName().equalsIgnoreCase("USER"));
-        if (!isStudent) {
+        if (user.getRole() == null ||
+                !user.getRole().getRoleName().equalsIgnoreCase("USER")) {
             throw new RuntimeException("Only users with role USER can enroll");
         }
 
@@ -120,7 +119,6 @@ public class CourseServiceImpl implements CourseService {
 
         return course;
     }
-
     @Override
     public List<Course> getCoursesByStudentId(Long studentId) {
         return courseRepository.findCoursesByUserId(studentId);
