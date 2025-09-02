@@ -1,25 +1,24 @@
-/* Sadržaj glavnog dijela stranice */
+
 main {
     width: 100%;
     padding: 0px;
-    margin-left: 12em; /* Prostor za sidebar */
+    margin-left: 12em;
 }
 
 /* Sidebar */
 .sidebar {
     background: #1b263b;
     color: #fff;
-    width: 12em; /* Postavi širinu sidebar-a */
+    width: 12em;
     max-height: 100vh;
     transition: all 0.5s;
     position: fixed;
     overflow-y: auto;
-    top: 0; /* Fiksiraj na vrhu */
-    left: 0; /* Fiksiraj na lijevoj strani */
-    bottom: 0; /* Osiguraj da bude duž cijelog ekrana */
+    top: 0;
+    left: 0;
+    bottom: 0;
 }
 
-/* Ostatak CSS-a ostaje isti */
 .top_section {
     display: flex;
     align-items: center;

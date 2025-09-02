@@ -8,7 +8,6 @@ const InstructorViewQuizzes = () => {
     const [quizzes, setQuizzes] = useState([]);
     const navigate = useNavigate();
 
-    // Uzmi token i očisti eventualne navodnike
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
     useEffect(() => {
@@ -17,7 +16,7 @@ const InstructorViewQuizzes = () => {
                 const res = await axios.get(
                     `http://localhost:8081/api/quiz/course/${id}/quizzes`,
                     {
-                        headers: { Authorization: `Bearer ${token}` } // JWT header
+                        headers: { Authorization: `Bearer ${token}` }
                     }
                 );
                 setQuizzes(res.data);
@@ -34,9 +33,6 @@ const InstructorViewQuizzes = () => {
         navigate(`/instructor/quiz/${quizId}/add-questions`);
     };
 
-    const handleEditQuiz = (quizId) => {
-        navigate(`/instructor/quiz/${quizId}`);
-    };
 
     const handleDeleteQuiz = (quizId) => {
         swal({
@@ -51,7 +47,7 @@ const InstructorViewQuizzes = () => {
                     await axios.delete(
                         `http://localhost:8081/api/quiz/${quizId}`,
                         {
-                            headers: { Authorization: `Bearer ${token}` } // JWT header
+                            headers: { Authorization: `Bearer ${token}` }
                         }
                     );
                     setQuizzes(quizzes.filter((q) => q.quizId !== quizId));

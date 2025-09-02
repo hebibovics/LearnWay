@@ -4,7 +4,7 @@ import { FaBars, FaUserAlt } from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchUserCourses } from "../actions/coursesActions"; // nova funkcija
+import { fetchUserCourses } from "../actions/coursesActions";
 import { TbLayoutGrid, TbReport } from "react-icons/tb";
 
 
@@ -37,7 +37,7 @@ const SidebarUser = ({ children }) => {
       setUserCourses(enrolledCourses);
 
       const newMenuItems = enrolledCourses.map((c) => ({
-        path: `/course/${c.courseId}`, // ili neka tvoja ruta
+        path: `/course/${c.courseId}`,
         name: c.title,
         icon: <TbLayoutGrid />,
       }));

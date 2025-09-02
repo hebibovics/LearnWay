@@ -18,7 +18,6 @@ const InstructorUpdateCourse = () => {
 
     const token = localStorage.getItem("jwtToken");
 
-    // Dohvati kurs pri učitavanju
     useEffect(() => {
         const fetchCourse = async () => {
             try {

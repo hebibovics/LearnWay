@@ -4,10 +4,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import swal from 'sweetalert';
 
 const InstructorAddQuiz = () => {
-    const navigate = useNavigate();
     const { id  } = useParams(); // courseId iz URL-a
 
-    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, ''); // očisti navodnike
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
     const [quizData, setQuizData] = useState({
         title: "",
@@ -15,7 +14,7 @@ const InstructorAddQuiz = () => {
         numOfQuestions: 0,
         iActive: true,
         course: {
-            courseId: parseInt(id) // odmah postavi kurs
+            courseId: parseInt(id)
         }
     });
 
@@ -33,7 +32,7 @@ const InstructorAddQuiz = () => {
                 "http://localhost:8081/api/quiz/",
                 quizData,
                 {
-                    headers: { Authorization: `Bearer ${token}` } // JWT header
+                    headers: { Authorization: `Bearer ${token}` }
                 }
             );
             setCreatedQuizId(res.data.quizId);

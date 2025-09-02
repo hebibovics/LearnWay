@@ -7,7 +7,7 @@ import FormContainer from "../../../components/FormContainer";
 import * as questionsConstants from "../../../constants/questionsConstants";
 import "../../admin/questions/AdminAddQuestionsPage.css";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 
 const InstructorAddQuestion = () => {
@@ -19,7 +19,6 @@ const InstructorAddQuestion = () => {
     const [option4, setOption4] = useState("");
     const [answer, setAnswer] = useState(null);
 
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { quizId } = useParams();
 
@@ -153,18 +152,7 @@ const InstructorAddQuestion = () => {
                                 <option value="option2">Option 2</option>
                                 <option value="option3">Option 3</option>
                                 <option value="option4">Option 4</option>
-                                {/* {categories ? (
-                  categories.map((cat, index) => (
-                    <option key={index} value={cat.catId}>
-                      {cat.title}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">Choose one from below</option>
-                )} */}
-                                {/* <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option> */}
+
                             </Form.Select>
                         </div>
                         <Button

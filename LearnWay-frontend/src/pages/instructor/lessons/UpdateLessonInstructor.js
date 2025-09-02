@@ -12,7 +12,6 @@ const UpdateLessonInstructor = () => {
     const [description, setDescription] = useState('');
     const [videoUrl, setVideoUrl] = useState('');
 
-    // Uzmi token i očisti eventualne navodnike
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
     useEffect(() => {

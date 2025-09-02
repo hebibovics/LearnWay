@@ -14,7 +14,6 @@ const StudentTakeQuizPage = () => {
     const [result, setResult] = useState({ correct: 0, total: 0 });
     const [courseTitle, setCourseTitle] = useState("");
 
-    // Uzmi JWT token iz localStorage i očisti eventualne navodnike
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
     useEffect(() => {
@@ -65,7 +64,7 @@ const StudentTakeQuizPage = () => {
         setSubmitted(true);
 
         axios.post(`/api/quizResult/submit`, answers, {
-            headers: { Authorization: `Bearer ${token}` }, // JWT header
+            headers: { Authorization: `Bearer ${token}` },
             params: { userId: user.userId, quizId: quizId },
         })
             .then(res => console.log("Saved result:", res.data))

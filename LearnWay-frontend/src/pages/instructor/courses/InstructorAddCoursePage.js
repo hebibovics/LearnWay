@@ -133,38 +133,6 @@ const InstructorAddCourse = () => {
                             ></Form.Control>
                         </Form.Group>
 
-                        {/* <Form.Group className="my-3" controlId="maxMarks">
-              <Form.Label>Maximum Marks</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Maximum Marks"
-                value={maxMarks}
-                onChange={(e) => {
-                  setMaxMarks(e.target.value);
-                }}
-              ></Form.Control>
-            </Form.Group> */}
-
-                        {/* <Form.Group className="my-3" controlId="numberOfQuestions">
-              <Form.Label>Number of Questions</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Enter Number of Questions"
-                value={numberOfQuestions}
-                onChange={(e) => {
-                  setNumberOfQuestions(e.target.value);
-                }}
-              ></Form.Control>
-            </Form.Group> */}
-
-                        {/*<Form.Check
-                            className="my-3"
-                            type="switch"
-                            id="publish-switch"
-                            label="Publish Course"
-                            onChange={onClickPublishedHandler}
-                            checked={isActive}
-                        />*/}
 
                         <div className="my-3">
                             <label htmlFor="category-select">Choose a Category:</label>

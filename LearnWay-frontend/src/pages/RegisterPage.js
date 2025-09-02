@@ -78,7 +78,7 @@ const RegisterPage = () => {
       if (data.type === authConstants.USER_REGISTER_SUCCESS) {
         navigate("/login");
       } else if (data.type === authConstants.USER_REGISTER_FAILURE) {
-        // ovdje hvatamo poruku iz backenda
+
         if (data.payload && data.payload.includes("User Already Exists")) {
           setErrors({ username: "Username already exists" });
         }

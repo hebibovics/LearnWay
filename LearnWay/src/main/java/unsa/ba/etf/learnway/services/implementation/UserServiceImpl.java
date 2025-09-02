@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // više nema Set<Role>, samo jedna rola
         user.setRole(null);
 
         userRepository.delete(user);

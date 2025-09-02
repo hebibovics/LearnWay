@@ -3,7 +3,7 @@ import {Container, Row, Col, Image, Nav} from "react-bootstrap";
 import img1 from '../images/image1.jpg';
 import {Link} from "react-router-dom";
 import SidebarUser from "../components/SidebarUser";
-import {LinkContainer} from "react-router-bootstrap";  // Import your image
+import {LinkContainer} from "react-router-bootstrap";
 
 
 const AboutUs = () => {
@@ -41,13 +41,12 @@ const AboutUs = () => {
                     </div>
                 </Col>
 
-                {/* Image section */}
                 <Col lg={5} className="mt-5">
                     <Image src={img1} fluid />
                 </Col>
             </Row>
 
-            <Row className="mt-5 text-center"> {/* Dodana klasa text-center za centriranje */}
+            <Row className="mt-5 text-center">
                 <Col md={4}>
                     <h3>Interactive Learning</h3>
                     <p>Experience interactive courses that make learning fun and engaging.</p>

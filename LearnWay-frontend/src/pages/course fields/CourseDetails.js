@@ -68,7 +68,6 @@ const CourseDetails = () => {
         };
         fetchCourse();
 
-        // Postavljanje role prema novom formatu
         const roleName = loginReducer?.user?.role?.roleName || "USER";
         setUserRole(roleName);
     }, [id, loginReducer]);
@@ -125,9 +124,9 @@ const CourseDetails = () => {
             console.log("ovaj token gledam", token);
             const response = await axios.post(
                 `http://localhost:8081/api/course/${id}/enroll/${userId}`,
-                {}, // body je prazan
+                {},
                 {
-                    headers: { Authorization: `Bearer ${token}` } // OBAVEZNO Bearer
+                    headers: { Authorization: `Bearer ${token}` }
                 }
             );
             swal("Success", "You have been enrolled successfully!", "success");

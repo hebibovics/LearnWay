@@ -52,8 +52,21 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public void deleteQuestion(Long questionId) {
-        questionRepository.delete(getQuestion(questionId));
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new RuntimeException("Question not found with id: " + questionId));
+
+        Quiz quiz = question.getQuiz();
+        if (quiz != null) {
+            quiz.getQuestions().remove(question);
+            quiz.setNumOfQuestions(quiz.getNumOfQuestions() - 1);
+            quizRepository.save(quiz);
+        }
+
+        questionRepository.delete(question);
     }
+
+
+
 
     @Override
     public List<Question> getQuestionsByQuiz(Quiz quiz) {

@@ -19,7 +19,7 @@ const InstructorQuestionsPage = () => {
             });
             setQuestions(res.data);
         } catch (err) {
-            console.error("Greška pri dohvatu pitanja:", err);
+            console.error("Greska pri dohvatu pitanjaaaa:", err);
         } finally {
             setLoading(false);
         }
@@ -44,7 +44,13 @@ const InstructorQuestionsPage = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 });
                 swal("Deleted!", "The question has been deleted.", "success");
-                setQuestions(questions.filter((q) => q.quesId !== questionId));
+                setQuestions(
+                    questions.filter((q) => {
+                        console.log("Question ID u listi:", q.quesId);
+                        return q.quesId !== questionId;
+                    })
+                );
+
             } catch (err) {
                 console.error("Error deleting question:", err);
                 swal("Error", "Failed to delete the question.", "error");
@@ -61,7 +67,7 @@ const InstructorQuestionsPage = () => {
             {questions.map((q) => (
                 <Card className="mb-3 text-dark" key={q.quesId}>
                     <Card.Body className="d-flex justify-content-between align-items-start">
-                        {/* Glavni sadržaj pitanja */}
+
                         <div style={{ flex: 1, marginRight: "10px" }}>
                             <Card.Title>{q.content}</Card.Title>
                             {q.image && (
@@ -91,7 +97,6 @@ const InstructorQuestionsPage = () => {
                             </ListGroup>
                         </div>
 
-                        {/* Dugme za brisanje u gornjem desnom kutu */}
                         <div style={{ alignSelf: "flex-start" }}>
                             <Button
                                 variant="outline-danger"

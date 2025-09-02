@@ -4,12 +4,12 @@ h1{
 .image-link {
     text-decoration: none;
     color: black;
-    transition: opacity 0.3s ease, transform 0.3s ease; /* Dodajemo tranziciju za glatki prelaz */
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
 .image-link:hover {
-    opacity: 0.7; /* Smanjujemo prozirnost prilikom prelaska mišem preko slike */
-    transform: scale(0.70); /* Smanjujemo veličinu slike za 5% prilikom prelaska mišem */
+    opacity: 0.7;
+    transform: scale(0.70);
     color: black;
 }
 .footer {

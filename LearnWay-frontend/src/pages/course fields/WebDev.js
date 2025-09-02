@@ -15,7 +15,6 @@ const WebDev = () => {
             .then(async response => {
                 const webDevCourses = response.data.filter(course => course.category.catId === 1);
 
-                // Za svaki kurs dohvatiti recenzije i izračunati prosjek (ovo je loše za performance)
                 const coursesWithRates = await Promise.all(webDevCourses.map(async (course) => {
                     try {
                         const reviewsResp = await axios.get(`/api/review/course/${course.courseId}`);

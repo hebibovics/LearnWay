@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Table, Button, Container } from "react-bootstrap";
 import axios from "axios";
 import swal from "sweetalert";
-import { FaBook } from "react-icons/fa"; // ikonica za kurseve
+import { FaBook } from "react-icons/fa";
 
 const AdminUsersPage = () => {
     const [users, setUsers] = useState([]);
     const [expandedUserId, setExpandedUserId] = useState(null);
-    const [courses, setCourses] = useState({}); // cache za kurseve po useru
+    const [courses, setCourses] = useState({});
     const rawToken = localStorage.getItem("jwtToken");
     const token = rawToken ? rawToken.replace(/^"|"$/g, "") : null;
     console.log("Token:", token);
@@ -76,7 +76,7 @@ const AdminUsersPage = () => {
 
     const toggleExpand = (userId) => {
         if (expandedUserId === userId) {
-            setExpandedUserId(null); // zatvori ako je već otvoren
+            setExpandedUserId(null); // da zatvori ako je već otvoren
         } else {
             setExpandedUserId(userId);
             fetchInstructorCourses(userId);
@@ -133,7 +133,6 @@ const AdminUsersPage = () => {
                                     </td>
                                 </tr>
 
-                                {/* Ako je ovaj instruktor expandan */}
                                 {expandedUserId === user.userId && (
                                     <tr>
                                         <td colSpan="5" style={{ color: "white" }}>

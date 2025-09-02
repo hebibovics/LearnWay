@@ -2,9 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import Image from "react-bootstrap/Image";
 import { fetchCategories } from "../../actions/categoriesActions";
-import { fetchQuizzes } from "../../actions/quizzesActions";
 import Sidebar from "../../components/Sidebar";
 import "../users/UserProfilePage.css";
 const AdminProfilePage = () => {

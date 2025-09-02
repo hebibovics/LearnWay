@@ -9,20 +9,18 @@ const AdminCoursesPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Dohvati kurseve sa backenda
         axios.get("/api/course/")
             .then((res) => setCourses(res.data))
             .catch((err) => console.error(err));
     }, []);
 
-    // Filtriraj kurseve po search termu
     const filteredCourses = courses.filter(course =>
         course.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
         <Container className="mt-4">
-            {/* Search bar */}
+
             <Form.Control
                 type="text"
                 placeholder="Search courses..."
@@ -31,7 +29,6 @@ const AdminCoursesPage = () => {
                 className="mb-4"
             />
 
-            {/* Lista kurseva */}
             <Row xs={1} sm={2} md={3} lg={4} className="g-4">
                 {filteredCourses.map((course) => (
                     <Col key={course.id}>

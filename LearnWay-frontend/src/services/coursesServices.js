@@ -8,7 +8,6 @@ const fetchCourses = async (token, instructorId) => {
             headers: { Authorization: `Bearer ${token}` },
         };
         console.log (config);
-        // Dodajte instructorId u URL
         const { data } = await axios.get(`http://localhost:8081/api/course/by-instructor/${instructorId}`, config);
         console.log("courseService:fetchCourses() Success: ", data);
         return data;

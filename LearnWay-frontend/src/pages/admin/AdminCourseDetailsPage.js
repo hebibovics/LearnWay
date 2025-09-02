@@ -19,7 +19,6 @@ const AdminCourseDetailsPage = () => {
     const [searchStudentTerm, setSearchStudentTerm] = useState("");
     const [searchLessonTerm, setSearchLessonTerm] = useState("");
 
-    // Dohvati token i očisti navodnike ako ih ima
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
     const axiosConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 
@@ -141,7 +140,6 @@ const AdminCourseDetailsPage = () => {
                 </Col>
             </Row>
 
-            {/* Course Info */}
             <Row className="mb-4">
                 <Col>
                     <p><strong>Description:</strong> {course.description}</p>
@@ -151,7 +149,6 @@ const AdminCourseDetailsPage = () => {
                 </Col>
             </Row>
 
-            {/* Search Students */}
             <Row className="mb-3">
                 <Col md={6}>
                     <Form.Control
@@ -163,7 +160,6 @@ const AdminCourseDetailsPage = () => {
                 </Col>
             </Row>
 
-            {/* Enrolled Students */}
             <Row className="mb-4">
                 <Col>
                     <h5>Enrolled Students:</h5>
@@ -181,7 +177,6 @@ const AdminCourseDetailsPage = () => {
                 </Col>
             </Row>
 
-            {/* Forum Comments */}
             <Row className="mb-4">
                 <Col>
                     <h5>Forum Comments:</h5>
@@ -213,7 +208,6 @@ const AdminCourseDetailsPage = () => {
                 </Col>
             </Row>
 
-            {/* Search Lessons */}
             <Row className="mb-3">
                 <Col md={6}>
                     <Form.Control

@@ -1,4 +1,3 @@
-// src/pages/student/StudentQuizzesPage.js
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -9,7 +8,6 @@ const StudentQuizzesPage = () => {
     const { id } = useParams(); // id kursa
     const [quizzes, setQuizzes] = useState([]);
 
-    // Uzmi JWT token iz localStorage i očisti eventualne navodnike
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
     useEffect(() => {

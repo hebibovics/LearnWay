@@ -29,7 +29,7 @@ const InstructorAddLesson = () => {
                 }
             );
 
-            const createdLesson = response.data; // ovdje dobijes lessonId
+            const createdLesson = response.data;
 
             // 2) UPDATE VIDEO URL (ako je uneseno)
             if (videoUrl.trim() !== "") {

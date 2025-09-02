@@ -48,10 +48,8 @@ const StudentQuizResultsPage = () => {
         const cert = document.getElementById(`certificate-${quizResId}`);
         if (!cert) return;
 
-        // privremeno prikaži certifikat
         cert.style.display = "block";
 
-        // sačekaj da se DOM osvježi
         await new Promise((resolve) => setTimeout(resolve, 100));
 
         const canvas = await html2canvas(cert);
@@ -63,7 +61,6 @@ const StudentQuizResultsPage = () => {
         pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
         pdf.save("certificate.pdf");
 
-        // sakrij certifikat ponovo
         cert.style.display = "none";
     };
 

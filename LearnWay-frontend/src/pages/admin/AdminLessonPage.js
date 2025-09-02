@@ -1,4 +1,4 @@
-// src/pages/AdminLessonPage.js
+
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
@@ -46,7 +46,7 @@ const AdminLessonPage = () => {
                     });
 
                     swal("Success", "Lesson has been deleted!", "success");
-                    navigate(-1); // vrati na prethodnu stranicu
+                    navigate(-1);
                 } catch (error) {
                     console.error("Error deleting lesson:", error);
                     swal("Error", "Failed to delete lesson.", "error");
