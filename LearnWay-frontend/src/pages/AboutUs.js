@@ -65,15 +65,18 @@ const AboutUs = () => {
             {/* Statistics section */}
             <Row className="mt-5 text-center">
                 <Col md={4}>
+                    <p style={{ color: "rgb(33, 182, 168)", fontSize: "2rem"  }}>Over</p>
                     <h1 className="statistic" style={{ color: "rgb(33, 182, 168)", fontSize: "5rem"  }}>900</h1>
-                    <p style={{ color: "rgb(33, 182, 168)", fontSize: "2rem"  }}>Satisfied customers</p>
+                    <p style={{ color: "rgb(33, 182, 168)", fontSize: "2rem"  }}>Satisfied users</p>
                 </Col>
                 <Col md={4}>
+                    <p style={{ color: "rgb(33, 182, 168)", fontSize: "2rem"  }}>Over</p>
                     <h1 className="statistic" style={{ color: "rgb(33, 182, 168)", fontSize: "5rem"  }}>500</h1>
                     <p style={{ color: "rgb(33, 182, 168)", fontSize: "2rem"  }}>Courses</p>
                 </Col>
                 <Col md={4}>
-                    <h1 className="statistic" style={{ color: "rgb(33, 182, 168)", fontSize: "5rem"  }}>1200</h1>
+                    <p style={{ color: "rgb(33, 182, 168)", fontSize: "2rem"  }}>Over</p>
+                    <h1 className="statistic" style={{ color: "rgb(33, 182, 168)", fontSize: "5rem"  }}>100</h1>
                     <p style={{ color: "rgb(33, 182, 168)", fontSize: "2rem"  }}>Certificates</p>
                 </Col>
             </Row>

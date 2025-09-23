@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Table, Button, Container } from "react-bootstrap";
+import { Table, Button, Container, Form } from "react-bootstrap";
 import axios from "axios";
 import swal from "sweetalert";
 import { FaBook } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
 
 const AdminUsersPage = () => {
     const [users, setUsers] = useState([]);
@@ -12,6 +14,7 @@ const AdminUsersPage = () => {
     const token = rawToken ? rawToken.replace(/^"|"$/g, "") : null;
     console.log("Token:", token);
 
+    const [searchTerm, setSearchTerm] = useState("");
 
     const fetchUsers = async () => {
         try {
@@ -84,10 +87,30 @@ const AdminUsersPage = () => {
     };
 
     const whiteTextStyle = { color: "white", fontWeight: "normal" };
+    const filteredUsers = users.filter((user) => {
+        const firstName = user.firstName ? user.firstName.toLowerCase() : "";
+        const lastName = user.lastName ? user.lastName.toLowerCase() : "";
+        const username = user.username ? user.username.toLowerCase() : "";
+
+        const term = searchTerm.toLowerCase();
+
+        return (
+            firstName.includes(term) ||
+            lastName.includes(term) ||
+            username.includes(term)
+        );
+    });
 
     return (
         <Container className="mt-4">
             <h2 style={whiteTextStyle}>All Users</h2>
+            <Form.Control
+                type="text"
+                placeholder="Search users..."
+                className="mb-3"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -99,8 +122,8 @@ const AdminUsersPage = () => {
                 </tr>
                 </thead>
                 <tbody>
-                {users.length > 0 ? (
-                    users.map((user) => {
+                {filteredUsers.length > 0 ? (
+                    filteredUsers.map((user) => {
                         const roleName = user.role?.roleName || "N/A";
                         const displayRole = roleName === "USER" ? "STUDENT" : roleName;
 
@@ -140,16 +163,23 @@ const AdminUsersPage = () => {
                                             <ul>
                                                 {courses[user.userId]?.length > 0 ? (
                                                     courses[user.userId].map((course) => (
-                                                        <li key={course.courseId}>{course.title} - {course.category.title}</li>
+                                                        <li key={course.courseId}>
+                                                            <Link
+                                                                to={`/admin/course/${course.courseId}`}
+                                                                style={{ color: "#0dcaf0", textDecoration: "none" }}
+                                                            >
+                                                                {course.title} - {course.category.title}
+                                                            </Link>
+                                                        </li>
                                                     ))
                                                 ) : (
                                                     <li>No courses found.</li>
                                                 )}
                                             </ul>
+
                                         </td>
                                     </tr>
                                 )}
-
                             </React.Fragment>
                         );
                     })

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col, Button, ListGroup, Form, Card } from 'react-bootstrap';
+import { Container, Row, Col, Button, ListGroup, Form, Card, Modal } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import swal from 'sweetalert';
@@ -15,9 +15,20 @@ const AdminCourseDetailsPage = () => {
     const [enrolledStudents, setEnrolledStudents] = useState([]);
     const [forumComments, setForumComments] = useState([]);
     const [lessons, setLessons] = useState([]);
+    const [averageRating, setAverageRating] = useState("No ratings yet");
 
     const [searchStudentTerm, setSearchStudentTerm] = useState("");
     const [searchLessonTerm, setSearchLessonTerm] = useState("");
+
+    // Modal za send mail
+    const [showMailModal, setShowMailModal] = useState(false);
+    const [selectedNotifications, setSelectedNotifications] = useState([]);
+
+    const notificationOptions = [
+        "Low rating on this course, consider improving lessons",
+        "Inappropriate lessons will be deleted",
+        "This course may be deleted due to irrelevant info",
+    ];
 
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
     const axiosConfig = token ? { headers: { Authorization: `Bearer ${token}` } } : {};
@@ -40,37 +51,49 @@ const AdminCourseDetailsPage = () => {
             }
         };
 
+        const fetchReviewsAndCalculateAverage = async () => {
+            try {
+                const response = await axios.get(`/api/review/course/${id}`, axiosConfig);
+                const reviews = response.data;
+
+                if (reviews.length > 0) {
+                    const sum = reviews.reduce((acc, review) => acc + review.rate, 0);
+                    const average = sum / reviews.length;
+                    setAverageRating(average.toFixed(2));
+                } else {
+                    setAverageRating("No ratings yet");
+                }
+            } catch (err) {
+                setAverageRating("N/A");
+            }
+        };
+
         const fetchEnrolledStudents = async () => {
             try {
                 const response = await axios.get(`/api/course/${id}/students`, axiosConfig);
                 setEnrolledStudents(response.data);
-            } catch (err) {
-                console.error("Error fetching students:", err);
-            }
+            } catch (err) {}
         };
 
         const fetchForumComments = async () => {
             try {
                 const response = await axios.get(`/api/comments/course/${id}`, axiosConfig);
                 setForumComments(response.data);
-            } catch (err) {
-                console.error("Error fetching comments:", err);
-            }
+            } catch (err) {}
         };
 
         const fetchLessons = async () => {
             try {
                 const response = await axios.get(`/api/lesson/api/lesson/${id}`, axiosConfig);
                 setLessons(response.data);
-            } catch (err) {
-                console.error("Error fetching lessons:", err);
-            }
+            } catch (err) {}
         };
 
         fetchCourse();
         fetchEnrolledStudents();
         fetchForumComments();
         fetchLessons();
+        fetchReviewsAndCalculateAverage();
     }, [id]);
 
     const handleDeleteCourse = () => {
@@ -122,18 +145,45 @@ const AdminCourseDetailsPage = () => {
         });
     };
 
+    const handleCheckboxChange = (option) => {
+        setSelectedNotifications(prev =>
+            prev.includes(option)
+                ? prev.filter(o => o !== option)
+                : [...prev, option]
+        );
+    };
+
+    const handleSendMail = () => {
+        if (!selectedNotifications.length) {
+            swal("Select at least one notification", "", "warning");
+            return;
+        }
+
+        // Samo prikaz alert, ne salje pravi stvarni mail
+        swal("Mail sent!", `Notifications sent to ${course.instructor.username}`, "success");
+        setShowMailModal(false);
+        setSelectedNotifications([]);
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error loading course details.</p>;
     if (!course) return <p>Course not found</p>;
 
     return (
         <Container className="mt-4">
-            {/* Course Title and Delete */}
+            {/* Course Title and Delete / Send Mail */}
             <Row className="mb-4 align-items-center">
                 <Col>
                     <h2 className="text-center">{course.title}</h2>
                 </Col>
                 <Col className="text-end">
+                    <Button
+                        variant="outline-primary"
+                        className="me-2"
+                        onClick={() => setShowMailModal(true)}
+                    >
+                        📧 Send Mail
+                    </Button>
                     <Button variant="danger" onClick={handleDeleteCourse}>
                         Delete Course
                     </Button>
@@ -146,6 +196,9 @@ const AdminCourseDetailsPage = () => {
                     <p><strong>Category:</strong> {course.category?.title || "N/A"}</p>
                     <p><strong>Number of Lessons:</strong> {course.lessons?.length || 0}</p>
                     <p><strong>Instructor:</strong> {course.instructor.firstName || ""} {course.instructor.lastName || ""}</p>
+                    <p>
+                        <strong>Course Rating:</strong> {averageRating}
+                    </p>
                 </Col>
             </Row>
 
@@ -244,6 +297,40 @@ const AdminCourseDetailsPage = () => {
                     </Col>
                 )}
             </Row>
+
+            {/* Send Mail Modal */}
+            <Modal  style={{ color: 'black' }} show={showMailModal} onHide={() => setShowMailModal(false)}>
+                <Modal.Header  style={{ color: 'black' }} closeButton>
+                    <Modal.Title  style={{ color: 'black' }}>Send Notification to Instructor</Modal.Title>
+                </Modal.Header>
+                <Modal.Body  style={{ color: 'black' }}>
+                    <Form.Group className="mb-3"  style={{ color: 'black' }}>
+                        <Form.Label  style={{ color: 'black' }}>To:</Form.Label>
+                        <Form.Control  style={{ color: 'black' }} type="email" value={course.instructor.username} readOnly />
+                    </Form.Group>
+
+                    <Form.Group  style={{ color: 'black' }}>
+                        <Form.Label>Select notifications:</Form.Label>
+                        {notificationOptions.map((option, idx) => (
+                            <Form.Check
+                                key={idx}
+                                type="checkbox"
+                                label={option}
+                                checked={selectedNotifications.includes(option)}
+                                onChange={() => handleCheckboxChange(option)}
+                            />
+                        ))}
+                    </Form.Group>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowMailModal(false)}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={handleSendMail}>
+                        Send
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Container>
     );
 };

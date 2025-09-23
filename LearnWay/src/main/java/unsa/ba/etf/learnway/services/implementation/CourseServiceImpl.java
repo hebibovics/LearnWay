@@ -46,10 +46,8 @@ public class CourseServiceImpl implements CourseService {
             throw new RuntimeException("Course not found with ID: " + courseId);
         }
 
-        // Očisti komentare povezane sa kursom
         course.getComments().clear();
 
-        // Očisti studente povezane sa kursom
         for (User user : new HashSet<>(course.getUsers())) {
             user.getCourses().remove(course);
             course.getUsers().remove(user);

@@ -36,6 +36,8 @@ import AdminCoursesPage from "./pages/admin/AdminCoursesPage";
 import AdminCourseDetailsPage from "./pages/admin/AdminCourseDetailsPage";
 import AdminLessonPage from "./pages/admin/AdminLessonPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
+import AdminQuizzesPage from "./pages/admin/AdminQuizzesPage";
+import AdminQuizDetailsPage from "./pages/admin/AdminQuizDetailsPage";
 
 const App = () => {
   return (
@@ -54,6 +56,8 @@ const App = () => {
           <Route path="/adminUsers" element={<AdminUsersPage/>}/>
           <Route path="/admin/course/:id" element={<AdminCourseDetailsPage/>}/>
           <Route path="/adminLesson/:id" element={<AdminLessonPage/>}/>
+          <Route path="/adminQuizzes" element={<AdminQuizzesPage/>}/>
+          <Route path="/adminQuiz/:id" element={<AdminQuizDetailsPage />} />
 
           <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>
           <Route path="/instructorAddCourse" element={<InstructorAddCoursePage/>}/>

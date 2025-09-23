@@ -59,7 +59,7 @@ public class LearnWayApplication {
                 User admin = User.builder()
                         .firstName("Admin")
                         .lastName("Admin")
-                        .username("admin")
+                        .username("admin@learnway.com")
                         .password(passwordEncoder.encode("admin123"))
                         .isActive(true)
                         .role(adminRole)

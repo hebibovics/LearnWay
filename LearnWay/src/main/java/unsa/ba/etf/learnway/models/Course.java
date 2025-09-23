@@ -33,7 +33,7 @@ public class Course {
     private String description;
 
     @ManyToMany(mappedBy = "courses")
-    private Set<User> users = new HashSet<>();  // Inicijalizirano na prazan set
+    private Set<User> users = new HashSet<>();
 
 
     @ManyToOne

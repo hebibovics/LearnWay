@@ -1,12 +1,13 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { Card, Button, Row, Col } from "react-bootstrap";
+import { FaQuestionCircle } from "react-icons/fa";
 
 const StudentQuizzesPage = () => {
     const { id } = useParams(); // id kursa
     const [quizzes, setQuizzes] = useState([]);
+    const [showInfo, setShowInfo] = useState(false); // za modal
 
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
@@ -14,20 +15,28 @@ const StudentQuizzesPage = () => {
         const fetchQuizzes = async () => {
             try {
                 const response = await axios.get(`/api/quiz/course/${id}/quizzes`, {
-                    headers: { Authorization: `Bearer ${token}` } // dodan JWT header
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setQuizzes(response.data);
             } catch (error) {
                 console.error("Error fetching quizzes:", error);
             }
         };
-
         fetchQuizzes();
     }, [id, token]);
 
     return (
         <div className="container mt-4">
-            <h2 className="text-center mb-4">Available Quizzes</h2>
+            {/* Naslov + upitnik */}
+            <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
+                <h2 className="me-2">Available Quizzes</h2>
+                <FaQuestionCircle
+                    size={22}
+                    style={{ cursor: "pointer", color: "#0d6efd" }}
+                    onClick={() => setShowInfo(true)}
+                />
+            </div>
+
             {quizzes.length === 0 ? (
                 <p className="text-center">No quizzes available for this course.</p>
             ) : (
@@ -49,6 +58,40 @@ const StudentQuizzesPage = () => {
                     ))}
                 </Row>
             )}
+
+            {/* Modal s uputama */}
+            {showInfo && (
+                <div className="modal fade show d-block" tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header text-dark">
+                                <h5 className="modal-title text-dark">Quiz Information</h5>
+                                <button
+                                    type="button"
+                                    className="btn-close"
+                                    onClick={() => setShowInfo(false)}
+                                ></button>
+                            </div>
+                            <div className="modal-body text-dark">
+                                <p>
+                                    Each quiz can be attempted multiple times. Every attempt is stored in the database,
+                                    so your progress can be tracked. Questions are of <b>multiple choice</b> type with
+                                    <b> one correct answer</b>. Once you complete a quiz successfully, you can earn a certificate.
+                                </p>
+                            </div>
+                            <div className="modal-footer">
+                                <button
+                                    className="btn btn-secondary"
+                                    onClick={() => setShowInfo(false)}
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showInfo && <div className="modal-backdrop fade show"></div>}
         </div>
     );
 };

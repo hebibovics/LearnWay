@@ -49,7 +49,7 @@ public class User implements UserDetails {
     private boolean isActive = true;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_name") // FK kolona u users tabeli
+    @JoinColumn(name = "role_name")
     private Role role;
 
     @ManyToMany

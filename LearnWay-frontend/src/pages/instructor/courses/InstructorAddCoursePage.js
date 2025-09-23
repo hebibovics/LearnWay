@@ -76,11 +76,8 @@ const InstructorAddCourse = () => {
                     swal("Course Not Added!", `${course.title} not added`, "error");
                 }
             });
-
-
-
-        } else {
-            alert("Select valid category!");
+        }  else {
+            swal("Invalid Category!", "Please select a valid category before adding the course.", "warning");
         }
     };
 

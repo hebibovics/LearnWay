@@ -95,7 +95,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 
-                .antMatchers("/api/review/**").hasAnyAuthority("INSTRUCTOR", "USER")
+                .antMatchers("/api/review/**").permitAll()
+
+
 
 
 
@@ -108,11 +110,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
               //  .antMatchers("/api/review/rate").permitAll()
 
                 .antMatchers(HttpMethod.POST, "/api/question/**").hasAuthority("INSTRUCTOR")
-                .antMatchers(HttpMethod.GET, "/api/question/**").hasAnyAuthority("USER", "INSTRUCTOR")
+                .antMatchers(HttpMethod.GET, "/api/question/**").permitAll()
                 .antMatchers(HttpMethod.DELETE, "/api/question/**").hasAuthority("INSTRUCTOR")
 
                 .antMatchers(HttpMethod.POST,"/api/quiz/**").hasAuthority("INSTRUCTOR")
-                .antMatchers(HttpMethod.GET,"/api/quiz/**").hasAnyAuthority("USER", "INSTRUCTOR", "ADMIN")
+                .antMatchers(HttpMethod.GET,"/api/quiz/**").permitAll()
                 .antMatchers(HttpMethod.DELETE,"/api/quiz/**").hasAuthority("INSTRUCTOR")
 
                 .antMatchers("/api/quizResult/**").permitAll()

@@ -183,6 +183,9 @@ const CourseDetails = () => {
                     <p><strong>Number of Lessons:</strong> {course.lessons?.length || 0}</p>
                     <p><strong>Rate:</strong> {averageRating}</p>
                     <p><strong>Category:</strong> {course.category?.title}</p>
+                    {course.instructor && (
+                        <p><strong>Instructor:</strong> {course.instructor.firstName} {course.instructor.lastName}</p>
+                    )}
 
                     {userRole === "USER" && (
                         <div className="mt-3 d-flex gap-2">

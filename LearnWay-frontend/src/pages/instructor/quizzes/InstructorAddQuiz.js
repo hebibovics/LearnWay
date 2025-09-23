@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import swal from 'sweetalert';
+import { FaQuestionCircle } from "react-icons/fa"; // ikonica upitnika
 
 const InstructorAddQuiz = () => {
-    const { id  } = useParams(); // courseId iz URL-a
+    const { id } = useParams(); // courseId iz URL-a
 
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
@@ -19,6 +20,7 @@ const InstructorAddQuiz = () => {
     });
 
     const [createdQuizId, setCreatedQuizId] = useState(null);
+    const [showInfo, setShowInfo] = useState(false); // za modal
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -55,7 +57,15 @@ const InstructorAddQuiz = () => {
 
     return (
         <div className="container mt-4">
-            <h2>Add quiz for the course</h2>
+            <div className="d-flex align-items-center mb-3">
+                <h2 className="me-2">Add quiz for the course</h2>
+                <FaQuestionCircle
+                    size={22}
+                    style={{ cursor: "pointer", color: "#0d6efd" }}
+                    onClick={() => setShowInfo(true)}
+                />
+            </div>
+
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label>Quiz title</label>
@@ -82,6 +92,32 @@ const InstructorAddQuiz = () => {
 
                 <button type="submit" className="btn btn-primary me-2">Add Quiz</button>
             </form>
+
+            {/* Modal */}
+            {showInfo && (
+                <div className="modal fade show d-block" tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header text-dark">
+                                <h5 className="modal-title">Quiz Information</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowInfo(false)}></button>
+                            </div>
+                            <div className="modal-body text-dark">
+                                <p>
+                                    Here you only add a quiz with its <b>title</b> and optionally a <b>description</b>.
+                                    Questions will be added later – go to <i>View Quizzes</i> and choose the option
+                                    <b> Add Question</b> for this quiz.
+                                </p>
+                            </div>
+                            <div className="modal-footer">
+                                <button className="btn btn-secondary" onClick={() => setShowInfo(false)}>Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showInfo && <div className="modal-backdrop fade show"></div>}
+
         </div>
     );
 };

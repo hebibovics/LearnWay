@@ -61,12 +61,8 @@ const AdminProfilePage = () => {
                   <td>{`${user.firstName} ${user.lastName}`}</td>
                 </tr>
                 <tr>
-                  <td>Username</td>
-                  <td>{user.username}</td>
-                </tr>
-                <tr>
                   <td>Mail</td>
-                  <td>admin@learnway.com</td>
+                  <td>{user.username}</td>
                 </tr>
                 <tr>
                   <td>Role</td>

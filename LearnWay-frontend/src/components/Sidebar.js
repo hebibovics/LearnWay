@@ -33,7 +33,26 @@ const Sidebar = ({ children }) => {
       name: "View All Users",
       icon: <MdQueue />,
     },
-
+    {
+      path: "/adminQuizzes",
+      name: "View All Quizzes",
+      icon: <MdQueue />,
+    },
+    {
+      path: "/adminQuizzes",
+      name: "Service Costs",
+      icon: <MdQueue />,
+    },
+    {
+      path: "/adminQuizzes",
+      name: "Backup",
+      icon: <MdQueue />,
+    },
+    {
+      path: "/adminQuizzes",
+      name: "DASHBOARD",
+      icon: <MdQueue />,
+    },
   ]);
 
 
