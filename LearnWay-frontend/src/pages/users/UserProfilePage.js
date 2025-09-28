@@ -53,7 +53,7 @@ const UserProfilePage = () => {
                   <td>{`${user.firstName} ${user.lastName}`}</td>
                 </tr>
                 <tr>
-                  <td>Username</td>
+                  <td>Email</td>
                   <td>{user.username}</td>
                 </tr>
                 <tr>

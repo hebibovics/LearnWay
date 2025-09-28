@@ -38,6 +38,8 @@ import AdminLessonPage from "./pages/admin/AdminLessonPage";
 import AdminUsersPage from "./pages/admin/AdminUsersPage";
 import AdminQuizzesPage from "./pages/admin/AdminQuizzesPage";
 import AdminQuizDetailsPage from "./pages/admin/AdminQuizDetailsPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import InstructorCoursesPage from "./pages/instructor/courses/InstructorCoursesPage";
 
 const App = () => {
   return (
@@ -58,6 +60,7 @@ const App = () => {
           <Route path="/adminLesson/:id" element={<AdminLessonPage/>}/>
           <Route path="/adminQuizzes" element={<AdminQuizzesPage/>}/>
           <Route path="/adminQuiz/:id" element={<AdminQuizDetailsPage />} />
+          <Route path="/adminDashboard" element={<AdminDashboard />} />
 
           <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>
           <Route path="/instructorAddCourse" element={<InstructorAddCoursePage/>}/>
@@ -70,6 +73,7 @@ const App = () => {
           <Route path="/instructor/course/:id/quizzes" element={<InstructorViewQuizzes />} />
           <Route path="/instructor/quiz/:quizId/add-questions" element={<InstructorAddQuestion />} />
           <Route path="/instructor/quiz/:quizId/questions" element={<InstructorQuestionsPage />} />
+          <Route path="/instructorCourses" element={<InstructorCoursesPage />} />
 
 
 

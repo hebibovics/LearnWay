@@ -5,17 +5,16 @@ import swal from "sweetalert";
 import { FaBook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-
 const AdminUsersPage = () => {
     const [users, setUsers] = useState([]);
     const [expandedUserId, setExpandedUserId] = useState(null);
     const [courses, setCourses] = useState({});
     const rawToken = localStorage.getItem("jwtToken");
     const token = rawToken ? rawToken.replace(/^"|"$/g, "") : null;
-    console.log("Token:", token);
 
     const [searchTerm, setSearchTerm] = useState("");
 
+    // Dohvat svih korisnika
     const fetchUsers = async () => {
         try {
             const response = await axios.get("/api/users", {
@@ -28,19 +27,26 @@ const AdminUsersPage = () => {
         }
     };
 
-
-    const fetchInstructorCourses = async (userId) => {
+    // Dohvat kurseva za instruktore i studente
+    const fetchUserCourses = async (user) => {
         try {
-            if (courses[userId]) return;
+            if (courses[user.userId]) return; // ako je već dohvaćeno
 
-            const response = await axios.get(`/api/course/by-instructor/${userId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
+            let response;
+            if (user?.roleName === "INSTRUCTOR") {
+                response = await axios.get(`/api/course/by-instructor/${user.userId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } else if (user?.roleName === "USER") {
+                response = await axios.get(`/api/course/student/${user.userId}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            }
 
-            setCourses((prev) => ({ ...prev, [userId]: response.data }));
+            setCourses((prev) => ({ ...prev, [user.userId]: response.data }));
         } catch (error) {
             console.error("Error fetching courses:", error);
-            swal("Error", "Could not fetch instructor courses", "error");
+            swal("Error", "Could not fetch courses", "error");
         }
     };
 
@@ -48,6 +54,7 @@ const AdminUsersPage = () => {
         fetchUsers();
     }, []);
 
+    // Deaktivacija korisnika
     const handleDeactivate = async (userId) => {
         if (!token) {
             swal("Error", "You are not authenticated!", "error");
@@ -76,28 +83,31 @@ const AdminUsersPage = () => {
         });
     };
 
-
-    const toggleExpand = (userId) => {
-        if (expandedUserId === userId) {
-            setExpandedUserId(null); // da zatvori ako je već otvoren
+    // Toggle prikaza kurseva
+    const toggleExpand = (user) => {
+        if (expandedUserId === user.userId) {
+            setExpandedUserId(null);
         } else {
-            setExpandedUserId(userId);
-            fetchInstructorCourses(userId);
+            setExpandedUserId(user.userId);
+            fetchUserCourses(user);
         }
     };
 
     const whiteTextStyle = { color: "white", fontWeight: "normal" };
+
+    // Filter po pretraživanju
     const filteredUsers = users.filter((user) => {
         const firstName = user.firstName ? user.firstName.toLowerCase() : "";
         const lastName = user.lastName ? user.lastName.toLowerCase() : "";
         const username = user.username ? user.username.toLowerCase() : "";
-
+        const role = user?.roleName ? user.roleName.toLowerCase() : "";
         const term = searchTerm.toLowerCase();
 
         return (
             firstName.includes(term) ||
             lastName.includes(term) ||
-            username.includes(term)
+            username.includes(term) ||
+            role.includes(term)
         );
     });
 
@@ -124,7 +134,7 @@ const AdminUsersPage = () => {
                 <tbody>
                 {filteredUsers.length > 0 ? (
                     filteredUsers.map((user) => {
-                        const roleName = user.role?.roleName || "N/A";
+                        const roleName = user?.roleName || "N/A";
                         const displayRole = roleName === "USER" ? "STUDENT" : roleName;
 
                         return (
@@ -143,10 +153,10 @@ const AdminUsersPage = () => {
                                                 >
                                                     Deactivate
                                                 </Button>{" "}
-                                                {roleName === "INSTRUCTOR" && (
+                                                {(roleName === "INSTRUCTOR" || roleName === "USER") && (
                                                     <Button
                                                         variant="info"
-                                                        onClick={() => toggleExpand(user.userId)}
+                                                        onClick={() => toggleExpand(user)}
                                                     >
                                                         <FaBook /> Courses
                                                     </Button>
@@ -176,7 +186,6 @@ const AdminUsersPage = () => {
                                                     <li>No courses found.</li>
                                                 )}
                                             </ul>
-
                                         </td>
                                     </tr>
                                 )}

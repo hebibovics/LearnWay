@@ -24,6 +24,12 @@ const SidebarInstructor = ({ children }) => {
             icon: <FaUserAlt />,
         },
         {
+            path: "/instructorCourses",
+            name: "My courses",
+            icon: <TbLayoutGrid />,
+        },
+
+        {
             path: "/instructorAddCourse",
             name: "Add Course",
             icon: <MdQueue />,

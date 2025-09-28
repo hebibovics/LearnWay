@@ -61,7 +61,7 @@ const AdminProfilePage = () => {
                   <td>{`${user.firstName} ${user.lastName}`}</td>
                 </tr>
                 <tr>
-                  <td>Mail</td>
+                  <td>Email</td>
                   <td>{user.username}</td>
                 </tr>
                 <tr>

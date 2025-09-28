@@ -1,6 +1,8 @@
 package unsa.ba.etf.learnway.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -50,14 +52,21 @@ public class User implements UserDetails {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_name")
+    @JsonIgnoreProperties({"users"})
     private Role role;
+
 
     @ManyToMany
     @JoinTable(
             name = "user_courses",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
+    @JsonIgnoreProperties({"users"})
     private Set<Course> courses = new HashSet<>();
+    @JsonProperty("roleName")
+    public String getRoleName() {
+        return role != null ? role.getRoleName() : null;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

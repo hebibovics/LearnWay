@@ -58,7 +58,11 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(role);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        userRepository.flush();
+
+        return savedUser;
+
     }
 
     public LoginResponse loginUserService(LoginRequest loginRequest) throws Exception {
