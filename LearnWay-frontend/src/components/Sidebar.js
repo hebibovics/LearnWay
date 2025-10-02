@@ -20,7 +20,7 @@ const Sidebar = ({ children }) => {
     { path: "/adminCourses", name: "View All Courses", icon: <TbLayoutGrid /> },
     { path: "/adminUsers", name: "View All Users", icon: <FaUsers /> },
     { path: "/adminQuizzes", name: "View All Quizzes", icon: <MdQuiz /> },
-    { path: "/adminQuizzes", name: "Service Costs", icon: <FaMoneyBillWave /> },
+    { path: "/adminResources", name: "Resources", icon: <FaMoneyBillWave /> },
     { path: "#", name: "Backup", icon: <MdBackup /> },
     { path: "/adminDashboard", name: "DASHBOARD", icon: <MdDashboard /> },
   ]);

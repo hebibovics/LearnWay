@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
-import { FaBars, FaUserAlt } from "react-icons/fa";
+import { FaBars, FaUserAlt, FaTicketAlt } from "react-icons/fa";
 import {MdQueue, MdQuiz} from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +27,11 @@ const SidebarInstructor = ({ children }) => {
             path: "/instructorCourses",
             name: "My courses",
             icon: <TbLayoutGrid />,
+        },
+        {
+            path: "/userServiceDesk",
+            name: "ServiceDesk",
+            icon: <FaTicketAlt />,
         },
 
         {

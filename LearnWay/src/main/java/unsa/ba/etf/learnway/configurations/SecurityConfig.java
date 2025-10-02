@@ -100,6 +100,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/status/**").permitAll()
                 .antMatchers("/api/active/**").permitAll()
                 .antMatchers("/api/active-count/**").permitAll()
+                .antMatchers("/api/resources/**").permitAll()
 
 
 

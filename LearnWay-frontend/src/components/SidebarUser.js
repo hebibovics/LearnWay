@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
-import { FaBars, FaUserAlt } from "react-icons/fa";
+import {FaBars, FaTicketAlt, FaUserAlt} from "react-icons/fa";
 import { MdQuiz } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,11 @@ const SidebarUser = ({ children }) => {
       path: "/profile",
       name: "Profile",
       icon: <FaUserAlt />,
+    },
+    {
+      path: "/userServiceDesk",
+      name: "ServiceDesk",
+      icon: <FaTicketAlt />,
     },
     {
       path: "/quizResults",
