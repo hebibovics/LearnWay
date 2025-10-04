@@ -25,6 +25,20 @@ public class StrategyGoalServiceImpl implements StrategyGoalService {
     }
 
     @Override
+    public StrategyGoal updateGoal(Long id, StrategyGoal goal) {
+        StrategyGoal existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Goal not found with id: " + id));
+
+        existing.setTitle(goal.getTitle());
+        existing.setDescription(goal.getDescription());
+        existing.setRisk(goal.getRisk());
+        existing.setMitigation(goal.getMitigation());
+        existing.setStatus(goal.getStatus());
+
+        return repository.save(existing);
+    }
+
+    @Override
     public void deleteGoal(Long id) {
         repository.deleteById(id);
     }

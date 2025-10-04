@@ -81,6 +81,7 @@ public class LearnWayApplication {
                     Category.builder().title("Other Courses").description("Miscellaneous courses").build()
             ));
 
+
             // Fetch all categories
             Category webDevelopment = categoryRepository.findByTitle("Web Development");
             Category webDesign = categoryRepository.findByTitle("Web Design");

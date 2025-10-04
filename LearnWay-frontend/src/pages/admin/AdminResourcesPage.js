@@ -41,6 +41,20 @@ const AdminResourcesPage = () => {
         fetchResources();
     };
 
+    const checkLicenseStatus = (expiryDate) => {
+        if (!expiryDate) return null;
+
+        const today = new Date();
+        const expiry = new Date(expiryDate);
+        const diffTime = expiry - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        if (diffDays < 0) return "expired";
+        if (diffDays <= 7) return "warning";
+        return null;
+    };
+
+
     return (
         <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
             <h2 style={{ marginBottom: "20px" }}>Digital Resources</h2>
@@ -52,80 +66,133 @@ const AdminResourcesPage = () => {
                     gap: "20px",
                 }}
             >
-                {resources.map((res) => (
-                    <div
-                        key={res.id}
-                        style={{
-                            border: "1px solid #ccc",
-                            borderRadius: "10px",
-                            padding: "15px",
-                            boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                            transition: "transform 0.2s",
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
-                        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                    >
-                        {editingResource?.id === res.id ? (
-                            <>
-                                <input
-                                    placeholder="Resource Name"
-                                    value={editingResource.name}
-                                    onChange={(e) => setEditingResource({ ...editingResource, name: e.target.value })}
-                                    style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
-                                />
-                                <input
-                                    type="date"
-                                    value={editingResource.licenseExpiry}
-                                    onChange={(e) => setEditingResource({ ...editingResource, licenseExpiry: e.target.value })}
-                                    style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
-                                />
-                                <input
-                                    type="number"
-                                    placeholder="Maintenance Cost"
-                                    value={editingResource.maintenanceCost}
-                                    onChange={(e) => setEditingResource({ ...editingResource, maintenanceCost: e.target.value })}
-                                    style={{ width: "100%", marginBottom: "10px", padding: "8px" }}
-                                />
-                                <button
-                                    onClick={() => handleUpdate(res.id)}
-                                    style={{
-                                        backgroundColor: "#1b263b",
-                                        color: "white",
-                                        border: "none",
-                                        padding: "8px 12px",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Save
-                                </button>
-                            </>
-                        ) : (
-                            <>
-                                <h3 style={{ marginBottom: "10px" }}>{res.name}</h3>
-                                <p>
-                                    <strong>License Expiry:</strong> {res.licenseExpiry || "-"}
-                                </p>
-                                <p>
-                                    <strong>Maintenance (€):</strong> {res.maintenanceCost || "-"}
-                                </p>
-                                <button
-                                    onClick={() => setEditingResource(res)}
-                                    style={{
-                                        backgroundColor: "#3498db",
-                                        color: "white",
-                                        border: "none",
-                                        padding: "8px 12px",
-                                        borderRadius: "5px",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    Edit
-                                </button>
-                            </>
-                        )}
-                    </div>
-                ))}
+                {resources.map((res) => {
+                    const status = checkLicenseStatus(res.licenseExpiry);
+                    return (
+                        <div
+                            key={res.id}
+                            style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "10px",
+                                padding: "15px",
+                                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+                                transition: "transform 0.2s",
+                                position: "relative",
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.03)")}
+                            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+                        >
+                            {status === "expired" && (
+                                <div style={{
+                                    position: "absolute",
+                                    top: "10px",
+                                    right: "10px",
+                                    backgroundColor: "red",
+                                    color: "white",
+                                    padding: "5px 10px",
+                                    borderRadius: "5px",
+                                    fontWeight: "bold",
+                                }}>
+                                    Expired!
+                                </div>
+                            )}
+                            {status === "warning" && (
+                                <div style={{
+                                    position: "absolute",
+                                    top: "10px",
+                                    right: "10px",
+                                    backgroundColor: "orange",
+                                    color: "white",
+                                    padding: "5px 10px",
+                                    borderRadius: "5px",
+                                    fontWeight: "bold",
+                                }}>
+                                    Expiring Soon
+                                </div>
+                            )}
+
+                            {editingResource?.id === res.id ? (
+                                <div>
+                                    <input
+                                        type="text"
+                                        value={editingResource.name}
+                                        onChange={(e) =>
+                                            setEditingResource({ ...editingResource, name: e.target.value })
+                                        }
+                                        style={{ padding: "5px", marginBottom: "5px" }}
+                                    />
+                                    <input
+                                        type="date"
+                                        value={editingResource.licenseExpiry}
+                                        onChange={(e) =>
+                                            setEditingResource({ ...editingResource, licenseExpiry: e.target.value })
+                                        }
+                                        style={{ padding: "5px", marginBottom: "5px" }}
+                                    />
+                                    <input
+                                        type="number"
+                                        value={editingResource.maintenanceCost}
+                                        onChange={(e) =>
+                                            setEditingResource({ ...editingResource, maintenanceCost: e.target.value })
+                                        }
+                                        style={{ padding: "5px", marginBottom: "5px" }}
+                                    />
+                                    <button
+                                        onClick={() => handleUpdate(editingResource.id)}
+                                        style={{
+                                            backgroundColor: "green",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "5px 10px",
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+                                            marginRight: "5px",
+                                        }}
+                                    >
+                                        Save
+                                    </button>
+                                    <button
+                                        onClick={() => setEditingResource(null)}
+                                        style={{
+                                            backgroundColor: "gray",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "5px 10px",
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <h3 style={{ marginBottom: "10px" }}>{res.name}</h3>
+                                    <p>
+                                        <strong>License Expiry:</strong> {res.licenseExpiry || "-"}
+                                    </p>
+                                    <p>
+                                        <strong>Maintenance (€):</strong> {res.maintenanceCost || "-"}
+                                    </p>
+                                    <button
+                                        onClick={() => setEditingResource(res)}
+                                        style={{
+                                            backgroundColor: "#3498db",
+                                            color: "white",
+                                            border: "none",
+                                            padding: "8px 12px",
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        Edit
+                                    </button>
+                                </>
+                            )}
+
+                        </div>
+                    );
+                })}
             </div>
 
             <div style={{ marginTop: "30px" }}>

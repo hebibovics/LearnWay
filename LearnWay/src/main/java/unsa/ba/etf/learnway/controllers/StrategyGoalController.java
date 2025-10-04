@@ -7,6 +7,7 @@ import unsa.ba.etf.learnway.services.StrategyGoalService;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RestController
 @RequestMapping("/api/strategy-goals")
 @RequiredArgsConstructor
@@ -22,6 +23,11 @@ public class StrategyGoalController {
     @PostMapping
     public StrategyGoal add(@RequestBody StrategyGoal goal) {
         return service.addGoal(goal);
+    }
+
+    @PutMapping("/{id}")
+    public StrategyGoal update(@PathVariable Long id, @RequestBody StrategyGoal goal) {
+        return service.updateGoal(id, goal);
     }
 
     @DeleteMapping("/{id}")
