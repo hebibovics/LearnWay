@@ -5,12 +5,16 @@ import swal from "sweetalert";
 const AdminDashboard = () => {
     const [topCourses, setTopCourses] = useState([]);
     const [status, setStatus] = useState({ backend: false, database: false });
-    const [onlineCount, setOnlineCount] = useState(0);
     const [goals, setGoals] = useState([]);
     const [newGoal, setNewGoal] = useState("");
     const [newDescription, setNewDescription] = useState("");
     const [newRisk, setNewRisk] = useState("");
     const [newMitigation, setNewMitigation] = useState("");
+    const [newStartDate, setNewStartDate] = useState("");
+
+    const [newEndDate, setNewEndDate] = useState("");
+
+    const [performance, setPerformance] = useState({ activeUsers: 0, averageResponseTime: 0 });
     const [loading, setLoading] = useState(false);
 
     const token = localStorage.getItem("jwtToken")?.replace(/"/g, "");
@@ -23,7 +27,6 @@ const AdminDashboard = () => {
     const headers = { Authorization: `Bearer ${token}` };
     console.log("OVO MI JE TOKENTOKENTOKEN", token)
 
-    // 🔹 Fetch Top Courses
     useEffect(() => {
         axios.get("http://localhost:8081/api/course/", { headers })
             .then(res => {
@@ -44,24 +47,35 @@ const AdminDashboard = () => {
             .catch(() => setStatus({ backend: false, database: false }));
     }, []);
 
-    // 🔹 Track Active Users
+
     useEffect(() => {
         const interval = setInterval(() => {
-            fetch("/api/active", { method: "POST", headers: { "user-id": userId } });
+            fetch("http://localhost:8081/api/active", {
+                method: "POST",
+                headers: { "user-id": userId }
+            });
         }, 10000);
         return () => clearInterval(interval);
     }, [userId]);
 
+
+
     useEffect(() => {
-        const countInterval = setInterval(() => {
-            fetch("/api/active-count")
-                .then(res => res.json())
-                .then(count => setOnlineCount(count));
-        }, 5000);
-        return () => clearInterval(countInterval);
+        const fetchPerformance = async () => {
+            try {
+                const res = await axios.get("http://localhost:8081/api/performance", { headers });
+                setPerformance(res.data);
+            } catch (err) {
+                console.error("Error fetching performance data:", err);
+            }
+        };
+        fetchPerformance();
+
+        const interval = setInterval(fetchPerformance, 10000); // refresh svakih 10 sekundi
+        return () => clearInterval(interval);
     }, []);
 
-    // 🔹 Fetch Strategic Goals
+
     const fetchGoals = async () => {
         try {
             const token = localStorage.getItem("jwtToken")?.replace(/"/g, "");
@@ -93,13 +107,16 @@ const AdminDashboard = () => {
         setLoading(true);
         try {
             await axios.post("http://localhost:8081/api/strategy-goals", {
-                text: newGoal,
+                title: newGoal,
                 description: newDescription,
                 risk: newRisk,
-                mitigation: newMitigation
+                mitigation: newMitigation,
+                startDate: newStartDate,
+                endDate: newEndDate
             }, {
                 headers: { Authorization: `Bearer ${token}` },
-            })
+            });
+
 
             swal("Success!", "Strategic goal added successfully.", "success");
             setNewGoal("");
@@ -112,6 +129,7 @@ const AdminDashboard = () => {
         } finally {
             setLoading(false);
         }
+
     };
 
     // 🔹 Delete Goal
@@ -234,16 +252,44 @@ const AdminDashboard = () => {
             </div>
 
             <div style={{ marginTop: "40px" }}>
-                <h2>Currently Active Users:</h2>
-                <h2 style={{ color: "white" }}>{onlineCount}</h2>
+                <h2>Performance Overview</h2>
+                <div style={{
+                    display: "flex",
+                    gap: "40px",
+                    background: "#f0f8ff",
+                    padding: "20px",
+                    borderRadius: "10px",
+                    boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+                    color: "#1b263b"
+                }}>
+                    <div>
+                        <h3>👥 Active Users</h3>
+                        <p style={{ fontSize: "24px", fontWeight: "bold" }}>{performance.activeUsers}</p>
+                    </div>
+                    <div>
+                        <h3>⚡ Avg. Response Time</h3>
+                        <p style={{ fontSize: "24px", fontWeight: "bold" }}>
+                            {performance.averageResponseTime.toFixed(2)} ms
+                        </p>
+                    </div>
+                </div>
             </div>
 
+            {/* STRATEGIC GOALS SECTION */}
             <div style={{ marginTop: "40px" }}>
                 <h2>Strategic Goals</h2>
-                <p style={{ color: "#555" }}>Add, view, and archive strategic goals.</p>
+                <p style={{ color: "#555" }}>Add, view, and visualize goals on a Gantt chart.</p>
 
                 {/* Input Fields Side by Side */}
-                <div style={{ display: "flex", gap: "10px", marginBottom: "20px", flexWrap: "wrap" }}>
+                <div
+                    style={{
+                        display: "flex",
+                        gap: "10px",
+                        marginBottom: "20px",
+                        flexWrap: "wrap",
+                        alignItems: "center"
+                    }}
+                >
                     <input
                         type="text"
                         value={newGoal}
@@ -272,6 +318,18 @@ const AdminDashboard = () => {
                         placeholder="Mitigation..."
                         style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "1px solid #ccc" }}
                     />
+                    <input
+                        type="date"
+                        value={newStartDate || ""}
+                        onChange={(e) => setNewStartDate(e.target.value)}
+                        style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "1px solid #ccc" }}
+                    />
+                    <input
+                        type="date"
+                        value={newEndDate || ""}
+                        onChange={(e) => setNewEndDate(e.target.value)}
+                        style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "1px solid #ccc" }}
+                    />
                     <button
                         onClick={handleAddGoal}
                         disabled={loading}
@@ -290,6 +348,7 @@ const AdminDashboard = () => {
 
                 {/* Display Goals */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+
                     {goals.length === 0 ? (
                         <p style={{ color: "#777" }}>No strategic goals found.</p>
                     ) : (
@@ -305,10 +364,14 @@ const AdminDashboard = () => {
                                 gap: "3px",
                                 fontSize: "14px"
                             }}>
-                                <strong>{goal.text}</strong>
+                                <strong>{goal.title}</strong>
                                 <span>{goal.description}</span>
                                 <span><strong>Risk:</strong> {goal.risk}</span>
                                 <span><strong>Mitigation:</strong> {goal.mitigation}</span>
+                                <span>
+                        <strong>📅 Duration:</strong>{" "}
+                                    {goal.startDate ? `${goal.startDate} → ${goal.endDate}` : "N/A"}
+                    </span>
                                 <button
                                     onClick={() => handleDeleteGoal(goal.id)}
                                     style={{
@@ -328,6 +391,69 @@ const AdminDashboard = () => {
                         ))
                     )}
                 </div>
+
+                {/* Gantt Chart */}
+                {goals.length > 0 && (
+                    <div style={{ marginTop: "40px" }}>
+                        <h3>📊 Gantt Overview</h3>
+                        <div
+                            style={{
+                                width: "100%",
+                                minWidth: "600px",
+                                overflowX: "auto",
+                                padding: "20px",
+                                background: "#fafafa",
+                                borderRadius: "10px",
+                                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                            }}
+                        >
+                            <svg width="100%" height={Math.max(100, goals.length * 40)}>
+                            {goals.map((goal, index) => {
+                                console.log("Raw dates:", goal.title, goal.startDate, goal.endDate);
+                                    const barHeight = 20;
+
+                                    const start = goal.startDate ? new Date(goal.startDate + "T00:00:00") : null;
+                                    const end = goal.endDate ? new Date(goal.endDate + "T00:00:00") : null;
+                                    if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) return null;
+
+
+                                    if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
+
+                                    const totalDays = (end - start) / (1000 * 60 * 60 * 24);
+                                    const scale = 8; // 1 dan = 8px
+                                    const y = index * 40;
+                                console.log(goal.title, totalDays);
+                                console.log("OVO OVO ZA GOAlS", goal.title, totalDays);
+
+                                return (
+                                        <g key={goal.id} transform={`translate(150, ${y})`}>
+                                            <text x="-140" y={barHeight} fontSize="12" fill="#1b263b">
+                                                {goal.title}
+                                            </text>
+                                            <rect
+                                                x={0}
+                                                y={0}
+                                                width={totalDays * scale}
+                                                height={barHeight}
+                                                fill="#1b263b"
+                                                rx="5"
+                                            />
+                                            <text
+                                                x={totalDays * scale + 5}
+                                                y={barHeight - 5}
+                                                fontSize="11"
+                                                fill="#555"
+                                            >
+                                                {goal.endDate}
+                                            </text>
+                                        </g>
+                                    );
+                                })}
+
+                            </svg>
+                        </div>
+                    </div>
+                )}
             </div>
 
 

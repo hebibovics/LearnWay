@@ -37,4 +37,10 @@ public class TicketController {
     public Ticket updateTicketStatus(@PathVariable Long id, @RequestParam String status) {
         return ticketService.updateTicketStatus(id, status);
     }
+
+    @GetMapping("/user/{userId}")
+    public List<Ticket> getTicketsByUser(@PathVariable Long userId) {
+        return ticketService.getTicketsByUserId(userId);
+    }
+
 }

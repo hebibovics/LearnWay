@@ -3,6 +3,7 @@ package unsa.ba.etf.learnway.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.web.bind.annotation.*;
+import unsa.ba.etf.learnway.configurations.RequestTimingFilter;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -17,6 +18,8 @@ public class StatusController {
 
     @Autowired
     private DataSource dataSource;
+    @Autowired
+    private RequestTimingFilter requestTimingFilter;
     private final Map<String, Long> activeUsers = new ConcurrentHashMap<>();
 
     @GetMapping("/status")
@@ -38,11 +41,18 @@ public class StatusController {
         activeUsers.put(userId, System.currentTimeMillis());
     }
 
-    @GetMapping("/active-count")
-    public int getActiveCount() {
+    @GetMapping("/performance")
+    public Map<String, Object> getPerformanceMetrics() {
         long now = System.currentTimeMillis();
+
+        // izbaci one koji nisu "aktivni" duže od 30 sekundi
         activeUsers.entrySet().removeIf(entry -> now - entry.getValue() > 30_000);
-        return activeUsers.size();
+
+        Map<String, Object> performance = new HashMap<>();
+        performance.put("activeUsers", activeUsers.size());
+        performance.put("averageResponseTime", requestTimingFilter.getAverageResponseTime());
+
+        return performance;
     }
 
 

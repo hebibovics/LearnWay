@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Sidebar.css";
-import { FaBars, FaUserAlt, FaUsers, FaMoneyBillWave } from "react-icons/fa";
+import { FaBars, FaUserAlt, FaUsers, FaMoneyBillWave, FaTicketAlt } from "react-icons/fa";
 import { MdQueue, MdQuiz, MdBackup, MdDashboard } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +23,7 @@ const Sidebar = ({ children }) => {
     { path: "/adminResources", name: "Resources", icon: <FaMoneyBillWave /> },
     { path: "#", name: "Backup", icon: <MdBackup /> },
     { path: "/adminDashboard", name: "DASHBOARD", icon: <MdDashboard /> },
+    { path: "/adminServiceDesk", name: "Service desk", icon: <FaTicketAlt /> },
   ]);
 
   const [isBackingUp, setIsBackingUp] = useState(false);

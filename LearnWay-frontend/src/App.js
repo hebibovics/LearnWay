@@ -42,6 +42,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import InstructorCoursesPage from "./pages/instructor/courses/InstructorCoursesPage";
 import AdminResourcesPage from "./pages/admin/AdminResourcesPage";
 import ServiceDeskPage from "./pages/ServiceDeskPage";
+import AdminServiceDesk from "./pages/admin/AdminServiceDesk";
 
 const App = () => {
   return (
@@ -64,6 +65,7 @@ const App = () => {
           <Route path="/adminQuiz/:id" element={<AdminQuizDetailsPage />} />
           <Route path="/adminDashboard" element={<AdminDashboard />} />
           <Route path="/adminResources" element={<AdminResourcesPage />} />
+          <Route path="/adminServiceDesk" element={<AdminServiceDesk />} />
 
           <Route path="/instructorProfile" element={<InstructorProfilePage/>}/>
           <Route path="/instructorAddCourse" element={<InstructorAddCoursePage/>}/>

@@ -45,4 +45,10 @@ public class TicketServiceImpl implements TicketService {
         ticket.setStatus(status.toUpperCase());
         return ticketRepository.save(ticket);
     }
+
+    @Override
+    public List<Ticket> getTicketsByUserId(Long userId) {
+        return ticketRepository.findBySubmittedBy_UserId(userId);
+    }
+
 }

@@ -1,128 +1,148 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Card, Button, Form, Row, Col, Alert } from "react-bootstrap";
 import swal from "sweetalert";
 
 const ServiceDeskPage = () => {
+    const [tickets, setTickets] = useState([]);
     const [title, setTitle] = useState("");
-    const [category, setCategory] = useState("");
-    const [subCategory, setSubCategory] = useState("");
     const [description, setDescription] = useState("");
-    const [userId, setUserId] = useState(null);
+    const [category, setCategory] = useState("Problem");
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("user"));
-        if (user) setUserId(user.userId);
-    }, []);
+    // Dohvati userId iz localStorage
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userId = user?.userId; // ovo je tvoj userId
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!userId) {
-            swal("⚠️ Greška!", "Korisnik nije prijavljen.", "error");
-            return;
-        }
 
-        const ticketData = {
-            title,
-            category: subCategory ? `${category} - ${subCategory}` : category,
-            description,
-        };
-
+    // Dohvati sve ticket-e
+    const fetchTickets = async () => {
         try {
-            await axios.post(`http://localhost:8080/api/tickets/${userId}`, ticketData);
-            swal("✅ Uspjeh!", "Ticket je poslan.", "success");
-            setTitle(""); setCategory(""); setSubCategory(""); setDescription("");
+            const res = await axios.get(
+                `http://localhost:8081/api/tickets/user/${userId}`
+            );
+            setTickets(res.data); // Postavi state sa dohvacenim ticketima
         } catch (err) {
-            swal("❌ Greška!", "Došlo je do greške.", "error");
+            console.error(err);
+            swal("Error", "Failed to load tickets", "error");
         }
     };
 
-    const subCategories = {
-        Greška: ["Problem sa kvizom", "Problem sa lekcijom", "Problem sa loginom", "Drugo"],
+    useEffect(() => {
+        fetchTickets();
+    }, []);
+
+    // Kreiranje novog ticket-a
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!title || !description) {
+            swal("Warning", "Please fill in all fields", "warning");
+            return;
+        }
+        if (!userId) {
+            swal("Error", "User not logged in", "error");
+            return;
+        }
+        setLoading(true);
+        try {
+            const res = await axios.post(
+                `http://localhost:8081/api/tickets/${userId}`,
+                { title, description, category }
+            );
+            setTickets([res.data, ...tickets]);
+            setTitle("");
+            setDescription("");
+            setCategory("Problem");
+            swal("Success", "Ticket submitted successfully", "success");
+        } catch (err) {
+            console.error(err);
+            swal("Error", "Failed to submit ticket", "error");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100 p-6">
-            <div className="w-full max-w-2xl bg-white rounded-2xl shadow-xl p-8">
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <h2 className="text-3xl font-bold text-gray-800">🎫 Service Desk</h2>
-                    <p className="text-gray-500 mt-2">Pošaljite svoj zahtjev ili prijavite problem</p>
-                </div>
+        <div className="container mt-4">
+            <h2 className="mb-4">Service Desk</h2>
 
-                {/* Forma */}
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    {/* Naslov */}
-                    <div className="flex flex-col">
-                        <label className="text-gray-700 font-medium mb-1">Naslov ticketa</label>
-                        <input
-                            type="text"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            placeholder="Kratak opis problema"
-                            className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition"
-                            required
-                        />
-                    </div>
+            {!userId && <Alert variant="warning">You must be logged in to submit tickets.</Alert>}
 
-                    {/* Kategorija + Podkategorija */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div className="flex flex-col">
-                            <label className="text-gray-700 font-medium mb-1">Kategorija</label>
-                            <select
-                                value={category}
-                                onChange={(e) => { setCategory(e.target.value); setSubCategory(""); }}
-                                className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-400 transition"
-                                required
-                            >
-                                <option value="">-- Odaberi kategoriju --</option>
-                                <option value="Prijedlog za poboljšanje">Prijedlog za poboljšanje</option>
-                                <option value="Prijedlog nove kategorije">Prijedlog nove kategorije</option>
-                                <option value="Greška">Greška</option>
-                            </select>
-                        </div>
+            {/* Form for new ticket */}
 
-                        {category === "Greška" && (
-                            <div className="flex flex-col">
-                                <label className="text-gray-700 font-medium mb-1">Podkategorija</label>
-                                <select
-                                    value={subCategory}
-                                    onChange={(e) => setSubCategory(e.target.value)}
-                                    className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 transition"
-                                    required
-                                >
-                                    <option value="">-- Odaberi podkategoriju --</option>
-                                    {subCategories["Greška"].map((sub, i) => (
-                                        <option key={i} value={sub}>{sub}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        )}
-                    </div>
 
-                    {/* Opis */}
-                    <div className="flex flex-col">
-                        <label className="text-gray-700 font-medium mb-1">Opis</label>
-                        <textarea
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            rows="4"
-                            placeholder="Detaljno opišite problem ili prijedlog"
-                            className="rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition"
-                            required
-                        />
-                    </div>
+            {/* Form Card */}
+            <Card className="mb-4 shadow-sm" style={{ color: "black" }}>
+                <Card.Body>
+                    <Form onSubmit={handleSubmit}>
+                        <Row className="mb-3">
+                            <Col md={6}>
+                                <Form.Group controlId="ticketTitle">
+                                    <Form.Label style={{ color: "black" }}>Title</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        placeholder="Enter title"
+                                        value={title}
+                                        onChange={(e) => setTitle(e.target.value)}
+                                        disabled={!userId}
+                                        style={{ color: "white" }} // samo tekst bijeli
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group controlId="ticketCategory">
+                                    <Form.Label style={{ color: "black" }}>Category</Form.Label>
+                                    <Form.Select
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                        disabled={!userId}
+                                        style={{ color: "black" }}
+                                    >
+                                        <option value="Problem">Problem</option>
+                                        <option value="Suggestion">Suggestion</option>
+                                        <option value="Question">Question</option>
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
-                    {/* Dugme */}
-                    <div className="flex justify-center">
-                        <button
-                            type="submit"
-                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-semibold px-10 py-3 rounded-lg shadow-md transform hover:scale-105 transition"
-                        >
-                            🚀 Pošalji Ticket
-                        </button>
-                    </div>
-                </form>
-            </div>
+                        <Form.Group controlId="ticketDescription" className="mb-3">
+                            <Form.Label style={{ color: "black" }}>Description</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                placeholder="Describe your issue or suggestion"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                disabled={!userId}
+                                style={{ color: "white" }} // samo tekst bijeli
+                            />
+                        </Form.Group>
+
+                        <Button variant="primary" type="submit" disabled={loading || !userId}>
+                            {loading ? "Submitting..." : "Submit Ticket"}
+                        </Button>
+                    </Form>
+                </Card.Body>
+            </Card>
+
+            {/* Tickets */}
+            <Row>
+                {tickets.map((ticket) => (
+                    <Col md={4} key={ticket.id} className="mb-3">
+                        <Card className="h-100 shadow-sm" style={{ color: "black" }}>
+                            <Card.Body>
+                                <Card.Title style={{ color: "black" }}>{ticket.title}</Card.Title>
+                                <Card.Subtitle style={{ color: "black" }} className="mb-2">
+                                    {ticket.category} - {ticket.status}
+                                </Card.Subtitle>
+                                <Card.Text style={{ color: "black" }}>{ticket.description}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+
         </div>
     );
 };

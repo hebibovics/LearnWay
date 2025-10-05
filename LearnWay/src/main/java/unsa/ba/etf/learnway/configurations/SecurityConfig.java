@@ -98,10 +98,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/api/review/**").permitAll()
                 .antMatchers("/api/status/**").permitAll()
+
                 .antMatchers("/api/active/**").permitAll()
-                .antMatchers("/api/active-count/**").permitAll()
-                .antMatchers("/api/resources/**").permitAll()
+                .antMatchers("/api/resources/**").hasAuthority("ADMIN")
                 .antMatchers("/api/strategy-goals/**").hasAuthority("ADMIN")
+                .antMatchers("/api/performance").hasAuthority("ADMIN")
+                .antMatchers("/api/tickets/**").permitAll()
 
 
 
