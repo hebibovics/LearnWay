@@ -11,19 +11,21 @@ public class Ticket {
     private Long id;
 
     private String title;
-
-    private String category; // Problem, Prijedlog, Pitanje
-
+    private String category; // Problem, Prijedlog, Pitanje, Feedback
     @Column(length = 2000)
     private String description;
-
-    private String status = "OPEN"; // OPEN, IN_PROGRESS, RESOLVED
-
+    private String status = "OPEN";
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    private String direction = "TO_ADMIN"; // TO_ADMIN ili TO_INSTRUCTOR
 
     @ManyToOne
     @JoinColumn(name = "submitted_by_id")
     private User submittedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
 
     // --- Getteri i Setteri ---
     public Long getId() { return id; }
@@ -44,6 +46,12 @@ public class Ticket {
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
+    public String getDirection() { return direction; }
+    public void setDirection(String direction) { this.direction = direction; }
+
     public User getSubmittedBy() { return submittedBy; }
     public void setSubmittedBy(User submittedBy) { this.submittedBy = submittedBy; }
+
+    public User getReceiver() { return receiver; }
+    public void setReceiver(User receiver) { this.receiver = receiver; }
 }

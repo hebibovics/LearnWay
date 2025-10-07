@@ -43,6 +43,7 @@ import InstructorCoursesPage from "./pages/instructor/courses/InstructorCoursesP
 import AdminResourcesPage from "./pages/admin/AdminResourcesPage";
 import ServiceDeskPage from "./pages/ServiceDeskPage";
 import AdminServiceDesk from "./pages/admin/AdminServiceDesk";
+import InstructorMessagesPage from "./pages/instructor/InstructorMessagesPage";
 
 const App = () => {
   return (
@@ -79,6 +80,7 @@ const App = () => {
           <Route path="/instructor/quiz/:quizId/add-questions" element={<InstructorAddQuestion />} />
           <Route path="/instructor/quiz/:quizId/questions" element={<InstructorQuestionsPage />} />
           <Route path="/instructorCourses" element={<InstructorCoursesPage />} />
+          <Route path="/instructorMessages" element={<InstructorMessagesPage />} />
 
 
           <Route path="/userServiceDesk" element={<ServiceDeskPage />} />

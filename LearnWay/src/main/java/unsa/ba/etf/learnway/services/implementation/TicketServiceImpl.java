@@ -51,4 +51,23 @@ public class TicketServiceImpl implements TicketService {
         return ticketRepository.findBySubmittedBy_UserId(userId);
     }
 
+    @Override
+    public Ticket createTicketToInstructor(Ticket ticket, Long adminId, Long instructorId) {
+        User admin = userRepository.findById(adminId)
+                .orElseThrow(() -> new RuntimeException("Admin not found"));
+        User instructor = userRepository.findById(instructorId)
+                .orElseThrow(() -> new RuntimeException("Instructor not found"));
+
+        ticket.setSubmittedBy(admin);
+        ticket.setReceiver(instructor);
+        ticket.setDirection("TO_INSTRUCTOR");
+        return ticketRepository.save(ticket);
+    }
+
+    @Override
+    public List<Ticket> getTicketsForInstructor(Long instructorId) {
+        return ticketRepository.findByReceiver_UserId(instructorId);
+    }
+
+
 }

@@ -43,4 +43,20 @@ public class TicketController {
         return ticketService.getTicketsByUserId(userId);
     }
 
+    //  Admin šalje ticket instruktoru
+    @PostMapping("/admin/{adminId}/to-instructor/{instructorId}")
+    public Ticket createTicketToInstructor(@PathVariable Long adminId,
+                                           @PathVariable Long instructorId,
+                                           @RequestBody Ticket ticket) {
+        return ticketService.createTicketToInstructor(ticket, adminId, instructorId);
+    }
+
+    // Instruktor vidi tickete koje je primio od admina
+    @GetMapping("/instructor/{instructorId}/received")
+    public List<Ticket> getTicketsForInstructor(@PathVariable Long instructorId) {
+        return ticketService.getTicketsForInstructor(instructorId);
+    }
+
+
+
 }

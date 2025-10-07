@@ -10,5 +10,8 @@ public interface TicketService {
     Ticket getTicketById(Long id);
     Ticket updateTicketStatus(Long id, String status);
     List<Ticket> getTicketsByUserId(Long userId);
+    Ticket createTicketToInstructor(Ticket ticket, Long adminId, Long instructorId);
+    List<Ticket> getTicketsForInstructor(Long instructorId);
+
 
 }
