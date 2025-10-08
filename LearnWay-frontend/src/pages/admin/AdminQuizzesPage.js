@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Card, Row, Col, ProgressBar } from "react-bootstrap";
+import { Container, Card, Row, Col } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 
 const AdminQuizzesPage = () => {
     const [quizzes, setQuizzes] = useState([]);
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchQuizzes = async () => {
@@ -13,7 +15,7 @@ const AdminQuizzesPage = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
-                // Grupiramo po kvizu
+                // Grupisanje po kvizu
                 const quizMap = {};
                 response.data.forEach(r => {
                     const qId = r.quiz.quizId;
@@ -33,7 +35,6 @@ const AdminQuizzesPage = () => {
                     if (Math.round(r.totalObtainedMarks * 100) / 100 === perfectScore) {
                         quizMap[qId].perfectAttempts += 1;
                     }
-
                 });
 
                 setQuizzes(Object.values(quizMap));
@@ -47,19 +48,37 @@ const AdminQuizzesPage = () => {
 
     return (
         <Container className="mt-4">
-            <h2 className="text-center mb-4" style={{ color: "white" }}>Admin Quiz Overview</h2>
+            <h2 className="text-center mb-4" style={{ color: "white" }}>Admin Quizzes Overview</h2>
             <Row xs={1} md={2} lg={3} className="g-4">
                 {quizzes.map(({ quiz, totalAttempts, perfectAttempts }) => {
                     const perfectPercent = totalAttempts > 0 ? (perfectAttempts / totalAttempts) * 100 : 0;
+
                     return (
                         <Col key={quiz.quizId}>
-                            <Card bg="white" text="dark">
+                            <Card
+                                bg="white"
+                                text="dark"
+                                onClick={() => navigate(`/adminQuiz/${quiz.quizId}`)}
+                                style={{
+                                    cursor: "pointer",
+                                    transition: "transform 0.2s ease, box-shadow 0.2s ease"
+                                }}
+                                onMouseEnter={e => {
+                                    e.currentTarget.style.transform = "scale(1.03)";
+                                    e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.3)";
+                                }}
+                                onMouseLeave={e => {
+                                    e.currentTarget.style.transform = "scale(1)";
+                                    e.currentTarget.style.boxShadow = "none";
+                                }}
+                            >
                                 <Card.Body>
                                     <Card.Title>{quiz.title}</Card.Title>
                                     <Card.Text>
-                                        Total Attempts: {totalAttempts} <br/>
+                                        Total Attempts: {totalAttempts} <br />
                                         Perfect Scores: {perfectAttempts}
                                     </Card.Text>
+
                                     <div style={{
                                         height: '25px',
                                         width: '100%',
@@ -80,7 +99,6 @@ const AdminQuizzesPage = () => {
                                             {Math.round(perfectPercent)}%
                                         </div>
                                     </div>
-
                                 </Card.Body>
                             </Card>
                         </Col>

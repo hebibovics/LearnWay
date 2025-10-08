@@ -184,8 +184,8 @@ const AdminDashboard = () => {
                 const quizzes = quizzesRes.data;
                 const licenses = licensesRes.data;
 
-                const students = users.filter(u => u.role === "STUDENT").length;
-                const instructors = users.filter(u => u.role === "INSTRUCTOR").length;
+                const students = users.filter(u => u.roleName === "USER").length;
+                const instructors = users.filter(u => u.roleName === "INSTRUCTOR").length;
                 const today = new Date();
                 const expiredLicenses = licenses.filter(l => {
                     const expiryDate = new Date(l.licenseExpiry);
@@ -280,7 +280,6 @@ const AdminDashboard = () => {
                 <h2>Strategic Goals</h2>
                 <p style={{ color: "#555" }}>Add, view, and visualize goals on a Gantt chart.</p>
 
-                {/* Input Fields Side by Side */}
                 <div
                     style={{
                         display: "flex",

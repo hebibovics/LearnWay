@@ -82,8 +82,15 @@ const InstructorViewQuizzes = () => {
                     {quizzes.map((quiz) => {
                         const results = quizResults[quiz.quizId] || [];
                         const totalAttempts = results.length;
-                        const totalCompleted = results.filter(r => r.totalObtainedMarks > 0).length;
-                        const completionRate = totalAttempts > 0 ? (totalCompleted / totalAttempts) * 100 : 0;
+
+                        // isti princip kao kod admina
+                        const totalQuestions = quiz.questions ? quiz.questions.length : quiz.numOfQuestions || 0;
+                        const perfectScore = totalQuestions * 5; // 5 po pitanju
+                        const perfectAttempts = results.filter(r =>
+                            Math.round(r.totalObtainedMarks * 100) / 100 === perfectScore
+                        ).length;
+
+                        const perfectPercent = totalAttempts > 0 ? (perfectAttempts / totalAttempts) * 100 : 0;
 
                         return (
                             <div className="col-md-4 mb-3" key={quiz.quizId}>
@@ -92,7 +99,7 @@ const InstructorViewQuizzes = () => {
                                         <h5 className="card-title">{quiz.title}</h5>
                                         <p className="card-text">{quiz.description}</p>
                                         <p className="card-text">
-                                            Number of questions: {quiz.numOfQuestions}
+                                            Number of questions: {totalQuestions}
                                         </p>
 
                                         <button
@@ -116,10 +123,10 @@ const InstructorViewQuizzes = () => {
                                             Delete
                                         </button>
 
-                                        {/* Custom Progress Bar */}
+                                        {/* Progress bar kao kod admina */}
                                         <div className="mt-3">
                                             <p>Total Attempts: {totalAttempts}</p>
-                                            <p>Total Completed: {totalCompleted}</p>
+                                            <p>Perfect Scores: {perfectAttempts}</p>
                                             <div style={{
                                                 height: '25px',
                                                 width: '100%',
@@ -130,14 +137,14 @@ const InstructorViewQuizzes = () => {
                                             }}>
                                                 <div style={{
                                                     height: '100%',
-                                                    width: `${completionRate}%`,
+                                                    width: `${perfectPercent}%`,
                                                     backgroundColor: '#1b263b',
                                                     textAlign: 'center',
                                                     color: 'white',
                                                     lineHeight: '25px',
                                                     fontSize: '1rem'
                                                 }}>
-                                                    {Math.round(completionRate)}%
+                                                    {Math.round(perfectPercent)}%
                                                 </div>
                                             </div>
                                         </div>
@@ -147,6 +154,7 @@ const InstructorViewQuizzes = () => {
                             </div>
                         );
                     })}
+
                 </div>
             )}
         </div>

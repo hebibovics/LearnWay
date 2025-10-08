@@ -13,33 +13,50 @@ const AdminResourcesPage = () => {
     const [newResource, setNewResource] = useState({ name: "", licenseExpiry: "", maintenanceCost: "" });
     const [editingResource, setEditingResource] = useState(null);
 
+    const token = JSON.parse(localStorage.getItem("jwtToken"));
+
     useEffect(() => {
         fetchResources();
     }, []);
 
     const fetchResources = async () => {
-        const res = await axios.get("http://localhost:8081/api/resources");
+        const res = await axios.get("http://localhost:8081/api/resources", {
+            headers: { Authorization: `Bearer ${token}` },
+        });
         setResources(res.data);
     };
 
+
     const handleAdd = async () => {
         if (!newResource.name) return;
-        await axios.post("http://localhost:8081/api/resources", {
-            ...newResource,
-            maintenanceCost: parseFloat(newResource.maintenanceCost) || 0,
-        });
+        await axios.post(
+            "http://localhost:8081/api/resources",
+            {
+                ...newResource,
+                maintenanceCost: parseFloat(newResource.maintenanceCost) || 0,
+            },
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
         setNewResource({ name: "", licenseExpiry: "", maintenanceCost: "" });
         fetchResources();
     };
-
     const handleUpdate = async (id) => {
-        await axios.put(`http://localhost:8081/api/resources/${id}`, {
-            ...editingResource,
-            maintenanceCost: parseFloat(editingResource.maintenanceCost) || 0,
-        });
+        await axios.put(
+            `http://localhost:8081/api/resources/${id}`,
+            {
+                ...editingResource,
+                maintenanceCost: parseFloat(editingResource.maintenanceCost) || 0,
+            },
+            {
+                headers: { Authorization: `Bearer ${token}` },
+            }
+        );
         setEditingResource(null);
         fetchResources();
     };
+
 
     const checkLicenseStatus = (expiryDate) => {
         if (!expiryDate) return null;

@@ -27,7 +27,6 @@ public class Ticket {
     @JoinColumn(name = "receiver_id")
     private User receiver;
 
-    // --- Getteri i Setteri ---
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 

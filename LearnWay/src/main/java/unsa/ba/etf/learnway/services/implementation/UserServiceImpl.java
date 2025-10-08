@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         }
         user.getCourses().clear();
 
-        // ako je instruktor, prvo mu makni kurseve
+        // ako je instruktor, prvo mu delete kurseve
         if ("INSTRUCTOR".equalsIgnoreCase(user.getRole().getRoleName())) {
             List<Course> instructorCourses = courseRepository.findByInstructorId(userId);
             for (Course course : instructorCourses) {

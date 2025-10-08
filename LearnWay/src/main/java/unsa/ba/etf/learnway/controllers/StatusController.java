@@ -45,7 +45,7 @@ public class StatusController {
     public Map<String, Object> getPerformanceMetrics() {
         long now = System.currentTimeMillis();
 
-        // izbaci one koji nisu "aktivni" duže od 30 sekundi
+        // ovde izbacam one koji nisu aktivni duze od 30 sekundi
         activeUsers.entrySet().removeIf(entry -> now - entry.getValue() > 30_000);
 
         Map<String, Object> performance = new HashMap<>();

@@ -93,7 +93,6 @@ public class LessonController {
         return ResponseEntity.ok(videoUrl);
     }
 
-    // UPDATE or ADD video URL
     @PutMapping("/{lessonId}/video")
     public ResponseEntity<String> updateVideoUrl(@PathVariable Long lessonId,
                                                  @RequestBody String videoUrl) {

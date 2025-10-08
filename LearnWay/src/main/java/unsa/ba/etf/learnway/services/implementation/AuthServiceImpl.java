@@ -47,7 +47,7 @@ public class AuthServiceImpl implements AuthService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User Already Exists");
         }
 
-        // Ako korisnik pošalje rolu -> koristi tu, inače default INSTRUCTOR
+        // Ako korisnik posalje rolu koristi tu, inace default
         String roleName = (user.getRole() != null)
                 ? user.getRole().getRoleName()
                 : "INSTRUCTOR";

@@ -43,7 +43,7 @@ public class TicketController {
         return ticketService.getTicketsByUserId(userId);
     }
 
-    //  Admin šalje ticket instruktoru
+    //  Admin salje ticket instruktoru
     @PostMapping("/admin/{adminId}/to-instructor/{instructorId}")
     public Ticket createTicketToInstructor(@PathVariable Long adminId,
                                            @PathVariable Long instructorId,
