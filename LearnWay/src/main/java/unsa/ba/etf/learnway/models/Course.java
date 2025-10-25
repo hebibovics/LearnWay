@@ -33,6 +33,7 @@ public class Course {
     private String description;
 
     @ManyToMany(mappedBy = "courses", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"courses"})
     private Set<User> users = new HashSet<>();
 
 
@@ -50,8 +51,10 @@ public class Course {
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Quiz> quizzes;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "instructor_id")
+    @JsonIgnoreProperties({"courses"})
     private User instructor;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)

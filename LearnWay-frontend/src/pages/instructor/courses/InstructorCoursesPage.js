@@ -5,15 +5,16 @@ import axios from "axios";
 const InstructorCoursesPage = () => {
     const [courses, setCourses] = useState([]);
     const [expandedCourse, setExpandedCourse] = useState(null);
-    const [students, setStudents] = useState({}); // key: courseId, value: studenti
-    const [quizzes, setQuizzes] = useState({}); // key: courseId, value: quizzes
+    const [students, setStudents] = useState({});
+    const [quizzes, setQuizzes] = useState({});
+    const [averageRatings, setAverageRatings] = useState({});
     const [loading, setLoading] = useState(false);
 
     const token = JSON.parse(localStorage.getItem("jwtToken"));
-
     const user = JSON.parse(localStorage.getItem("user"));
     const instructorId = user?.userId;
 
+    // Fetch all instructor courses
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -30,6 +31,38 @@ const InstructorCoursesPage = () => {
         };
         fetchCourses();
     }, [instructorId, token]);
+
+    // Fetch average ratings for all courses
+    useEffect(() => {
+        const fetchAverageRatings = async () => {
+            try {
+                const ratingsData = {};
+
+                for (const course of courses) {
+                    const response = await axios.get(`/api/review/course/${course.courseId}`, {
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    const reviews = response.data;
+                    if (reviews.length > 0) {
+                        const sum = reviews.reduce((acc, review) => acc + review.rate, 0);
+                        const avg = (sum / reviews.length).toFixed(2);
+                        ratingsData[course.courseId] = avg;
+                    } else {
+                        ratingsData[course.courseId] = "No ratings yet";
+                    }
+                }
+
+                setAverageRatings(ratingsData);
+            } catch (error) {
+                console.error("Error fetching average ratings:", error);
+            }
+        };
+
+        if (courses.length > 0) {
+            fetchAverageRatings();
+        }
+    }, [courses, token]);
 
     const toggleStudents = async (courseId) => {
         if (expandedCourse === courseId) {
@@ -52,7 +85,7 @@ const InstructorCoursesPage = () => {
 
     const fetchQuizzes = async (courseId) => {
         try {
-            const res = await axios.get(`/api/courses/${courseId}/quizzes`, {
+            const res = await axios.get(`/api/quiz/course/${courseId}/quizzes`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setQuizzes((prev) => ({ ...prev, [courseId]: res.data }));
@@ -73,8 +106,10 @@ const InstructorCoursesPage = () => {
                                 <Card.Title style={{ fontSize: "1.5rem", color: "black" }}>
                                     {course.title}
                                 </Card.Title>
+
                                 <Card.Text style={{ color: "black" }}>
-                                    <strong>Rate:</strong> {course.rate ?? "N/A"}
+                                    <strong>Rate:</strong>{" "}
+                                    {averageRatings[course.courseId] ?? "Loading..."}
                                 </Card.Text>
 
                                 <Button

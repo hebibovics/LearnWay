@@ -52,7 +52,6 @@ public class User implements UserDetails {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_name")
-    @JsonIgnoreProperties({"users"})
     private Role role;
 
 
@@ -61,8 +60,8 @@ public class User implements UserDetails {
             name = "user_courses",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "course_id"))
-    @JsonIgnoreProperties({"users"})
     private Set<Course> courses = new HashSet<>();
+
     @JsonProperty("roleName")
     public String getRoleName() {
         return role != null ? role.getRoleName() : null;

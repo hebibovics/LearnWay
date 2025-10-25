@@ -49,13 +49,15 @@ const InstructorMessagesPage = () => {
     });
 
     const extractYouTubeEmbed = (text) => {
-        const regex = /https?:\/\/(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/;
+        // regex za standardni i embed link
+        const regex = /https?:\/\/(www\.)?(youtube\.com\/(watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/;
         const match = text.match(regex);
         if (match) {
-            return `https://www.youtube.com/embed/${match[3]}`;
+            return `https://www.youtube.com/embed/${match[4]}`;
         }
         return null;
     };
+
 
     return (
         <Container className="mt-4">

@@ -155,7 +155,7 @@ const AdminDashboard = () => {
 
     const releaseNotes = [
         { version: "v1.0", description: "Added certificates feature" },
-        { version: "v1.3", description: "Added quiz results overview" },
+        { version: "v1.1", description: "Added quiz results overview" },
     ];
     const [ciData, setCiData] = useState([]);
     useEffect(() => {
@@ -230,7 +230,7 @@ const AdminDashboard = () => {
                     }}>
                         <div>
                             <h3 style={{ margin: "0 0 5px 0" }}>
-                                {index + 1}. {course.title} <span style={{ color: "#f1c40f", marginLeft: "5px" }}>⭐</span>
+                                {index + 1}. {course.title}
                             </h3>
                             <p style={{ margin: "2px 0", fontSize: "14px", color: "#555" }}>
                                 Category: {course.category?.title || "N/A"} | Instructor: {course.instructor ? `${course.instructor.firstName} ${course.instructor.lastName}` : "N/A"}
@@ -407,30 +407,37 @@ const AdminDashboard = () => {
                             }}
                         >
                             <svg width="100%" height={Math.max(100, goals.length * 40)}>
-                            {goals.map((goal, index) => {
-                                console.log("Raw dates:", goal.title, goal.startDate, goal.endDate);
+                                {goals.map((goal, index) => {
                                     const barHeight = 20;
-
                                     const start = goal.startDate ? new Date(goal.startDate + "T00:00:00") : null;
                                     const end = goal.endDate ? new Date(goal.endDate + "T00:00:00") : null;
                                     if (!start || !end || isNaN(start.getTime()) || isNaN(end.getTime())) return null;
 
-
-                                    if (isNaN(start.getTime()) || isNaN(end.getTime())) return null;
-
                                     const totalDays = (end - start) / (1000 * 60 * 60 * 24);
                                     const scale = 8; // 1 dan = 8px
                                     const y = index * 40;
-                                console.log(goal.title, totalDays);
-                                console.log("OVO OVO ZA GOAlS", goal.title, totalDays);
 
-                                return (
+                                    const textX = -140; // offset za naziv cilja
+                                    const barX = 0;     // start pozicija trake
+                                    const maxTextLength = 20; // max karaktera prikazano
+                                    const displayTitle =
+                                        goal.title.length > maxTextLength
+                                            ? goal.title.slice(0, maxTextLength) + "..."
+                                            : goal.title;
+
+                                    return (
                                         <g key={goal.id} transform={`translate(150, ${y})`}>
-                                            <text x="-140" y={barHeight} fontSize="12" fill="#1b263b">
-                                                {goal.title}
+                                            <text
+                                                x={textX}
+                                                y={barHeight - 5}
+                                                fontSize="12"
+                                                fill="#1b263b"
+                                                style={{ pointerEvents: "none" }}
+                                            >
+                                                {displayTitle}
                                             </text>
                                             <rect
-                                                x={0}
+                                                x={barX}
                                                 y={0}
                                                 width={totalDays * scale}
                                                 height={barHeight}
@@ -448,8 +455,8 @@ const AdminDashboard = () => {
                                         </g>
                                     );
                                 })}
-
                             </svg>
+
                         </div>
                     </div>
                 )}

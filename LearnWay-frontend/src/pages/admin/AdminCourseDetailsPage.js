@@ -133,15 +133,20 @@ const AdminCourseDetailsPage = () => {
                 message = "Please consider adding additional learning materials to enrich the course.";
                 break;
             case "improveEngagement":
-                message = "Consider improving student engagement. You can start with this helpful video.";
+                message = "Consider improving student engagement.";
                 break;
             default:
                 break;
         }
 
-
-
+// Dodaj custom message ako postoji
         if (customMessage.trim()) message += `\n\nAdmin note: ${customMessage}`;
+
+// **Dodaj video link u description**
+        if (selectedOption && videoLinks[selectedOption]) {
+            message += `\n\n ${videoLinks[selectedOption]}`;
+        }
+
 
 
         try {
