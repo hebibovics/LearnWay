@@ -11,7 +11,7 @@ const Sidebar = ({ children }) => {
   const categoriesReducer = useSelector((state) => state.categoriesReducer);
   const [courses, setCourses] = useState(categoriesReducer.categories);
   const dispatch = useDispatch();
-  const token = JSON.parse(localStorage.getItem("jwtToken"));
+  const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
   const user = JSON.parse(localStorage.getItem("user"));
   const instructorId = user?.userId;
 
@@ -29,15 +29,27 @@ const Sidebar = ({ children }) => {
   const [isBackingUp, setIsBackingUp] = useState(false);
   const [backupMessage, setBackupMessage] = useState("");
 
-  const handleBackupClick = () => {
+  const handleBackupClick = async () => {
     setIsBackingUp(true);
-    setBackupMessage("");
-    // simulacija backup procesa 2.5 sekunde
-    setTimeout(() => {
+    setBackupMessage("Backup in progress...");
+
+    try {
+      const response = await fetch("http://localhost:8081/api/backup", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const text = await response.text();
+
       setIsBackingUp(false);
-      setBackupMessage("Backup executed successfully ✅");
-    }, 2500);
+      setBackupMessage(text || "Backup completed ✅");
+    } catch (error) {
+      console.error("Backup failed:", error);
+      setIsBackingUp(false);
+      setBackupMessage("Backup failed ❌");
+    }
   };
+
 
   useEffect(() => {
     fetchCourses(dispatch, token, instructorId).then((data) => {
