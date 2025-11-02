@@ -1,15 +1,13 @@
 package unsa.ba.etf.learnway.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-@JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
-)
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Ticket {
 
     @Id
@@ -25,13 +23,16 @@ public class Ticket {
 
     private String direction = "TO_ADMIN"; // TO_ADMIN ili TO_INSTRUCTOR
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "submitted_by_id")
+    @JsonIgnoreProperties({"courses", "comments", "role"})
     private User submittedBy;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver_id")
+    @JsonIgnoreProperties({"courses", "comments", "role"})
     private User receiver;
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

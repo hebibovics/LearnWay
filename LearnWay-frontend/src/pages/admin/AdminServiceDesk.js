@@ -8,21 +8,64 @@ const AdminServiceDesk = () => {
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
+
     useEffect(() => {
         fetchTickets();
     }, []);
 
     const fetchTickets = async () => {
         try {
-            const res = await axios.get("http://localhost:8081/api/tickets");
-            // sortiranje po statusu
-            const sorted = res.data.sort(
+            const res = await axios.get("http://localhost:8081/api/tickets")
+            let ticketsData = res.data;
+
+            // Ako submittedBy bude broj, dohvati usera
+            const ticketsWithUsers = await Promise.all(
+                ticketsData.map(async (ticket) => {
+                    // ako je broj
+                    if (typeof ticket.submittedBy === "number") {
+                        try {
+                            const userRes = await axios.get(
+                                `http://localhost:8081/api/users/${ticket.submittedBy}`, {
+                                    headers: { Authorization: `Bearer ${token}` },
+                                });
+
+                            return { ...ticket, submittedBy: userRes.data };
+                        } catch (e) {
+                            console.error("Greška pri dohvaćanju korisnika:", e);
+                            return ticket;
+                        }
+                    }
+
+                    // ako je objekt ali ima userId (ne id)
+                    if (
+                        typeof ticket.submittedBy === "object" &&
+                        ticket.submittedBy.userId,
+                        console.log("OVO SAD GLEDAM", ticket, ticket.submittedBy, ticket.submittedBy.userId)
+                    ) {
+                        try {
+                            const userRes = await axios.get(
+                                `http://localhost:8081/api/users/${ticket.submittedBy.userId}`
+                            );
+                            return { ...ticket, submittedBy: userRes.data };
+                        } catch (e) {
+                            console.error("Greška pri dohvaćanju korisnika:", e);
+                            return ticket;
+                        }
+                    }
+
+                    return ticket;
+                })
+            );
+
+            const sorted = ticketsWithUsers.sort(
                 (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
             );
+
             setTickets(sorted);
         } catch (err) {
             console.error(err);
-            swal("Error", "", "error");
+            swal("Error", "Could not fetch tickets", "error");
         } finally {
             setLoading(false);
         }
@@ -36,14 +79,13 @@ const AdminServiceDesk = () => {
                 { params: { status: newStatus } }
             );
             swal("Success", "Status successfully updated", "success");
-            // update lokalnog state-a
+
             setTickets((prev) =>
                 prev
-                    .map((t) =>
-                        t.id === ticketId ? { ...t, status: newStatus } : t
-                    )
+                    .map((t) => (t.id === ticketId ? { ...t, status: newStatus } : t))
                     .sort(
-                        (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+                        (a, b) =>
+                            statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
                     )
             );
         } catch (err) {
@@ -64,8 +106,8 @@ const AdminServiceDesk = () => {
                         borderRadius: "8px",
                         padding: "15px",
                         width: "300px",
-                        backgroundColor: "#ffffff", // bijela pozadina
-                        color: "#000000", // crna slova
+                        backgroundColor: "#ffffff",
+                        color: "#000000",
                         boxShadow: "0px 2px 5px rgba(0,0,0,0.1)",
                     }}
                 >
@@ -81,7 +123,9 @@ const AdminServiceDesk = () => {
                     </p>
                     <p>
                         <strong>Submitted by:</strong>{" "}
-                        {ticket.submittedBy?.firstName} {ticket.submittedBy?.lastName}
+                        {ticket.submittedBy && ticket.submittedBy.firstName
+                            ? `${ticket.submittedBy.firstName} ${ticket.submittedBy.lastName}`
+                            : "N/A"}
                     </p>
                     <div>
                         <label htmlFor={`status-${ticket.id}`}>Change status: </label>

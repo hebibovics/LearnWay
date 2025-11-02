@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Container, Card, Row, Col } from "react-bootstrap";
+import { Container, Card, Row, Col, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
 const AdminQuizzesPage = () => {
     const [quizzes, setQuizzes] = useState([]);
+    const [filter, setFilter] = useState("all");
+    const [search, setSearch] = useState("");
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
     const navigate = useNavigate();
 
@@ -46,11 +48,63 @@ const AdminQuizzesPage = () => {
         fetchQuizzes();
     }, [token]);
 
+    // Filtriranje i pretraga
+    const filteredQuizzes = quizzes.filter(({ quiz, totalAttempts, perfectAttempts }) => {
+        const perfectPercent = totalAttempts > 0 ? (perfectAttempts / totalAttempts) * 100 : 0;
+
+        // Pretraga po nazivu
+        const matchesSearch = quiz.title.toLowerCase().includes(search.toLowerCase());
+
+        // Filtriranje po procentu
+        if (filter === "perfect") return perfectPercent === 100 && matchesSearch;
+        if (filter === "above50") return perfectPercent > 50 && matchesSearch;
+        if (filter === "below50") return perfectPercent < 50 && matchesSearch;
+        return matchesSearch;
+    });
+
+    const handleClearFilters = () => {
+        setFilter("all");
+        setSearch("");
+    };
+
     return (
         <Container className="mt-4">
             <h2 className="text-center mb-4" style={{ color: "white" }}>Admin Quizzes Overview</h2>
+
+            {/* Filteri i pretraga */}
+            <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+                <div>
+                    <label style={{ color: "white", marginRight: "10px" }}>Filter by score:</label>
+                    <select
+                        value={filter}
+                        onChange={(e) => setFilter(e.target.value)}
+                        className="form-select d-inline-block w-auto"
+                    >
+                        <option value="all">All</option>
+                        <option value="perfect">100% Score</option>
+                        <option value="above50">Above 50%</option>
+                        <option value="below50">Below 50%</option>
+                    </select>
+                </div>
+
+                <div className="d-flex align-items-center gap-2">
+                    <input
+                        type="text"
+                        placeholder="Search quiz by name..."
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="form-control"
+                        style={{ width: "250px" }}
+                    />
+                    <Button variant="secondary" onClick={handleClearFilters}>
+                        Clear
+                    </Button>
+                </div>
+            </div>
+
+            {/* Lista kvizova */}
             <Row xs={1} md={2} lg={3} className="g-4">
-                {quizzes.map(({ quiz, totalAttempts, perfectAttempts }) => {
+                {filteredQuizzes.map(({ quiz, totalAttempts, perfectAttempts }) => {
                     const perfectPercent = totalAttempts > 0 ? (perfectAttempts / totalAttempts) * 100 : 0;
 
                     return (
@@ -105,6 +159,13 @@ const AdminQuizzesPage = () => {
                     );
                 })}
             </Row>
+
+            {/* Ako nema rezultata */}
+            {filteredQuizzes.length === 0 && (
+                <p className="text-center mt-4" style={{ color: "white" }}>
+                    No quizzes match your filters.
+                </p>
+            )}
         </Container>
     );
 };

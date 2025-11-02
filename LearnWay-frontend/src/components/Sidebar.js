@@ -90,11 +90,12 @@ const Sidebar = ({ children }) => {
 
           {/* Prikaz poruke i loadera */}
           {isBackingUp && (
-              <div style={{ margin: "10px", color: "orange" }}>Backing up...</div>
+              <div style={{ margin: "10px", color: "white" }}>Backing up...</div>
           )}
           {backupMessage && (
-              <div style={{ margin: "10px", color: "green" }}>{backupMessage}</div>
+              <div style={{ margin: "10px", color: "white" }}>{backupMessage}</div>
           )}
+
         </div>
 
         <main>{children}</main>

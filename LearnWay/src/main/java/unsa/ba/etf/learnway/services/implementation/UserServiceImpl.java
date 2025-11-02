@@ -30,6 +30,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+
+
         // unenroll iz svih kurseva
         for (Course course : user.getCourses()) {
             course.getUsers().remove(user);
@@ -49,5 +51,8 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }
