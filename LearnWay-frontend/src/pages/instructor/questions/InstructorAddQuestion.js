@@ -143,7 +143,6 @@ const InstructorAddQuestion = () => {
                 </FormContainer>
             </div>
 
-            {/* Modal */}
             {showInfo && (
                 <div className="modal fade show d-block" tabIndex="-1">
                     <div className="modal-dialog modal-dialog-centered">

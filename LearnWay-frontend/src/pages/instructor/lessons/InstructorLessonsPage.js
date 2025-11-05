@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const InstructorLessonsPage = () => {
     const [lessons, setLessons] = useState([]);
-    const [searchTerm, setSearchTerm] = useState(""); // search state
+    const [searchTerm, setSearchTerm] = useState("");
     const courseId = localStorage.getItem("courseId");
 
     useEffect(() => {
@@ -36,7 +36,6 @@ const InstructorLessonsPage = () => {
         <Container>
             <h1 className="my-4 text-center">Lessons</h1>
 
-            {/* Search bar */}
             <Form className="mb-4">
                 <Form.Control
                     type="text"

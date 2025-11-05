@@ -139,10 +139,8 @@ const AdminCourseDetailsPage = () => {
                 break;
         }
 
-// Dodaj custom message ako postoji
         if (customMessage.trim()) message += `\n\nAdmin note: ${customMessage}`;
 
-// **Dodaj video link u description**
         if (selectedOption && videoLinks[selectedOption]) {
             message += `\n\n ${videoLinks[selectedOption]}`;
         }
@@ -181,7 +179,6 @@ const AdminCourseDetailsPage = () => {
     return (
         <Container className="mt-4" style={{ color: "white" }}>
 
-        {/* Title and Actions */}
             <Row className="mb-4 align-items-center">
                 <Col>
                     <h2 className="text-center">{course.title}</h2>

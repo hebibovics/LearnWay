@@ -14,7 +14,6 @@ const AdminUsersPage = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
 
-    // Dohvat svih korisnika
     const fetchUsers = async () => {
         try {
             const response = await axios.get("/api/users", {
@@ -27,10 +26,9 @@ const AdminUsersPage = () => {
         }
     };
 
-    // Dohvat kurseva za instruktore i studente
     const fetchUserCourses = async (user) => {
         try {
-            if (courses[user.userId]) return; // ako je već dohvaćeno
+            if (courses[user.userId]) return;
 
             let response;
             if (user?.roleName === "INSTRUCTOR") {
@@ -54,7 +52,7 @@ const AdminUsersPage = () => {
         fetchUsers();
     }, []);
 
-    // Deaktivacija korisnika
+
     const handleDeactivate = async (userId) => {
         if (!token) {
             swal("Error", "You are not authenticated!", "error");
@@ -83,7 +81,7 @@ const AdminUsersPage = () => {
         });
     };
 
-    // Toggle prikaza kurseva
+
     const toggleExpand = (user) => {
         if (expandedUserId === user.userId) {
             setExpandedUserId(null);
@@ -95,7 +93,7 @@ const AdminUsersPage = () => {
 
     const whiteTextStyle = { color: "white", fontWeight: "normal" };
 
-    // Filter po pretraživanju
+
     const filteredUsers = users.filter((user) => {
         const firstName = user.firstName ? user.firstName.toLowerCase() : "";
         const lastName = user.lastName ? user.lastName.toLowerCase() : "";

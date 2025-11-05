@@ -42,7 +42,6 @@ const InstructorProfilePage = () => {
             )}
 
 
-            {/* Overlay (klik van sidebar zatvara) */}
             <div
                 className={`userProfilePage__overlay ${sidebarOpen ? "active" : ""}`}
                 onClick={() => setSidebarOpen(false)}

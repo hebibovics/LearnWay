@@ -15,7 +15,7 @@ public class Ticket {
     private Long id;
 
     private String title;
-    private String category; // Problem, Prijedlog, Pitanje, Feedback
+    private String category; // Problem, Prijedlog, Pitanje
     @Column(length = 2000)
     private String description;
     private String status = "OPEN";

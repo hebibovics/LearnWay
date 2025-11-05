@@ -20,7 +20,7 @@ const StudentTakeQuizPage = () => {
         const fetchQuestions = async () => {
             try {
                 const response = await axios.get(`/api/question/quiz/${quizId}`, {
-                    headers: { Authorization: `Bearer ${token}` } // JWT header
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setQuestions(response.data);
             } catch (error) {
@@ -34,7 +34,7 @@ const StudentTakeQuizPage = () => {
         const fetchCourseTitle = async () => {
             try {
                 const response = await axios.get(`/api/quiz/${quizId}`, {
-                    headers: { Authorization: `Bearer ${token}` } // JWT header
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setCourseTitle(response.data.course?.title || response.data.title || "");
             } catch (error) {

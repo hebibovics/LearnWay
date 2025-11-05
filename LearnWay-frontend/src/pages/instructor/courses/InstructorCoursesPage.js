@@ -14,7 +14,6 @@ const InstructorCoursesPage = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     const instructorId = user?.userId;
 
-    // Fetch all instructor courses
     useEffect(() => {
         const fetchCourses = async () => {
             try {
@@ -32,7 +31,6 @@ const InstructorCoursesPage = () => {
         fetchCourses();
     }, [instructorId, token]);
 
-    // Fetch average ratings for all courses
     useEffect(() => {
         const fetchAverageRatings = async () => {
             try {

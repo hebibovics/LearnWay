@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../../pages/Home.css';
 
-// Osnovni podaci o kursevima
 
 const OtherCourses = () => {
 

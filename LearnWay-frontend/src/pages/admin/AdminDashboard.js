@@ -97,7 +97,6 @@ const AdminDashboard = () => {
         fetchGoals();
     }, []);
 
-    // 🔹 Add new Goal
     const handleAddGoal = async () => {
         if (!newGoal.trim() || !newDescription.trim() || !newRisk.trim() || !newMitigation.trim()) {
             swal("⚠️ Warning", "Please fill in all fields (Goal, Description, Risk, Mitigation).", "warning");
@@ -132,7 +131,6 @@ const AdminDashboard = () => {
 
     };
 
-    // 🔹 Delete Goal
     const handleDeleteGoal = async (id) => {
         const confirm = await swal({
             title: "Are you sure?",
@@ -161,14 +159,14 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchCI = async () => {
             try {
-                // Dohvati token iz localStorage
+
                 const token = localStorage.getItem("jwtToken")?.replace(/"/g, "");
 
                 // Helper funkcija za GET s tokenom
                 const fetchWithToken = (url) =>
                     axios.get(url, { headers: { Authorization: `Bearer ${token}` } });
 
-                // Dohvati sve podatke
+
                 const [usersRes, coursesRes, lessonsRes, quizzesRes, licensesRes] = await Promise.all([
                     fetchWithToken("http://localhost:8081/api/users"),
                     fetchWithToken("http://localhost:8081/api/course/"),
@@ -177,7 +175,7 @@ const AdminDashboard = () => {
                     fetchWithToken("http://localhost:8081/api/resources"),
                 ]);
 
-                // Pripremi podatke za tabelu
+
                 const users = usersRes.data;
                 const courses = coursesRes.data;
                 const lessons = lessonsRes.data;
@@ -275,7 +273,6 @@ const AdminDashboard = () => {
                 </div>
             </div>
 
-            {/* STRATEGIC GOALS SECTION */}
             <div style={{ marginTop: "40px" }}>
                 <h2>Strategic Goals</h2>
                 <p style={{ color: "#555" }}>Add, view, and visualize goals on a Gantt chart.</p>
@@ -345,7 +342,6 @@ const AdminDashboard = () => {
                     </button>
                 </div>
 
-                {/* Display Goals */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
 
                     {goals.length === 0 ? (
@@ -391,7 +387,6 @@ const AdminDashboard = () => {
                     )}
                 </div>
 
-                {/* Gantt Chart */}
                 {goals.length > 0 && (
                     <div style={{ marginTop: "40px" }}>
                         <h3>📊 Gantt Overview</h3>
@@ -418,7 +413,7 @@ const AdminDashboard = () => {
                                     const y = index * 40;
 
                                     const textX = -140; // offset za naziv cilja
-                                    const barX = 0;     // start pozicija trake
+                                    const barX = 0;
                                     const maxTextLength = 20; // max karaktera prikazano
                                     const displayTitle =
                                         goal.title.length > maxTextLength

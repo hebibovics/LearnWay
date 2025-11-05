@@ -20,7 +20,7 @@ const InstructorAddLesson = () => {
         const lesson = { title, description };
 
         try {
-            // 1) ADD LESSON
+
             const response = await axios.post(
                 `http://localhost:8081/api/lesson/api/lesson/${id}`,
                 lesson,
@@ -31,7 +31,6 @@ const InstructorAddLesson = () => {
 
             const createdLesson = response.data;
 
-            // 2) UPDATE VIDEO URL (ako je uneseno)
             if (videoUrl.trim() !== "") {
                 await axios.put(
                     `http://localhost:8081/api/lesson/${createdLesson.lessonId}/video`,

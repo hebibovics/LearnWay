@@ -10,7 +10,6 @@ const AdminCoursesPage = () => {
     const [selectedInstructor, setSelectedInstructor] = useState("");
     const navigate = useNavigate();
 
-    // Fetch users first
     useEffect(() => {
         const token = JSON.parse(localStorage.getItem("jwtToken"));
         axios.get("http://localhost:8081/api/users", {

@@ -123,7 +123,7 @@ const StudentQuizResultsPage = () => {
                                             🏆 Download
                                         </Button>
 
-                                        {/* Hidden certificate for PDF generation */}
+                                        {/* Hidden certificate for PDF */}
                                         <div
                                             id={`certificate-${res.quizResId}`}
                                             style={{

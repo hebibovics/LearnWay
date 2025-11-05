@@ -89,7 +89,6 @@ const SidebarInstructor = ({ children }) => {
 
         fetchUnreadCount();
 
-        // Opcionalno: refresh svakih n sekundi ako želiš "live" update
         const interval = setInterval(fetchUnreadCount, 15000); // svakih 15 sekundi
         return () => clearInterval(interval);
     }, [instructorId, token]);
@@ -118,7 +117,6 @@ const SidebarInstructor = ({ children }) => {
                     >
                         <div className="icon" style={{ position: "relative" }}>
                             {item.icon}
-                            {/* Badge za new messages */}
                             {item.path === "/instructorMessages" && unreadCount > 0 && (
                                 <span
                                     style={{

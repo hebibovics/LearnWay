@@ -10,18 +10,16 @@ const ServiceDeskPage = () => {
     const [category, setCategory] = useState("Problem");
     const [loading, setLoading] = useState(false);
 
-    // Dohvati userId iz localStorage
     const user = JSON.parse(localStorage.getItem("user"));
-    const userId = user?.userId; // ovo je tvoj userId
+    const userId = user?.userId;
 
 
-    // Dohvati sve ticket-e
     const fetchTickets = async () => {
         try {
             const res = await axios.get(
                 `http://localhost:8081/api/tickets/user/${userId}`
             );
-            setTickets(res.data); // Postavi state sa dohvacenim ticketima
+            setTickets(res.data);
         } catch (err) {
             console.error(err);
             swal("Error", "Failed to load tickets", "error");
@@ -32,7 +30,7 @@ const ServiceDeskPage = () => {
         fetchTickets();
     }, []);
 
-    // Kreiranje novog ticket-a
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!title || !description) {
@@ -68,10 +66,9 @@ const ServiceDeskPage = () => {
 
             {!userId && <Alert variant="warning">You must be logged in to submit tickets.</Alert>}
 
-            {/* Form for new ticket */}
 
 
-            {/* Form Card */}
+
             <Card className="mb-4 shadow-sm" style={{ color: "black" }}>
                 <Card.Body>
                     <Form onSubmit={handleSubmit}>
@@ -85,7 +82,7 @@ const ServiceDeskPage = () => {
                                         value={title}
                                         onChange={(e) => setTitle(e.target.value)}
                                         disabled={!userId}
-                                        style={{ color: "white" }} // samo tekst bijeli
+                                        style={{ color: "white" }}
                                     />
                                 </Form.Group>
                             </Col>
@@ -115,7 +112,7 @@ const ServiceDeskPage = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                                 disabled={!userId}
-                                style={{ color: "white" }} // samo tekst bijeli
+                                style={{ color: "white" }}
                             />
                         </Form.Group>
 
@@ -126,7 +123,7 @@ const ServiceDeskPage = () => {
                 </Card.Body>
             </Card>
 
-            {/* Tickets */}
+
             <Row>
                 {tickets.map((ticket) => (
                     <Col md={4} key={ticket.id} className="mb-3">

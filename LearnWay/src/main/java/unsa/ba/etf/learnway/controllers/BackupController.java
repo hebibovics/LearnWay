@@ -17,7 +17,7 @@ public class BackupController {
         String originalDb = "learnway";
         String backupDb = "learnwaybackup";
 
-        // Putanja do MySQL alata
+        // Putanja do MySQLa
         String mysqlPath = "\"C:\\\\Program Files\\\\MySQL\\\\MySQL Server 8.0\\\\bin\\\\mysql.exe\"";
         String mysqldumpPath = "\"C:\\\\Program Files\\\\MySQL\\\\MySQL Server 8.0\\\\bin\\\\mysqldump.exe\"";
 

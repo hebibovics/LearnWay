@@ -37,7 +37,6 @@ const AdminServiceDesk = () => {
                         }
                     }
 
-                    // ako je objekt ali ima userId (ne id)
                     if (
                         typeof ticket.submittedBy === "object" &&
                         ticket.submittedBy.userId,

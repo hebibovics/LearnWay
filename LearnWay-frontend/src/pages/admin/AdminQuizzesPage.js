@@ -17,7 +17,6 @@ const AdminQuizzesPage = () => {
                     headers: { Authorization: `Bearer ${token}` },
                 });
 
-                // Grupisanje po kvizu
                 const quizMap = {};
                 response.data.forEach(r => {
                     const qId = r.quiz.quizId;
@@ -48,14 +47,11 @@ const AdminQuizzesPage = () => {
         fetchQuizzes();
     }, [token]);
 
-    // Filtriranje i pretraga
     const filteredQuizzes = quizzes.filter(({ quiz, totalAttempts, perfectAttempts }) => {
         const perfectPercent = totalAttempts > 0 ? (perfectAttempts / totalAttempts) * 100 : 0;
 
-        // Pretraga po nazivu
         const matchesSearch = quiz.title.toLowerCase().includes(search.toLowerCase());
 
-        // Filtriranje po procentu
         if (filter === "perfect") return perfectPercent === 100 && matchesSearch;
         if (filter === "above50") return perfectPercent > 50 && matchesSearch;
         if (filter === "below50") return perfectPercent < 50 && matchesSearch;
@@ -71,7 +67,6 @@ const AdminQuizzesPage = () => {
         <Container className="mt-4">
             <h2 className="text-center mb-4" style={{ color: "white" }}>Admin Quizzes Overview</h2>
 
-            {/* Filteri i pretraga */}
             <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
                 <div>
                     <label style={{ color: "white", marginRight: "10px" }}>Filter by score:</label>
@@ -102,7 +97,6 @@ const AdminQuizzesPage = () => {
                 </div>
             </div>
 
-            {/* Lista kvizova */}
             <Row xs={1} md={2} lg={3} className="g-4">
                 {filteredQuizzes.map(({ quiz, totalAttempts, perfectAttempts }) => {
                     const perfectPercent = totalAttempts > 0 ? (perfectAttempts / totalAttempts) * 100 : 0;
@@ -160,7 +154,6 @@ const AdminQuizzesPage = () => {
                 })}
             </Row>
 
-            {/* Ako nema rezultata */}
             {filteredQuizzes.length === 0 && (
                 <p className="text-center mt-4" style={{ color: "white" }}>
                     No quizzes match your filters.

@@ -45,7 +45,7 @@ const InstructorMessagesPage = () => {
     const sortedTickets = [...tickets].sort((a, b) => {
         if (a.status === "OPEN" && b.status !== "OPEN") return -1;
         if (a.status !== "OPEN" && b.status === "OPEN") return 1;
-        return new Date(b.createdAt) - new Date(a.createdAt); // po datumu unutar iste kategorije
+        return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
     const extractYouTubeEmbed = (text) => {

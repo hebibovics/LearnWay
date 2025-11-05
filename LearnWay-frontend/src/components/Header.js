@@ -49,7 +49,6 @@ const Header = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="justify-content-end flex-grow-1 pe-3">
-                {/* Conditionally render the Home link based on user role */}
                     <LinkContainer to="/home">
                       <Nav.Link>Home</Nav.Link>
                     </LinkContainer>

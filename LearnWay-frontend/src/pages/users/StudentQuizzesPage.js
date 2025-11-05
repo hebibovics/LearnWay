@@ -27,7 +27,7 @@ const StudentQuizzesPage = () => {
 
     return (
         <div className="container mt-4">
-            {/* Naslov + upitnik */}
+
             <div style={{ display: "flex", alignItems: "center", marginBottom: "20px" }}>
                 <h2 className="me-2">Available Quizzes</h2>
                 <FaQuestionCircle
@@ -59,7 +59,6 @@ const StudentQuizzesPage = () => {
                 </Row>
             )}
 
-            {/* Modal s uputama */}
             {showInfo && (
                 <div className="modal fade show d-block" tabIndex="-1">
                     <div className="modal-dialog modal-dialog-centered">

@@ -15,7 +15,7 @@ const UpdateLessonInstructor = () => {
     const token = localStorage.getItem("jwtToken")?.replace(/^"|"$/g, '');
 
     useEffect(() => {
-        // Fetch existing lesson
+
         const fetchLesson = async () => {
             try {
                 const res = await axios.get(`/api/lesson/${lessonId}`, {
@@ -35,7 +35,6 @@ const UpdateLessonInstructor = () => {
         e.preventDefault();
 
         try {
-            // update title + description
             await axios.put(
                 `/api/lesson/${lessonId}`,
                 { title, description },
@@ -44,7 +43,6 @@ const UpdateLessonInstructor = () => {
                 }
             );
 
-            // update video URL (ako je popunjen)
             if (videoUrl) {
                 await axios.put(
                     `/api/lesson/${lessonId}/video`,

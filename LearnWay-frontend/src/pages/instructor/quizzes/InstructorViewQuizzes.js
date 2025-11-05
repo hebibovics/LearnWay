@@ -20,7 +20,6 @@ const InstructorViewQuizzes = () => {
                 );
                 setQuizzes(res.data);
 
-                // Za svaki quiz, fetchamo sve quizResults
                 const resultsRes = await axios.get(
                     `http://localhost:8081/api/quizResult/all`,
                     { headers: { Authorization: `Bearer ${token}` } }
@@ -83,7 +82,6 @@ const InstructorViewQuizzes = () => {
                         const results = quizResults[quiz.quizId] || [];
                         const totalAttempts = results.length;
 
-                        // isti princip kao kod admina
                         const totalQuestions = quiz.questions ? quiz.questions.length : quiz.numOfQuestions || 0;
                         const perfectScore = totalQuestions * 5; // 5 po pitanju
                         const perfectAttempts = results.filter(r =>
@@ -123,7 +121,6 @@ const InstructorViewQuizzes = () => {
                                             Delete
                                         </button>
 
-                                        {/* Progress bar kao kod admina */}
                                         <div className="mt-3">
                                             <p>Total Attempts: {totalAttempts}</p>
                                             <p>Perfect Scores: {perfectAttempts}</p>
