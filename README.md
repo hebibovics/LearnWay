@@ -1,4 +1,4 @@
-# eLearning Platforma
+# e-learning system
 
 1. start backend
 2. enter LearnWay-frontend through terminal
